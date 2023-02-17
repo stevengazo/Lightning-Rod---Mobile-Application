@@ -1,41 +1,451 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Manchito.MainPage">
+             x:Class="Manchito.MainPage"
+             Title="Lista de Proyectos"
+             >
 
-    <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
+        <HorizontalStackLayout Grid.Row="0"  HorizontalOptions="Center" Padding="5" VerticalOptions="Center" >
+            <Label FontSize="Title">
+                Lista de Proyectos
+            </Label>
+        </HorizontalStackLayout>
+        <ScrollView Grid.Row="1" BackgroundColor="WhiteSmoke" Padding="10,10,10,0">
+            <VerticalStackLayout>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame 
+                    Padding="30,0"
+                    Margin="2"                               
+                    VerticalOptions="Center"
+                    MaximumHeightRequest="120"
+                    HeightRequest="120"
+                    BackgroundColor="White"    
+                    BorderColor="LightBlue"
+                    >
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" Margin="0,10">
+                            <Label FontSize="Header" >
+                                Nombre:
+                            </Label>
+                            <Label>
+                                San Miguel
+                            </Label>
+                            <Label FontSize="Header" >
+                                Cliente:
+                            </Label>
+                            <Label>
+                                Steven Gazo
+                            </Label>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                            <Label>
+                                Sin Fotografias
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                
+            </VerticalStackLayout>
+            
+            
+        </ScrollView>
+        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center"
+                                >
+            <Button x:Name="btnAgregar"
+                    BackgroundColor="Blue"
+                    Clicked="AddProject"
+                    TextColor="White"
+                    Text="Agregar Proyecto"
+                    FontSize="Medium"                                   
+                    MaximumHeightRequest="50"
+                   MinimumWidthRequest="120"                    
+                    >
+            </Button>
+        </HorizontalStackLayout>
+    </Grid>
 
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
 
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
-
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
-
-        </VerticalStackLayout>
-    </ScrollView>
 
 </ContentPage>
