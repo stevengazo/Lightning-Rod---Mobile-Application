@@ -1,4 +1,7 @@
-﻿namespace Manchito;
+﻿
+using Manchito.Views;
+
+namespace Manchito;
 
 public partial class MainPage : ContentPage
 {
@@ -15,8 +18,17 @@ public partial class MainPage : ContentPage
 	}
 	private async void AddProject(object sender, EventArgs e)
 	{
-		await Navigation.PushAsync(new AgregarProyecto());
+		await Navigation.PushAsync(new AddProject());
 		
+	}
+
+	private async void ViewProject(object sender, EventArgs e)
+	{
+		try
+		{
+			await Navigation.PushAsync(new ViewProject());	
+		}catch (Exception ex) { 
+		}
 	}
 }
 

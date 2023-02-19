@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Manchito.Views.ViewProject"
+             Title="Información de Proyecto">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.6*" />
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="0.2*"  />
+        </Grid.RowDefinitions>
+        <!-- HEADER -->
+        <Frame Grid.Row="0" Padding="5" BorderColor="White" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="8*" />
+                </Grid.ColumnDefinitions>
+                <Frame Grid.Column="0" Grid.Row="0"  Padding="1" BorderColor="White" Margin="0" >
+                    <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0">
+                        Nombre
+                    </Label>
+                </Frame>
+                <Frame Grid.Column="1" Grid.Row="0" BorderColor="White" >
+                    <Label FontSize="Caption" VerticalOptions="Center">
+                        Nombre del Proyecto
+                    </Label>
+                </Frame>
+                <Frame Grid.Column="0" Grid.Row="1"  Padding="1"  BorderColor="White" >
+                    <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0">
+                        Cliente
+                    </Label>
+                </Frame>
+                <Frame Grid.Column="1" Grid.Row="1" BorderColor="White">
+                    <Label VerticalOptions="Center">
+                        Nombre cliente
+                    </Label>
+                </Frame>
+                <Frame Grid.Row="2" Grid.ColumnSpan="2"  Padding="0" BorderColor="White" >
+                    <HorizontalStackLayout HorizontalOptions="Center" Margin="0" Spacing="10" Padding="0">
+                        <Button Text="Modificar"
+                                Clicked="updateProject"
+                                BackgroundColor="Green"
+                                TextColor="White"
+                                Padding="1"
+                                BorderColor="WhiteSmoke"
+                                BorderWidth="1"
+                                WidthRequest="120"
+                                HeightRequest="35"/>
+                        <Button Text="Eliminar"
+                                BackgroundColor="Red"
+                                TextColor="White"
+                                Padding="1"
+                                BorderColor="WhiteSmoke"
+                                BorderWidth="1"
+                                WidthRequest="120"
+                                HeightRequest="35"/>                        
+                    </HorizontalStackLayout>
+                </Frame>
+            </Grid>
+        </Frame>
+        <!-- LIST OF MAINTENANCES -->        
+        <Frame Grid.Row="1" BackgroundColor="LightGray" Margin="7">
+            <ScrollView>
+                <VerticalStackLayout>
+                    <Frame >
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ViewMaintenance"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10">
+                            <HorizontalStackLayout Spacing="10" Margin="0,10">
+                                <Label  >
+                                    Sitio:
+                                </Label>
+                                <Label>
+                                    San Miguel
+                                </Label>
+                                <Label >
+                                    Estado:
+                                </Label>
+                                <Label>
+                                    Steven. Gazo
+                                </Label>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            >
+                                <Label>
+                                    Sin Fotografias
+                                </Label>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Frame>
+       <!-- BUTTON TO ADD MAINTENANCE -->
+        <Frame Grid.Row="2" Padding="3">
+
+            <HorizontalStackLayout Padding="5" Margin="5" HorizontalOptions="Center">
+                <Button 
+                        Clicked="AddMaintenance"
+                        CornerRadius="15"
+                        WidthRequest="200"
+                        HeightRequest="60"
+                        BackgroundColor="Blue"  
+                        TextColor="White"
+                        Text="Agregar Mantenimiento"/>
+            </HorizontalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>
