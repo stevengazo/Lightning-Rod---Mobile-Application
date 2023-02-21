@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Manchito.MainPage"
              Title="Lista de Proyectos"
+            
              >
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="3*" />
-            <RowDefinition Height="80" />
+            <RowDefinition Height="60" />
         </Grid.RowDefinitions>
 
         <HorizontalStackLayout Grid.Row="0"  HorizontalOptions="Center" Padding="5" VerticalOptions="Center" BackgroundColor="White">
@@ -26,7 +27,7 @@
                     MaximumHeightRequest="120"
                     HeightRequest="120"
                     BackgroundColor="White"    
-                    BorderColor="LightBlue"
+                    BorderColor="Gray"
                     >
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="ViewProject"/>
@@ -49,6 +50,7 @@
                         <HorizontalStackLayout 
                             BackgroundColor="LightGray"
                             MaximumWidthRequest="300"
+                            Padding="5"
                             MaximumHeightRequest="300"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"
@@ -64,8 +66,7 @@
             
             
         </ScrollView>
-        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center"
-                                >
+        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center">
             <Button x:Name="btnAgregar"
                     BackgroundColor="Blue"
                     Clicked="AddProject"
@@ -74,8 +75,7 @@
                     FontSize="Medium"                                   
                     MaximumHeightRequest="50"
                    MinimumWidthRequest="120"                    
-                    >
-            </Button>
+                    />
         </HorizontalStackLayout>
     </Grid>
 

@@ -3,10 +3,145 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Manchito.Views.ViewMaintenance"
              Title="Mantenimiento">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid BackgroundColor="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+        <!-- Header -->
+        <Frame Grid.Row="0"  BorderColor="White" Padding="10">
+            <Grid ZIndex="1" RowSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.ColumnSpan="2" FontSize="Title" Text="Información del Proyecto" HorizontalOptions="Center" />
+                <Frame Grid.Row="1" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,5,0,0">
+                    <Label Text="Alias de Mantenimiento" />
+                </Frame>
+                <Frame Grid.Row="1" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                    <Label Text="Cell 0" />
+                </Frame>
+                <Frame Grid.Row="2" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                    <Label Text="Fecha de Trabajo" />
+                </Frame>
+                <Frame Grid.Row="2" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                    <Label Text="Cell 0" />
+                </Frame>
+                <Frame Grid.Row="3" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                    <Label Text="Estado del Proyecto" />
+                </Frame>
+                <Frame Grid.Row="3" Grid.Column="1" BorderColor="White"  Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                    <Label Text="Cell 0" />
+                </Frame>
+                <Frame Grid.Row="4" Grid.ColumnSpan="2" BorderColor="White" Padding="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0">
+                    <Button Text="Validar Mantenimiento"
+                            BackgroundColor="Blue"
+                            CornerRadius="15"
+                            WidthRequest="240"
+                            HeightRequest="35"
+                            Padding="5"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"/>
+                </Frame>                
+
+            </Grid>
+        </Frame>
+        <Frame Grid.Row="1" BackgroundColor="LightGray" Margin="5" Padding="2">
+            <ScrollView>
+                <VerticalStackLayout>
+                   
+                    <!-- Items a implementar -->
+                    <Frame Padding="2">
+  
+                        <VerticalStackLayout Spacing="10" Padding="2">
+                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                <Label Text="Tipo" />
+                                <Label Text="Pararrayos"  Margin="0,0,10,0"/>
+                                <Label Text="Nota:" />
+                                <Label Text="Sector Este"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"                               
+                            VerticalOptions="Center"
+                            Padding="5"
+                            HorizontalOptions="Center"
+                            >
+                                <Label>
+                                    Sin Fotografias
+                                </Label>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame Padding="2">
+       
+                        <VerticalStackLayout Spacing="10" Padding="2">
+                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                <Label Text="Tipo" />
+                                <Label Text="Bajante"  Margin="0,0,10,0"/>
+                                <Label Text="Nota:" />
+                                <Label Text="Sector OEste"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"                               
+                            VerticalOptions="Center"
+                            Padding="5"
+                            HorizontalOptions="Center"
+                            >
+                                <Label>
+                                    Sin Fotografias
+                                </Label>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame Padding="2">
+
+                        <VerticalStackLayout Spacing="10" Padding="2">
+                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                <Label Text="Tipo" />
+                                <Label Text="Bajante"  Margin="0,0,10,0"/>
+                                <Label Text="Nota:" />
+                                <Label Text="Sector Este"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout 
+                            BackgroundColor="LightGray"
+                            MaximumWidthRequest="300"
+                            MaximumHeightRequest="300"                               
+                            VerticalOptions="Center"
+                            Padding="5"
+                            HorizontalOptions="Center"
+                            >
+                                <Label>
+                                    Sin Fotografias
+                                </Label>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>                    
+
+                </VerticalStackLayout>
+            </ScrollView>            
+        </Frame>
+        <Frame Grid.Row="2" BackgroundColor="White" Padding="0" BorderColor="White">
+            <HorizontalStackLayout HorizontalOptions="Center" Margin="3" Padding="3">
+                <Button Text="Agregar Item"
+                        CornerRadius="15"
+                        HeightRequest="50"
+                        BackgroundColor="Blue"
+                        TextColor="White"/>
+            </HorizontalStackLayout>
+        </Frame>
+    </Grid>
 </ContentPage>
