@@ -1,4 +1,4 @@
-﻿
+﻿using Manchito.ViewModel;
 using Manchito.Views;
 
 namespace Manchito;
@@ -9,7 +9,7 @@ public partial class MainPage : ContentPage
 
 	public MainPage()
 	{
-		InitializeComponent();
+		InitializeComponent();		
 	}
 
 	private void OnCounterClicked(object sender, EventArgs e)
