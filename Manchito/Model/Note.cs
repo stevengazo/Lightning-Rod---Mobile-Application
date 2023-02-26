@@ -4,9 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Manchito.Models
+namespace Manchito.Model
 {
-    class Note
+    /// <summary>
+    /// Class to save the records
+    /// </summary>
+    public class Note
     {
+        /// <summary>
+        /// internal id
+        /// </summary>
+        public int NoteId { get; set; }
+        /// <summary>
+        /// file path
+        /// </summary>
+        public string FilePath { get; set; }
+        /// <summary>
+        /// parent item
+        /// </summary>
+        public Item Item { get; set; }
+        /// <summary>
+        /// parent item id
+        /// </summary>
+        public int ItemId { get; set; }
     }
 }
