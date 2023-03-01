@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Manchito.ViewModel
 {
-    class UpdateProjectViewModel
+    public class UpdateProjectViewModel : INotifyPropertyChangedAbst
     {
+        
     }
 }
