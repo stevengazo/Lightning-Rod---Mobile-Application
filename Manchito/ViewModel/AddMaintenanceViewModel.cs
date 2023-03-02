@@ -14,4 +14,4 @@ namespace Manchito.ViewModel
 		}
 	}
 }
-}
+

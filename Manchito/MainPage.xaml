@@ -72,7 +72,7 @@
         <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center">
             <Button x:Name="btnAgregar"
                     BackgroundColor="Blue"
-                    Clicked="connecdb"
+                    Clicked="AddProject"
                     TextColor="White"
                     Text="Agregar Proyecto"
                     FontSize="Medium"                                   

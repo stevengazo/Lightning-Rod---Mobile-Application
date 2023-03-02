@@ -2,7 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Manchito.Views.AddItem"
+               xmlns:local="clr-namespace:Manchito.ViewModel"
              Title="Agregar Item">
+    <ContentPage.BindingContext>
+        <local:AddItemViewModel />
+    </ContentPage.BindingContext>
     <VerticalStackLayout>
         <Label 
             Text="Welcome to .NET MAUI!"

@@ -8,5 +8,7 @@ namespace Manchito.ViewModel
 {
    public class AddProjectViewModel : INotifyPropertyChangedAbst
     {
-    }
+
+	
+	}
 }

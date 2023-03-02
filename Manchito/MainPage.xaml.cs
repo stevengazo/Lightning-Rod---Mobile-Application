@@ -13,17 +13,16 @@ public partial class MainPage : ContentPage
 	public MainPage()
 	{
 		InitializeComponent();
-		listProjects();
+		//listProjects();
 	}
 
 	private void OnCounterClicked(object sender, EventArgs e)
 	{
 	
 	}
-	private async Task AddProject(object sender, EventArgs e)
+	private async void AddProject(object sender, EventArgs e)
 	{
 		await Navigation.PushAsync(new AddProject());
-		
 	}
 
 
@@ -58,7 +57,7 @@ public partial class MainPage : ContentPage
 		try
 		{
 		
-			//await Navigation.PushAsync(new ViewProject());	
+			await Navigation.PushAsync(new ViewProject());	
 		}catch (Exception ex) { 
 		}
 	}
