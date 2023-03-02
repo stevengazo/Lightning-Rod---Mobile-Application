@@ -65,6 +65,9 @@
                    
                     <!-- Items a implementar -->
                     <Frame Padding="2">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ViewItem" />
+                        </Frame.GestureRecognizers>
   
                         <VerticalStackLayout Spacing="10" Padding="2">
                             <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
