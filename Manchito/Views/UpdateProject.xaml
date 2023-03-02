@@ -7,10 +7,88 @@
     <ContentPage.BindingContext>
         <local:UpdateProjectViewModel />
     </ContentPage.BindingContext>
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="500" />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
+        <VerticalStackLayout Grid.Row="0" HorizontalOptions="Center" Spacing="20" VerticalOptions="Center" Padding="0,20">
+            <!-- Id Proyecto-->
+            <Label FontSize="Subtitle" HorizontalOptions="Center">
+                Proyecto - 00
+            </Label>
+            <!--Alias-->
+            <Label FontSize="Subtitle" HorizontalOptions="Center">
+                Alias
+            </Label>
+            <Entry
+                BackgroundColor="WhiteSmoke"
+                HorizontalOptions="Center"
+                MaximumWidthRequest="180"
+                Style="{StaticResource CommonEntryStyle}"
+                Placeholder="Nombre del Proyecto"
+                MaxLength="80"              
+                />
+            <Label FontSize="Small" HorizontalOptions="Center">
+                Alias: nombre del sitio o lugar
+            </Label>
+            
+            <!--Fecha-->
+            <Label FontSize="Small" HorizontalOptions="Center">
+                Fecha
+            </Label>
+            <DatePicker 
+                    BackgroundColor="WhiteSmoke"
+                    MaximumWidthRequest="180"
+                    HorizontalOptions="Center"                       
+                />
+            <Label FontSize="Small" HorizontalOptions="Center">
+                Fecha: inicio del proyecto
+            </Label>
+            <!--Estado-->
+            <Label FontSize="Small" HorizontalOptions="Center">
+                Estado
+            </Label>
+            <Picker x:Name="picker"
+                    BackgroundColor="WhiteSmoke"
+                        Margin="0"                        
+                        HorizontalTextAlignment="Center"
+                        Title="Seleccione un estado">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>En ejecucion</x:String>
+                            <x:String>Concluido</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+           
+            <Label FontSize="Small" HorizontalOptions="Center" >
+                Estado: situación del proyecto
+            </Label>
+        </VerticalStackLayout>
+        <HorizontalStackLayout Grid.Row="1" HorizontalOptions="Center">
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="50" Padding="0">
+                <Button
+                     Text="Actualizar"
+                    BackgroundColor="Green"
+                    BorderColor="LightGreen"
+                    BorderWidth="1"
+                    CornerRadius="10"
+                    TextColor="White"
+                    WidthRequest="120"
+                    HeightRequest="40"
+                    />
+                <Button
+                    Text="Cancelar"
+                    BackgroundColor="Red"
+                    BorderColor="LightPink"
+                    BorderWidth="1"
+                    CornerRadius="10"
+                    TextColor="White"
+                    WidthRequest="120"
+                    HeightRequest="40"
+                    />
+            </HorizontalStackLayout>
+        </HorizontalStackLayout>
+    </Grid>
 </ContentPage>

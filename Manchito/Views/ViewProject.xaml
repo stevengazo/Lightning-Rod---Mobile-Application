@@ -59,6 +59,7 @@
                         <Button Text="Eliminar"
                                 BackgroundColor="Red"
                                 TextColor="White"
+                                Clicked="DeleteProyect"
                                 Padding="1"
                                 BorderColor="WhiteSmoke"
                                 BorderWidth="1"

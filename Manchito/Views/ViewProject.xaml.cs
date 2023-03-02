@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Manchito.Views;
 
 public partial class ViewProject : ContentPage
@@ -45,5 +47,10 @@ public partial class ViewProject : ContentPage
 		{
 
 		}
+	}
+
+	private async void DeleteProyect(object sender, EventArgs e)
+	{
+		bool answer = await DisplayAlert("Advertencia!", "¿Estas Seguro que deseas borrar este proyecto?", "Sí", "No");		
 	}
 }

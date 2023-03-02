@@ -13,7 +13,7 @@ public partial class MainPage : ContentPage
 	public MainPage()
 	{
 		InitializeComponent();
-		//listProjects();
+		BindingContext = new MainPageViewModel(Navigation);
 	}
 
 	private void OnCounterClicked(object sender, EventArgs e)

@@ -9,65 +9,67 @@
     </ContentPage.BindingContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="8.8*" />
-            <RowDefinition Height="1.2*" />
+            <RowDefinition Height="600" />
+            <RowDefinition Height="80" />
         </Grid.RowDefinitions>
-        <Frame Grid.Row="0" >
+        <Frame Grid.Row="0" BorderColor="White" >
             <VerticalStackLayout   HorizontalOptions="Center" Spacing="20" VerticalOptions="Center" Padding="0,20">
                 <!--Alias-->
-                <Label FontSize="Subtitle" HorizontalOptions="Center">
+                <Label FontSize="Large" HorizontalOptions="Center">
                     Alias
                 </Label>
-                <Frame BorderColor="Gray" CornerRadius="5" Padding="0,2,0,2">
-                    <Entry
+
+                <Entry
                 HorizontalOptions="Center"
                 MaximumWidthRequest="180"
+                    BackgroundColor="WhiteSmoke"
                 Style="{StaticResource CommonEntryStyle}"
                 Placeholder="Nombre del Proyecto"
                 MaxLength="80">
-                    </Entry>
-                </Frame>
+                </Entry>
 
-                <Label FontSize="Small" HorizontalOptions="Center">
+
+                <Label FontSize="Micro" HorizontalOptions="Center" Margin="0">
                     Alias: nombre del sitio o lugar
                 </Label>
                 <!--Fecha-->
-                <Label FontSize="Small" HorizontalOptions="Center">
+                <Label FontSize="Large" HorizontalOptions="Center">
                     Fecha
                 </Label>
-                <Frame BorderColor="Gray" CornerRadius="5" Padding="0">
-                    <DatePicker 
+
+                <DatePicker 
                     MaximumWidthRequest="180"
                     HorizontalOptions="Center"                       
                 />
-                </Frame>
-                <Label FontSize="Small" HorizontalOptions="Center">
+
+                <Label FontSize="Micro" HorizontalOptions="Center">
                     Fecha: inicio del proyecto
                 </Label>
                 <!--Estado-->
-                <Label FontSize="Small" HorizontalOptions="Center">
+                <Label FontSize="Large" HorizontalOptions="Center">
                     Estado
                 </Label>
-                <Frame BorderColor="Gray" CornerRadius="5" Padding="0">
-                    <Picker x:Name="picker"
+
+                <Picker x:Name="picker"
+                        BackgroundColor="WhiteSmoke"
                         Margin="0"                        
                         HorizontalTextAlignment="Center"
                         Title="Seleccione un estado">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>En ejecucion</x:String>
-                                <x:String>Concluido</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-                </Frame>
-                <Label FontSize="Small" HorizontalOptions="Center" >
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>En ejecucion</x:String>
+                            <x:String>Concluido</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+
+                <Label FontSize="Micro" HorizontalOptions="Center" >
                     Estado: situación del proyecto
                 </Label>
             </VerticalStackLayout>
 
         </Frame>
-        <Frame Grid.Row="1"  Padding="0">
+        <Frame Grid.Row="1" BorderColor="White"  Padding="0" >
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="50" Padding="0">
                 <Button
                      Text="Agregar"
@@ -88,7 +90,7 @@
                     TextColor="White"
                     WidthRequest="120"
                     HeightRequest="40"
-                    />                
+                    />
             </HorizontalStackLayout>
         </Frame>
     </Grid>
