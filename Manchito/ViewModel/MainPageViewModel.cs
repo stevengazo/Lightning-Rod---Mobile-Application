@@ -11,7 +11,7 @@ namespace Manchito.ViewModel
 {
    public class MainPageViewModel : INotifyPropertyChangedAbst
     {
-        public ICommand AddProjectCommand { get; }        
+        public ICommand AddProjectCommand { get; private set; }        
 
 
         public INavigation Navigation { get; set; }
@@ -19,12 +19,21 @@ namespace Manchito.ViewModel
         public MainPageViewModel(INavigation navigation)
         {
             Navigation= navigation;
+            // permite enlazar la propiedad con el meotodo asincrono
+            AddProjectCommand= new Command(async ()=> await AddProject());
         }
 
 
         public async Task AddProject()
         {
-            await Navigation.PushAsync(new AddProject());
+            try
+            {
+				await Navigation.PushAsync(new AddProject());
+			}catch(Exception ex)
+            {
+                
+            }
+            
         }
     }
 }

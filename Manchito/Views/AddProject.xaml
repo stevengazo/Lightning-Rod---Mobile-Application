@@ -18,8 +18,9 @@
             <Label FontSize="Subtitle" HorizontalOptions="Center">
                 Alias
             </Label>
-            <Frame BorderColor="Gray" CornerRadius="5" Padding="0,2,0,2">
+            <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
                 <Entry
+                    BackgroundColor="WhiteSmoke"
                 HorizontalOptions="Center"
                 MaximumWidthRequest="180"
                 Style="{StaticResource CommonEntryStyle}"
@@ -34,8 +35,9 @@
             <Label FontSize="Small" HorizontalOptions="Center">
                 Fecha
             </Label>
-            <Frame BorderColor="Gray" CornerRadius="5" Padding="0">
+            <Frame BorderColor="White" CornerRadius="5" Padding="0">
                 <DatePicker 
+                    BackgroundColor="WhiteSmoke"
                     MaximumWidthRequest="180"
                     HorizontalOptions="Center"                       
                 />
@@ -47,9 +49,10 @@
             <Label FontSize="Small" HorizontalOptions="Center">
                 Estado
             </Label>
-            <Frame BorderColor="Gray" CornerRadius="5" Padding="0">
+            <Frame BorderColor="White" CornerRadius="5" Padding="0">
                 <Picker x:Name="picker"
-                        Margin="0"                        
+                        Margin="0"        
+                        BackgroundColor="WhiteSmoke"
                         HorizontalTextAlignment="Center"
                         Title="Seleccione un estado">
                     <Picker.ItemsSource>
