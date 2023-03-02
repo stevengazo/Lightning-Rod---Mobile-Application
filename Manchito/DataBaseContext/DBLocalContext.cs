@@ -11,24 +11,28 @@ namespace Manchito.DataBaseContext
 	public class DBLocalContext: DbContext 
 	{
 
-		DbSet<AudioNote> AudioNote { get; set; }	
-		DbSet<Category> Category { get; set; }
-		DbSet<Item> Item { get; set; }
-		DbSet<ItemType> ItemTypes { get; set; }
-		DbSet<Maintenance> Maintenance { get; set; }
-		DbSet<Note> Note { get; set; }
-		DbSet<Photography> Photography { get; set; }
-		DbSet<Project> Project { get; set; }
+		public DbSet<AudioNote> AudioNote { get; set; }	
+		public DbSet<Category> Category { get; set; }
+		public DbSet<Item> Item { get; set; }
+		public DbSet<ItemType> ItemTypes { get; set; }
+		public DbSet<Maintenance> Maintenance { get; set; }
+		public DbSet<Note> Note { get; set; }
+		public DbSet<Photography> Photography { get; set; }
+		public DbSet<Project> Project { get; set; }
 
 
-		public DBLocalContext(DbContextOptions<DBLocalContext> options) :base(options)
-		{
+		public DBLocalContext() { 
+			SQLitePCL.Batteries_V2.Init();
+			this.Database.EnsureCreated();
 
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlite($"DataSource=mydatabase.db;");
+			string PathDatabase = Path.Combine(FileSystem.CacheDirectory, "mydatabase.db");
+			optionsBuilder.UseSqlite($"Filename={PathDatabase}");
+
+
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

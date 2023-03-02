@@ -22,7 +22,7 @@
             </Label>
         </HorizontalStackLayout>
         <ScrollView Grid.Row="1" BackgroundColor="WhiteSmoke" Padding="10,10,10,0">
-            <VerticalStackLayout>
+            <VerticalStackLayout x:Name="containerlist">
                 <Frame 
                     Padding="30,0"
                     Margin="2"                               
@@ -72,7 +72,7 @@
         <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center">
             <Button x:Name="btnAgregar"
                     BackgroundColor="Blue"
-                    Clicked="AddProject"
+                    Clicked="connecdb"
                     TextColor="White"
                     Text="Agregar Proyecto"
                     FontSize="Medium"                                   
