@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Manchito.DataBaseContext;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,13 @@ using System.Threading.Tasks;
 
 namespace Manchito.ViewModel
 {
-    class MainPageViewModel
+   public class MainPageViewModel
     {
+    
+        public MainPageViewModel()
+        {
+            
+        }
+
     }
 }
