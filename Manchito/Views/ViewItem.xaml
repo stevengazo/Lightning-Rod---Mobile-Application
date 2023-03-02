@@ -1,16 +1,73 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Manchito.Views.ViewItem"
-             xmlns:local="clr-namespace:Manchito.ViewModel"
-             Title="Ver Item">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Manchito.Views.ViewItem"
+    xmlns:local="clr-namespace:Manchito.ViewModel"
+    Title="Ver Item">
     <ContentPage.BindingContext>
         <local:ViewItemViewModel />
     </ContentPage.BindingContext>
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .N MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="700" />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
+        <VerticalStackLayout Grid.Row="0" BackgroundColor="AliceBlue" HorizontalOptions="Center">
+            <Label Text="Elementos" 
+                    FontSize="Title" 
+                    HorizontalOptions="Center" />
+            <Label  Text="Verifique que haya tomado todas las fotos relevantes para esta área" 
+                    HorizontalOptions="Center"
+                    FontSize="Subtitle" />
+        </VerticalStackLayout>
+        <HorizontalStackLayout  Grid.Row="1" 
+                                HorizontalOptions="Center" 
+                                VerticalOptions="Center" 
+                                BackgroundColor="Purple" Margin="5">
+            <CarouselView PeekAreaInsets="100">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Frame
+                                HasShadow="True"
+                                BorderColor="DarkGray"
+                                CornerRadius="5"
+                                Margin="20"
+                                HeightRequest="300"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                >
+                                <StackLayout>
+
+                                    <Label Text="{Binding Name}"
+                                            FontAttributes="Bold"
+                                            FontSize="Large"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center" />
+                                    <Image Source="{Binding ImageUrl}"
+                                            Aspect="AspectFill"
+                                            HeightRequest="150"
+                                            WidthRequest="150"
+                                            HorizontalOptions="Center" />
+                                    <Button>
+                                        
+                                    </Button>
+
+                                </StackLayout>
+
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center">
+            <Button 
+    BackgroundColor="Blue"
+    TextColor="White"
+    HeightRequest="50"
+    Text="Tomar Fotográfia" />
+        </HorizontalStackLayout>
+    </Grid>
 </ContentPage>
