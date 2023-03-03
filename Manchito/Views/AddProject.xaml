@@ -4,9 +4,6 @@
              x:Class="Manchito.Views.AddProject"
              xmlns:local="clr-namespace:Manchito.ViewModel"
              Title="Agregar Proyecto">
-    <ContentPage.BindingContext>
-        <local:AddProjectViewModel />
-    </ContentPage.BindingContext>
     <Grid RowSpacing="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="500"></RowDefinition>
@@ -19,13 +16,13 @@
                 Alias
             </Label>
             <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
-                <Entry
-                    BackgroundColor="WhiteSmoke"
-                HorizontalOptions="Center"
-                MaximumWidthRequest="180"
-                Style="{StaticResource CommonEntryStyle}"
-                Placeholder="Nombre del Proyecto"
-                MaxLength="80">
+                <Entry  BackgroundColor="WhiteSmoke"
+                        Text="{Binding Alias}"
+                        HorizontalOptions="Center"
+                        MaximumWidthRequest="180"
+                        Style="{StaticResource CommonEntryStyle}"
+                        Placeholder="Nombre del Proyecto"
+                        MaxLength="80">
                 </Entry>
             </Frame>
             <Label FontSize="Small" HorizontalOptions="Center">
@@ -37,6 +34,7 @@
             </Label>
             <Frame BorderColor="White" CornerRadius="5" Padding="0">
                 <DatePicker 
+                    Date="{Binding DateProject}"
                     BackgroundColor="WhiteSmoke"
                     MaximumWidthRequest="180"
                     HorizontalOptions="Center"                       
@@ -51,7 +49,8 @@
             </Label>
             <Frame BorderColor="White" CornerRadius="5" Padding="0">
                 <Picker x:Name="picker"
-                        Margin="0"        
+                        Margin="0"       
+                        SelectedItem="{Binding Status}"
                         BackgroundColor="WhiteSmoke"
                         HorizontalTextAlignment="Center"
                         Title="Seleccione un estado">
@@ -69,8 +68,9 @@
         </VerticalStackLayout>
         <HorizontalStackLayout Grid.Row="1" BackgroundColor="Azure" Spacing="5" HorizontalOptions="Center" VerticalOptions="Center">
             <Button BackgroundColor="Green" 
-                    TextColor="White" 
-                    MinimumWidthRequest="30"                    
+                    TextColor="White"                     
+                    MinimumWidthRequest="30"  
+                    Command="{Binding AddProjectCommand}"
                     CornerRadius="5" 
                     Text="Agregar" />
             <Button BackgroundColor="Red" 

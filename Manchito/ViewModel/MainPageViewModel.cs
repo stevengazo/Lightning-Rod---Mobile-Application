@@ -18,6 +18,20 @@ namespace Manchito.ViewModel
 
         private List<Project> _Projects;
 
+        private string _ErrorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _ErrorMessage; }
+            set { _ErrorMessage = value;
+                if(_ErrorMessage != null)
+                {
+                    OnPropertyChanged(nameof(ErrorMessage));
+                }
+            }
+        }
+
+
         public List<Project> Projects
         {
             get { return _Projects; }
@@ -48,11 +62,12 @@ namespace Manchito.ViewModel
         public async Task AddProject()
         {
             try
-            {               
+            {
+                
 				await Navigation.PushAsync(new AddProject());
 			}catch(Exception ex)
             {
-                
+                ErrorMessage = $"Error {ex.Message}";
             }
             
         }

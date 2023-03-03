@@ -1,14 +1,116 @@
-﻿using System;
+﻿using Manchito.DataBaseContext;
+using Manchito.Views;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Manchito.ViewModel
 {
    public class AddProjectViewModel : INotifyPropertyChangedAbst
     {
+		private AddProject _AddProjectView { get; set; }
+		private INavigation Navigation { get; set; }
+		private string _Alias;
 
-	
+		public string Alias
+		{
+			get { return _Alias; }
+			set { _Alias = value;
+				if(_Alias != null)
+				{
+					OnPropertyChanged(nameof(Alias));
+				}
+			}
+		}
+
+		private DateTime _DateProject;
+
+		public DateTime DateProject
+		{
+			get { return _DateProject; }
+			set { _DateProject = value;
+				if(_DateProject != null)
+				{
+					OnPropertyChanged(nameof(DateProject));	
+				}
+			}
+		}
+
+		private string _Status;
+
+		public string Status
+		{
+			get { return _Status; }
+			set { _Status = value;
+				if(_Status != null)
+				{
+					OnPropertyChanged(nameof(Status));
+				}
+			}
+		}
+
+		public ICommand AddProjectCommand { get; private set; }
+
+		private string _ErrorMessage;
+
+		public string ErrorMessage
+		{
+			get { return _ErrorMessage; }
+			set { _ErrorMessage = value;
+				if(_ErrorMessage != null ) {
+					OnPropertyChanged(nameof(ErrorMessage));
+				}			
+			}
+		}
+
+
+		public AddProjectViewModel(INavigation navigation, AddProject addProject)
+		{
+			/// Allow close the view from this class
+			_AddProjectView = addProject;
+			// Navigation of the system
+			Navigation = navigation;
+			// Command to add new projects
+			AddProjectCommand = new Command(async () => await AddProject());
+
+		}
+
+
+		public async Task AddProject()
+		{
+			try
+			{
+				if(Alias== null || Status  == null) {
+					ErrorMessage = "No hay datos cargados";
+					await _AddProjectView.DisplayAlert("Error", $"{ErrorMessage}", "Ok");
+				}
+				else
+				{
+					using(var dbLocal = new DBLocalContext())
+					{
+						int id = (from proj in dbLocal.Project
+								  orderby proj.ProjectId descending
+								  select proj.ProjectId).FirstOrDefault() + 1;
+						Model.Project tmpProject = new Model.Project() { 
+							ProjectId = id,
+							Name = Alias,
+							dat
+						};
+					}
+				}
+			}catch(Exception f)
+			{
+				ErrorMessage =  $"Error interno: {f.Message}";
+				await _AddProjectView.DisplayAlert("Error", $"Error Interno {f.Message}","Ok");
+				Navigation.RemovePage(_AddProjectView);
+			}
+		}
+
+
+
 	}
 }
