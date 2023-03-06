@@ -10,7 +10,7 @@
             <RowDefinition Height="80"></RowDefinition>
 
         </Grid.RowDefinitions>
-        <VerticalStackLayout Grid.Row="0"  HorizontalOptions="Center" Spacing="20" VerticalOptions="Center" Padding="0,20">
+        <VerticalStackLayout Grid.Row="0"  HorizontalOptions="Center" Spacing="10" VerticalOptions="Center" Padding="0,20">
             <!--Alias-->
             <Label FontSize="Subtitle" HorizontalOptions="Center">
                 Alias
@@ -28,6 +28,35 @@
             <Label FontSize="Small" HorizontalOptions="Center">
                 Alias: nombre del sitio o lugar
             </Label>
+            <!--Customer Name-->
+            <Label FontSize="Subtitle" HorizontalOptions="Center">
+                Nombre Del Cliente
+            </Label>
+            <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
+                <Entry  BackgroundColor="WhiteSmoke"
+                        Text="{Binding CustomerName}"
+                        HorizontalOptions="Center"
+                        MaximumWidthRequest="180"
+                        Style="{StaticResource CommonEntryStyle}"
+                        Placeholder="Ejemplo S.A."
+                        MaxLength="80">
+                </Entry>
+            </Frame>
+            <!--Customer Contact Name-->
+            <Label FontSize="Subtitle" HorizontalOptions="Center">
+                Nombre del Contacto del cliente
+            </Label>
+            <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
+                <Entry  BackgroundColor="WhiteSmoke"
+                        Text="{Binding CustomerContactName}"
+                        HorizontalOptions="Center"
+                        MaximumWidthRequest="180"
+                        Style="{StaticResource CommonEntryStyle}"
+                        Placeholder="Pepito"
+                        MaxLength="80">
+                </Entry>
+            </Frame>
+            
             <!--Fecha-->
             <Label FontSize="Small" HorizontalOptions="Center">
                 Fecha

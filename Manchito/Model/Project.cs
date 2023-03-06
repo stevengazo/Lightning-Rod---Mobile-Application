@@ -20,9 +20,13 @@ namespace Manchito.Model
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Name of the Customer
+        /// Status of the client
         /// </summary>
-        public string CustomerName { get; set; }
+		public string Status { get; set; }
+		/// <summary>
+		/// Name of the Customer
+		/// </summary>
+		public string CustomerName { get; set; }
         /// <summary>
         /// Name of the contact for the project
         /// </summary>

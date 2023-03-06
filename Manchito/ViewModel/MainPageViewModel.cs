@@ -63,7 +63,6 @@ namespace Manchito.ViewModel
         {
             try
             {
-                
 				await Navigation.PushAsync(new AddProject());
 			}catch(Exception ex)
             {

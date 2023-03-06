@@ -1,5 +1,6 @@
 ﻿using Manchito.DataBaseContext;
 using Manchito.Views;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
@@ -53,6 +54,34 @@ namespace Manchito.ViewModel
 			}
 		}
 
+		private string _customerName;
+
+		public string CustomerName
+		{
+			get { return _customerName; }
+			set { _customerName = value;
+				if(_customerName!= null)
+				{
+					OnPropertyChanged(nameof(CustomerName));
+				}
+			}
+		}
+
+		private string _CustomerContactName;
+
+		public string CustomerContactName
+		{
+			get { return _CustomerContactName; }
+			set { _CustomerContactName = value; 
+				if(CustomerContactName != null)
+				{
+					OnPropertyChanged(nameof(CustomerContactName));
+				}
+			}
+		}
+
+
+
 		public ICommand AddProjectCommand { get; private set; }
 
 		private string _ErrorMessage;
@@ -80,6 +109,24 @@ namespace Manchito.ViewModel
 		}
 
 
+		public async Task<int> GetLastIdProject()
+		{
+			try
+			{
+				using(var dblocal = new DBLocalContext())
+				{
+					int queryResult = await (from proj in dblocal.Project
+									   orderby proj.ProjectId descending
+									   select proj.ProjectId
+									).FirstOrDefaultAsync();
+					return queryResult;
+				}
+			}catch(Exception f)
+			{
+				return -1;
+			}
+		}
+
 		public async Task AddProject()
 		{
 			try
@@ -90,16 +137,21 @@ namespace Manchito.ViewModel
 				}
 				else
 				{
+					int projectid = await GetLastIdProject();
+					projectid++;
 					using(var dbLocal = new DBLocalContext())
 					{
-						int id = (from proj in dbLocal.Project
-								  orderby proj.ProjectId descending
-								  select proj.ProjectId).FirstOrDefault() + 1;
 						Model.Project tmpProject = new Model.Project() { 
-							ProjectId = id,
+							ProjectId = projectid,
 							Name = Alias,
-							dat
+							CustomerName= this._customerName,
+							CustomerContactName = this._CustomerContactName,
+							Status = this._Status
 						};
+						dbLocal.Project.Add(tmpProject);
+						dbLocal.SaveChanges();
+						await _AddProjectView.DisplayAlert("Información", $"Proyecto Agregado con éxito\nProjecto {tmpProject.ProjectId}\nCliente {tmpProject.Name}", "Ok");
+						Navigation.RemovePage(_AddProjectView);
 					}
 				}
 			}catch(Exception f)
@@ -109,8 +161,5 @@ namespace Manchito.ViewModel
 				Navigation.RemovePage(_AddProjectView);
 			}
 		}
-
-
-
 	}
 }
