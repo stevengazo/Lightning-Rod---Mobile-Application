@@ -17,9 +17,9 @@
             </Label>
             <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
                 <Entry  BackgroundColor="WhiteSmoke"
-                        Text="{Binding Alias}"
+                        Text="{Binding Alias}"                        
                         HorizontalOptions="Center"
-                        MaximumWidthRequest="180"
+                        WidthRequest="240"
                         Style="{StaticResource CommonEntryStyle}"
                         Placeholder="Nombre del Proyecto"
                         MaxLength="80">
@@ -36,7 +36,7 @@
                 <Entry  BackgroundColor="WhiteSmoke"
                         Text="{Binding CustomerName}"
                         HorizontalOptions="Center"
-                        MaximumWidthRequest="180"
+                        WidthRequest="240"
                         Style="{StaticResource CommonEntryStyle}"
                         Placeholder="Ejemplo S.A."
                         MaxLength="80">
@@ -50,7 +50,7 @@
                 <Entry  BackgroundColor="WhiteSmoke"
                         Text="{Binding CustomerContactName}"
                         HorizontalOptions="Center"
-                        MaximumWidthRequest="180"
+                        WidthRequest="240"
                         Style="{StaticResource CommonEntryStyle}"
                         Placeholder="Pepito"
                         MaxLength="80">
@@ -64,8 +64,8 @@
             <Frame BorderColor="White" CornerRadius="5" Padding="0">
                 <DatePicker 
                     Date="{Binding DateProject}"
-                    BackgroundColor="WhiteSmoke"
-                    MaximumWidthRequest="180"
+                    BackgroundColor="WhiteSmoke"                    
+                    WidthRequest="240"
                     HorizontalOptions="Center"                       
                 />
             </Frame>
@@ -82,6 +82,7 @@
                         SelectedItem="{Binding Status}"
                         BackgroundColor="WhiteSmoke"
                         HorizontalTextAlignment="Center"
+                        WidthRequest="240"
                         Title="Seleccione un estado">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">

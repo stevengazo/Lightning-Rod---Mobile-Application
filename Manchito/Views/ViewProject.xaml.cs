@@ -4,6 +4,7 @@ namespace Manchito.Views;
 
 public partial class ViewProject : ContentPage
 {
+	public int ProjectId { get; set; }
 	public ViewProject()
 	{
 		InitializeComponent();

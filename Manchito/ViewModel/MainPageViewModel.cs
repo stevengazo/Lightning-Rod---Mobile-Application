@@ -17,11 +17,8 @@ namespace Manchito.ViewModel
         public ICommand AddProjectCommand { get; private set; }
 
         public ICommand ViewProjectCommand { get; private set; }
-
-		private List<Project> _Projects;
-
+        private List<Project> _Projects;
         private string _ErrorMessage;
-
         public string ErrorMessage
         {
             get { return _ErrorMessage; }
@@ -32,8 +29,6 @@ namespace Manchito.ViewModel
                 }
             }
         }
-
-
         public List<Project> Projects
         {
             get { return _Projects; }
@@ -44,28 +39,29 @@ namespace Manchito.ViewModel
                 }
             }
         }
-
         private MainPage _MainPage { get; set; }
-        public INavigation Navigation { get; set; }
-        
+        public INavigation Navigation { get; set; }        
         public MainPageViewModel(INavigation navigation,MainPage mainPage)
         {
             Navigation= navigation;
             _MainPage= mainPage;
-			// binding the icommand property with the async method
-			ViewProjectCommand = new Command((e)=> ViewProject(e));
+
+
+            // binding the icommand property with the async method
+            ViewProjectCommand = new Command(async (t) =>  ViewProject(t));
 			// binding the icommand property with the async method
 			AddProjectCommand = new Command(async ()=> await AddProject());
             
             LoadProjects();
 		}
-                
 
-        private  void  ViewProject(object f)
-        {
+
+        public async void  ViewProject(object t)
+		{
             try
-            {              
-				Navigation.PushAsync(new ViewProject());
+            {             
+                ViewProject viewProjecttmp = new ViewProject() {ProjectId= (int)t };				
+                await  Navigation.PushAsync(viewProjecttmp);
 
 			}
 			catch (Exception ex)

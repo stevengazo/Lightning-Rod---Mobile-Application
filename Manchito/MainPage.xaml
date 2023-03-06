@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:Manchito.ViewModel"
              xmlns:models="clr-namespace:Manchito.Model"
              x:Class="Manchito.MainPage"
+             x:Name="MyMainPage"
              Title="Lista de Proyectos"            
              >
     <Grid>
@@ -20,48 +21,26 @@
         </HorizontalStackLayout>
         <ScrollView Grid.Row="1" BackgroundColor="WhiteSmoke" Padding="10,10,10,10">
             <VerticalStackLayout x:Name="containerlist" Spacing="5">
-                <CollectionView ItemsSource="{Binding  Projects}">
+                <CollectionView SelectionMode="Single" ItemsSource="{Binding Projects,Mode=OneWay}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate >
                             <Frame 
-                    Padding="12"
-                    Margin="2" 
-                    VerticalOptions="Center"
-                    HeightRequest="130"
-                    BackgroundColor="White"    
-                    BorderColor="Gray"
-                    >
-                                <Frame.GestureRecognizers>
-                                    <TapGestureRecognizer  Command="{Binding ViewProjectCommand}"></TapGestureRecognizer>
-                                </Frame.GestureRecognizers>
-                                <VerticalStackLayout Spacing="10">
-                                    <HorizontalStackLayout Spacing="10" Margin="0,10">
-                                        <Label >
-                                            Nombre:
-                                        </Label>
-                                        <Label Text="{Binding Name}">
-                                            
-                                        </Label>
-                                        <Label >
-                                            Cliente:
-                                        </Label>
-                                        <Label Text="{Binding CustomerName}">
-                                            
-                                        </Label>
-                                    </HorizontalStackLayout>
-                                    <HorizontalStackLayout 
-                            BackgroundColor="LightGray"
-                            MaximumWidthRequest="300"
-                            Padding="5"
-                            MaximumHeightRequest="300"
-                            VerticalOptions="Center"
-                            HorizontalOptions="Center"
-                            >
-                                        <Label>
-                                            Sin Fotografias
-                                        </Label>
-                                    </HorizontalStackLayout>
-                                </VerticalStackLayout>
+                                    Padding="12"
+                                    Margin="2" 
+                                    VerticalOptions="Center"
+                                    HeightRequest="80"
+                                    BackgroundColor="White"    
+                                    BorderColor="Gray"
+                                    >
+                                <HorizontalStackLayout Spacing="10" Margin="0,10">
+                                    <HorizontalStackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer  Command="{Binding BindingContext.ViewProjectCommand, Source={x:Reference MyMainPage}}"  CommandParameter="{Binding ProjectId}" ></TapGestureRecognizer>
+                                    </HorizontalStackLayout.GestureRecognizers>
+                                    <Label Text="Nombre:" />
+                                    <Label Text="{Binding Name}" />
+                                    <Label Text="Cliente:" />
+                                    <Label Text="{Binding CustomerName}"  />
+                                </HorizontalStackLayout>
                             </Frame>
 
                         </DataTemplate>
