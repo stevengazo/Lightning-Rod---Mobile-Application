@@ -56,12 +56,12 @@ namespace Manchito.ViewModel
 		}
 
 
-        public async void  ViewProject(object t)
+        public  void  ViewProject(object t)
 		{
             try
             {             
                 ViewProject viewProjecttmp = new ViewProject() {ProjectId= (int)t };				
-                await  Navigation.PushAsync(viewProjecttmp);
+                Navigation.PushAsync(viewProjecttmp);
 
 			}
 			catch (Exception ex)
