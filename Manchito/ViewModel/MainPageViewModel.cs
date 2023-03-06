@@ -16,7 +16,9 @@ namespace Manchito.ViewModel
     {
         public ICommand AddProjectCommand { get; private set; }
 
-        private List<Project> _Projects;
+        public ICommand ViewProjectCommand { get; private set; }
+
+		private List<Project> _Projects;
 
         private string _ErrorMessage;
 
@@ -43,27 +45,58 @@ namespace Manchito.ViewModel
             }
         }
 
-
+        private MainPage _MainPage { get; set; }
         public INavigation Navigation { get; set; }
         
-        public MainPageViewModel(INavigation navigation)
+        public MainPageViewModel(INavigation navigation,MainPage mainPage)
         {
             Navigation= navigation;
-            // binding the icommand property with the async method
-            AddProjectCommand= new Command(async ()=> await AddProject());
-            // load the projects in the db
-            using(var db = new DBLocalContext())
+            _MainPage= mainPage;
+			// binding the icommand property with the async method
+			ViewProjectCommand = new Command((e)=> ViewProject(e));
+			// binding the icommand property with the async method
+			AddProjectCommand = new Command(async ()=> await AddProject());
+            
+            LoadProjects();
+		}
+                
+
+        private  void  ViewProject(object f)
+        {
+            try
+            {              
+				Navigation.PushAsync(new ViewProject());
+
+			}
+			catch (Exception ex)
             {
-                Projects = db.Project.ToList() ;
+				_MainPage.DisplayAlert("Error interno", $"Error: {ex.Message}", "ok");
+			}
+        }
+
+        public async Task LoadProjects()
+        {
+            try
+            {
+				// load the projects in the db
+				using (var db = new DBLocalContext())
+				{
+					Projects = db.Project.ToList();
+				}
+			}
+			catch(Exception ex) {
+                await _MainPage.DisplayAlert("Error interno", $"Error: {ex.Message}", "ok");   
             }
         }
 
+             
 
         public async Task AddProject()
         {
             try
             {
-				await Navigation.PushAsync(new AddProject());
+                await Navigation.PushAsync(new AddProject());
+                
 			}catch(Exception ex)
             {
                 ErrorMessage = $"Error {ex.Message}";
