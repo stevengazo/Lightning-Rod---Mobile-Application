@@ -5,13 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Manchito.DataBaseContext;
 using Manchito.Model;
+using Manchito.Views;
 
 namespace Manchito.ViewModel
 {
 	public class ViewProjectViewModel : INotifyPropertyChangedAbst
 	{
 
+		public int ProjectIdEXternal { get; set; }
 		private INavigation Navigation { get; set; }
+		private ViewProject ViewProject { get; set; }
 
 		private Project _Project;
 
@@ -29,14 +32,22 @@ namespace Manchito.ViewModel
 		}
 
 
-		public ViewProjectViewModel(INavigation nav)
+		public ViewProjectViewModel(INavigation nav, ViewProject _viewProject)
 		{
 			Navigation = nav;
+			ViewProject = _viewProject;
 
+			// refresh the data and the project
+			ViewProject.Appearing += (s, a) =>
+			{
+				// Logic
+				Project = GetProject(ProjectIdEXternal);
+
+			};
 		}
 
 
-		private async Task<Project> GetProject(int idProject)
+		private  Project GetProject(int idProject)
 		{
 			try
 			{
@@ -53,6 +64,5 @@ namespace Manchito.ViewModel
 				return null;
 			}
 		}
-
 	}
 }

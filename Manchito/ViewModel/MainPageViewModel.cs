@@ -45,27 +45,22 @@ namespace Manchito.ViewModel
         {
             Navigation= navigation;
             _MainPage= mainPage;
-
+            /// Add event listener and call the function loadproject when the view is loaded
             _MainPage.Appearing += (s, a) => {
                 LoadProjects();
             };
-
             // binding the icommand property with the async method
             ViewProjectCommand = new Command(async (t) =>  ViewProject(t));
 			// binding the icommand property with the async method
-			AddProjectCommand = new Command(async ()=> await AddProject());
-            
-
-
-            LoadProjects();
+			AddProjectCommand = new Command(async ()=> await AddProject());            
 		}
 
 
-        private void  ViewProject(object t)
+        private  void  ViewProject(object t)
 		{
             try
-            {             
-                ViewProject viewProjecttmp = new ViewProject() {ProjectId= (int)t };				
+            {
+                ViewProject viewProjecttmp = new ViewProject( t);
                 Navigation.PushAsync(viewProjecttmp);
 
 			}
