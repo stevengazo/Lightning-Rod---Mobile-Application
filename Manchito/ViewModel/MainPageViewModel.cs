@@ -46,17 +46,22 @@ namespace Manchito.ViewModel
             Navigation= navigation;
             _MainPage= mainPage;
 
+            _MainPage.Appearing += (s, a) => {
+                LoadProjects();
+            };
 
             // binding the icommand property with the async method
             ViewProjectCommand = new Command(async (t) =>  ViewProject(t));
 			// binding the icommand property with the async method
 			AddProjectCommand = new Command(async ()=> await AddProject());
             
+
+
             LoadProjects();
 		}
 
 
-        public  void  ViewProject(object t)
+        private void  ViewProject(object t)
 		{
             try
             {             

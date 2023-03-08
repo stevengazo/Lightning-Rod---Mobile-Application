@@ -14,6 +14,12 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = new MainPageViewModel(Navigation,this);
+		
 	}	
+	
+
+
+
+	
 }
 
