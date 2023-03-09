@@ -14,10 +14,10 @@ namespace Manchito.ViewModel
 {
    public class AddProjectViewModel : INotifyPropertyChangedAbst
     {
+		#region Properties
 		private AddProject _AddProjectView { get; set; }
 		private INavigation Navigation { get; set; }
 		private string _Alias;
-
 		public string Alias
 		{
 			get { return _Alias; }
@@ -28,9 +28,7 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
 		private DateTime _DateProject;
-
 		public DateTime DateProject
 		{
 			get { return _DateProject; }
@@ -41,9 +39,7 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
 		private string _Status;
-
 		public string Status
 		{
 			get { return _Status; }
@@ -54,9 +50,7 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
 		private string _customerName;
-
 		public string CustomerName
 		{
 			get { return _customerName; }
@@ -67,9 +61,7 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
 		private string _CustomerContactName;
-
 		public string CustomerContactName
 		{
 			get { return _CustomerContactName; }
@@ -80,13 +72,8 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
-
-
 		public ICommand AddProjectCommand { get; private set; }
-
 		private string _ErrorMessage;
-
 		public string ErrorMessage
 		{
 			get { return _ErrorMessage; }
@@ -96,14 +83,18 @@ namespace Manchito.ViewModel
 				}			
 			}
 		}
+		#endregion
 
-
+		#region Methods
 		public AddProjectViewModel(INavigation navigation, AddProject addProject)
 		{
 			/// Allow close the view from this class
 			_AddProjectView = addProject;
 			// Navigation of the system
 			Navigation = navigation;
+			// Actual date
+			DateProject = DateTime.Today;
+
 			// Command to add new projects
 			AddProjectCommand = new Command(async () => await AddProject());
 
@@ -175,5 +166,6 @@ namespace Manchito.ViewModel
 				Navigation.RemovePage(_AddProjectView);
 			}
 		}
+		#endregion
 	}
 }

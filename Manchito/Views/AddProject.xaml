@@ -63,7 +63,7 @@
             </Label>
             <Frame BorderColor="White" CornerRadius="5" Padding="0">
                 <DatePicker 
-                    Date="{Binding DateProject}"
+                    Date="{Binding DateProject}"                    
                     BackgroundColor="WhiteSmoke"                    
                     WidthRequest="240"
                     HorizontalOptions="Center"                       
@@ -78,7 +78,7 @@
             </Label>
             <Frame BorderColor="White" CornerRadius="5" Padding="0">
                 <Picker x:Name="picker"
-                        Margin="0"       
+                        Margin="0"                               
                         SelectedItem="{Binding Status}"
                         BackgroundColor="WhiteSmoke"
                         HorizontalTextAlignment="Center"
