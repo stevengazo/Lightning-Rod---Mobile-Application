@@ -1,4 +1,5 @@
 ﻿using Manchito.DataBaseContext;
+using Manchito.Model;
 using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -141,6 +142,7 @@ namespace Manchito.ViewModel
 					projectid++;
 					using(var dbLocal = new DBLocalContext())
 					{
+						// add the project to the db
 						Model.Project tmpProject = new Model.Project() { 
 							ProjectId = projectid,
 							Name = Alias,
@@ -149,6 +151,18 @@ namespace Manchito.ViewModel
 							Status = this._Status
 						};
 						dbLocal.Project.Add(tmpProject);
+						dbLocal.SaveChanges();
+						// create the maintanance
+						var lastIdMaintenance = (from maint in dbLocal.Maintenance orderby maint.MaintenanceId descending select maint.MaintenanceId).FirstOrDefault();
+						Maintenance maintenancetmp = new Maintenance()
+						{
+							MaintenanceId = lastIdMaintenance + 1,
+							ProjectId = tmpProject.ProjectId,
+							Alias = $"Mantenimiento defecto",
+							DateOfMaintenance = DateTime.Today,
+							Status = "En progreso"
+						};
+						dbLocal.Maintenance.Add(maintenancetmp);
 						dbLocal.SaveChanges();
 						await _AddProjectView.DisplayAlert("Información", $"Proyecto Agregado con éxito\nProjecto {tmpProject.ProjectId}\nCliente {tmpProject.Name}", "Ok");
 						Navigation.RemovePage(_AddProjectView);

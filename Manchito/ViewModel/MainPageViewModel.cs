@@ -14,8 +14,8 @@ namespace Manchito.ViewModel
 {
    public class MainPageViewModel : INotifyPropertyChangedAbst
     {
-        public ICommand AddProjectCommand { get; private set; }
-
+		#region Properties
+		public ICommand AddProjectCommand { get; private set; }
         public ICommand ViewProjectCommand { get; private set; }
         private List<Project> _Projects;
         private string _ErrorMessage;
@@ -40,8 +40,12 @@ namespace Manchito.ViewModel
             }
         }
         private MainPage _MainPage { get; set; }
-        public INavigation Navigation { get; set; }        
-        public MainPageViewModel(INavigation navigation,MainPage mainPage)
+        public INavigation Navigation { get; set; }
+		#endregion
+
+		#region Methods
+
+		public MainPageViewModel(INavigation navigation,MainPage mainPage)
         {
             Navigation= navigation;
             _MainPage= mainPage;
@@ -55,14 +59,12 @@ namespace Manchito.ViewModel
 			AddProjectCommand = new Command(async ()=> await AddProject());            
 		}
 
-
         private  void  ViewProject(object t)
 		{
             try
             {
                 ViewProject viewProjecttmp = new ViewProject( t);
                 Navigation.PushAsync(viewProjecttmp);
-
 			}
 			catch (Exception ex)
             {
@@ -85,8 +87,6 @@ namespace Manchito.ViewModel
             }
         }
 
-             
-
         public async Task AddProject()
         {
             try
@@ -99,5 +99,6 @@ namespace Manchito.ViewModel
             }
             
         }
-    }
+		#endregion
+	}
 }
