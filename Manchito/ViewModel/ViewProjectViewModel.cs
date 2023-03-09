@@ -14,6 +14,7 @@ namespace Manchito.ViewModel
 	{
 		#region Properties
 		public ICommand AddMaintenanceCommand { get; private set; }
+		public ICommand ViewMaintenanceCommand { get; private set; }
 		public ICommand DeleteProjectCommand { get; private set; }
 		public int ProjectIdEXternal { get; set; }
 		private INavigation Navigation { get; set; }
@@ -64,11 +65,24 @@ namespace Manchito.ViewModel
 				Project = GetProject(ProjectIdEXternal);
 				LoadMaintenances();
 			};
-			// binding command 
+			// binding command Delete Project
 			DeleteProjectCommand = new Command(() =>
 			{
 				DeleteProject();
 			});
+			// binding command view maintenance
+			ViewMaintenanceCommand = new Command((t) => { ViewMaintenance(t); });
+		}
+
+		private async void ViewMaintenance(object idNumber)
+		{
+			try
+			{
+				int number = int.Parse(idNumber.ToString());
+				throw new NotImplementedException();
+			}catch(Exception ex) {
+			await _ViewProject.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
+			}
 		}
 		private async Task AddMaintenance()
 		{
