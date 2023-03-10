@@ -12,7 +12,7 @@ public partial class ViewProject : ContentPage
 		{
 			InitializeComponent();
 
-			BindingContext = new ViewProjectViewModel(Navigation,this) { ProjectIdEXternal= ProjectId};
+			BindingContext = new ViewProjectViewModel(this) { ProjectIdEXternal= ProjectId};
 		}
 		else
 		{
@@ -27,7 +27,7 @@ public partial class ViewProject : ContentPage
 		{
 			InitializeComponent();
 
-			BindingContext = new ViewProjectViewModel(Navigation, this) { ProjectIdEXternal = ProjectId };
+			BindingContext = new ViewProjectViewModel( this) { ProjectIdEXternal = ProjectId };
 		}
 		else
 		{

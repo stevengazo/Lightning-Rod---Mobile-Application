@@ -20,7 +20,7 @@
                         Text="{Binding Alias}"                        
                         HorizontalOptions="Center"
                         WidthRequest="240"
-                        Style="{StaticResource CommonEntryStyle}"
+                        
                         Placeholder="Nombre del Proyecto"
                         MaxLength="80">
                 </Entry>
@@ -37,7 +37,7 @@
                         Text="{Binding CustomerName}"
                         HorizontalOptions="Center"
                         WidthRequest="240"
-                        Style="{StaticResource CommonEntryStyle}"
+                        
                         Placeholder="Ejemplo S.A."
                         MaxLength="80">
                 </Entry>
@@ -51,7 +51,7 @@
                         Text="{Binding CustomerContactName}"
                         HorizontalOptions="Center"
                         WidthRequest="240"
-                        Style="{StaticResource CommonEntryStyle}"
+                        
                         Placeholder="Pepito"
                         MaxLength="80">
                 </Entry>

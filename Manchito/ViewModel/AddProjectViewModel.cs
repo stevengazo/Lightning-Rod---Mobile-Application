@@ -16,7 +16,7 @@ namespace Manchito.ViewModel
     {
 		#region Properties
 		private AddProject _AddProjectView { get; set; }
-		private INavigation Navigation { get; set; }
+
 		private string _Alias;
 		public string Alias
 		{
@@ -86,12 +86,11 @@ namespace Manchito.ViewModel
 		#endregion
 
 		#region Methods
-		public AddProjectViewModel(INavigation navigation, AddProject addProject)
+		public AddProjectViewModel(AddProject addProject)
 		{
 			/// Allow close the view from this class
 			_AddProjectView = addProject;
-			// Navigation of the system
-			Navigation = navigation;
+
 			// Actual date
 			DateProject = DateTime.Today;
 
@@ -156,14 +155,14 @@ namespace Manchito.ViewModel
 						dbLocal.Maintenance.Add(maintenancetmp);
 						dbLocal.SaveChanges();
 						await _AddProjectView.DisplayAlert("Información", $"Proyecto Agregado con éxito\nProjecto {tmpProject.ProjectId}\nCliente {tmpProject.Name}", "Ok");
-						Navigation.RemovePage(_AddProjectView);
+						_AddProjectView.Navigation.RemovePage(_AddProjectView);
 					}
 				}
 			}catch(Exception f)
 			{
 				ErrorMessage =  $"Error interno: {f.Message}";
 				await _AddProjectView.DisplayAlert("Error", $"Error Interno {f.Message}","Ok");
-				Navigation.RemovePage(_AddProjectView);
+				_AddProjectView.Navigation.RemovePage(_AddProjectView);
 			}
 		}
 		#endregion

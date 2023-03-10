@@ -42,7 +42,7 @@
                 <Entry  HorizontalOptions="Center"
                         MaximumWidthRequest="180"
                         BackgroundColor="WhiteSmoke"
-                        Style="{StaticResource CommonEntryStyle}"
+                        
                         Placeholder="Alias del sitio"
                         WidthRequest="300"
                     

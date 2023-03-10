@@ -18,7 +18,6 @@ namespace Manchito.ViewModel
 		public ICommand DeleteProjectCommand { get; private set; }
 		public ICommand UpdateProjectCommand { get; private set; }	
 		public int ProjectIdEXternal { get; set; }
-		private INavigation Navigation { get; set; }
 		private List<Maintenance> _Maintenances;
 
 		public List<Maintenance> Maintenances
@@ -55,9 +54,8 @@ namespace Manchito.ViewModel
 		/// </summary>
 		/// <param name="nav">Navigation</param>
 		/// <param name="_viewProject">View how implement the view</param>
-		public ViewProjectViewModel(INavigation nav, ViewProject _viewProject)
+		public ViewProjectViewModel(ViewProject _viewProject)
 		{
-			Navigation = nav;
 			_ViewProject = _viewProject;
 			// refresh the data and the project
 			_ViewProject.Appearing += (s, a) =>
@@ -95,7 +93,7 @@ namespace Manchito.ViewModel
 			}catch (Exception ex)
 			{
 				await _ViewProject.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
-				Navigation.RemovePage(_ViewProject);
+				_ViewProject.Navigation.RemovePage(_ViewProject);
 			}
 		}
 
@@ -114,13 +112,13 @@ namespace Manchito.ViewModel
 						dbLocal.SaveChanges();
 					}
 					await _ViewProject.DisplayAlert("Información", $"Proyecto eliminado", "Ok");
-					Navigation.RemovePage(_ViewProject);
+					_ViewProject.Navigation.RemovePage(_ViewProject);
 				}
 			}
 			catch (Exception ex)
 			{
 				await _ViewProject.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
-				Navigation.RemovePage(_ViewProject);
+				_ViewProject.Navigation.RemovePage(_ViewProject);
 			}
 		}
 
@@ -163,7 +161,7 @@ namespace Manchito.ViewModel
 			try
 			{
 				UpdateProject UpdateView = new UpdateProject(Project.ProjectId);
-				await Navigation.PushAsync(UpdateView);
+				await _ViewProject.Navigation.PushAsync(UpdateView);
 			}
 			catch(Exception f)
 			{

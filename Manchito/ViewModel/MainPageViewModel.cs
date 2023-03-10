@@ -40,14 +40,12 @@ namespace Manchito.ViewModel
             }
         }
         private MainPage _MainPage { get; set; }
-        public INavigation Navigation { get; set; }
 		#endregion
 
 		#region Methods
 
-		public MainPageViewModel(INavigation navigation,MainPage mainPage)
+		public MainPageViewModel(MainPage mainPage)
         {
-            Navigation= navigation;
             _MainPage= mainPage;
             /// Add event listener and call the function loadproject when the view is loaded
             _MainPage.Appearing += (s, a) => {
@@ -64,7 +62,7 @@ namespace Manchito.ViewModel
             try
             {
                 ViewProject viewProjecttmp = new ViewProject( t);
-                Navigation.PushAsync(viewProjecttmp);
+                _MainPage.Navigation.PushAsync(viewProjecttmp);
 			}
 			catch (Exception ex)
             {
@@ -91,7 +89,7 @@ namespace Manchito.ViewModel
         {
             try
             {
-                await Navigation.PushAsync(new AddProject());
+                await _MainPage.Navigation.PushAsync(new AddProject());
                 
 			}catch(Exception ex)
             {
