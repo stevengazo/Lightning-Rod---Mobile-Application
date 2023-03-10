@@ -1,10 +1,19 @@
+using Manchito.ViewModel;
 namespace Manchito.Views;
 
 public partial class ViewMaintenance : ContentPage
 {
+	public int MaintenanceId { get; set; }
 	public ViewMaintenance()
 	{
 		InitializeComponent();
+		BindingContext = new  ViewMaintenanceViewModel(this);
+	}
+	public ViewMaintenance(int id)
+	{
+		MaintenanceId= id;
+		InitializeComponent();
+		BindingContext = new ViewMaintenanceViewModel(this);
 	}
 
 	private void Button_Clicked(object sender, EventArgs e)
@@ -28,14 +37,12 @@ public partial class ViewMaintenance : ContentPage
 		try
 		{
 			string action = await DisplayActionSheet("¿Qué tipo de item deseas añadir?", "Cancelar", null, "Pararrayos", "Montaje", "Bajante", "Sistema Puesta a Tierra", "Unificaciones", "Supresores");
-
 			if (action != null)
 			{
 				if (!action.Equals("Cancelar"))
 				{
 					string result = await DisplayPromptAsync("Alias", "Digite el nombre del item a agregar");
 				}
-				
 			}
 			//await Navigation.PushAsync(new AddItem());
 		}catch (Exception ex)

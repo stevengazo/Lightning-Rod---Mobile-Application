@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Manchito.DataBaseContext;
 using Manchito.Model;
 using Manchito.Views;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Manchito.ViewModel
 {
@@ -16,15 +17,18 @@ namespace Manchito.ViewModel
 		public ICommand AddMaintenanceCommand { get; private set; }
 		public ICommand ViewMaintenanceCommand { get; private set; }
 		public ICommand DeleteProjectCommand { get; private set; }
-		public ICommand UpdateProjectCommand { get; private set; }	
+		public ICommand UpdateProjectCommand { get; private set; }
 		public int ProjectIdEXternal { get; set; }
 		private List<Maintenance> _Maintenances;
 
 		public List<Maintenance> Maintenances
 		{
 			get { return _Maintenances; }
-			set { _Maintenances = value;
-				if(Maintenances!= null) {
+			set
+			{
+				_Maintenances = value;
+				if (Maintenances != null)
+				{
 					OnPropertyChanged(nameof(Maintenances));
 				}
 			}
@@ -64,11 +68,13 @@ namespace Manchito.ViewModel
 				Project = GetProject(ProjectIdEXternal);
 				LoadMaintenances();
 			};
+			// binding command add Project
+			AddMaintenanceCommand = new Command(() => { AddMaintenance(); });
 			// binding command Delete Project
 			DeleteProjectCommand = new Command(() =>
-			{
-				DeleteProject();
-			});
+			 {
+				 DeleteProject();
+			 });
 			// binding command view maintenance
 			ViewMaintenanceCommand = new Command((t) => { ViewMaintenance(t); });
 			// binding command update project
@@ -80,30 +86,80 @@ namespace Manchito.ViewModel
 			try
 			{
 				int number = int.Parse(idNumber.ToString());
-				throw new NotImplementedException();
-			}catch(Exception ex) {
-			await _ViewProject.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
+				ViewMaintenance viewMaintenance = new ViewMaintenance();
+				await _ViewProject.Navigation.PushAsync(viewMaintenance);
+
+			}
+			catch (Exception ex)
+			{
+				await _ViewProject.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
 			}
 		}
 		private async Task AddMaintenance()
 		{
 			try
 			{
-
-			}catch (Exception ex)
+				Model.Maintenance tmp = new Maintenance();
+				tmp.ProjectId = Project.ProjectId;
+				tmp.MaintenanceId = GetLastMaintenanceId() + 1;
+				tmp.DateOfMaintenance = DateTime.Now;
+				tmp.Alias = await _ViewProject.DisplayPromptAsync("Ingreso mantenimiento", "¿Deseas añadir un mantenimiento?", "Agregar", "Cancelar", null, 50);
+				tmp.Status = await _ViewProject.DisplayActionSheet("Estatus del mantenimiento", "Cancelar", null, "En ejecución", "Concluido", "Pendiente ejecución");
+				if (!string.IsNullOrEmpty(tmp.Alias) && !string.IsNullOrEmpty(tmp.Status) && !tmp.Status.Equals("Cancelar"))
+				{
+					using (var dbLocal = new DBLocalContext())
+					{
+						dbLocal.Add(tmp);
+						dbLocal.SaveChanges();
+						await LoadMaintenances();
+						await _ViewProject.DisplayAlert("Informacion", "Mantenimiento Agregado", "OK");
+						// base items of the maintenance
+						List<Category> itemsCategories = new List<Category>();
+						using (var local = new DBLocalContext())
+						{
+							var itemstypes = local.ItemTypes.ToList();
+							foreach (var item in itemstypes)
+							{
+								Category categoryTmp = new Category();
+								categoryTmp.CategoryId = await lastCategoryId() + 1;
+								categoryTmp.Alias = "No Asignado";
+								categoryTmp.ItemTypeId = item.ItemTypeId;
+								categoryTmp.MaintenanceId = tmp.MaintenanceId;
+								dbLocal.Add(categoryTmp);
+								dbLocal.SaveChanges();								
+							}
+							await _ViewProject.DisplayAlert("Informacion", "Items por defecto agregados al mantenimiento", "OK");
+						}
+					}
+				}
+			}
+			catch (Exception ex)
 			{
 				await _ViewProject.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
 				_ViewProject.Navigation.RemovePage(_ViewProject);
 			}
 		}
 
+		private async Task<int> lastCategoryId()
+		{
+			using (var db = new DBLocalContext())
+			{
+				int id = (from iT in db.Category
+						  orderby iT.CategoryId descending
+						  select iT.CategoryId).FirstOrDefault();
+				return id;
+			}
+		}
+
+
 		private async Task DeleteProject()
 		{
 			try
 			{
 				var result = await _ViewProject.DisplayAlert("Alerta", "Deseas borrar este dato", "Yes", "No");
-				if (result.Equals(true)){
-					using(var dbLocal = new DBLocalContext())
+				if (result.Equals(true))
+				{
+					using (var dbLocal = new DBLocalContext())
 					{
 						var query = (from maint in dbLocal.Maintenance where maint.ProjectId == Project.ProjectId select maint).ToList();
 						dbLocal.RemoveRange(query);
@@ -122,11 +178,22 @@ namespace Manchito.ViewModel
 			}
 		}
 
-		private  Project GetProject(int idProject)
+
+		private int GetLastMaintenanceId()
+		{
+			using (var dbLocal = new DBLocalContext())
+			{
+				int id = (from main in dbLocal.Maintenance
+						  orderby main.MaintenanceId descending
+						  select main.MaintenanceId).FirstOrDefault();
+				return id;
+			}
+		}
+		private Project GetProject(int idProject)
 		{
 			try
 			{
-				using(var dblocal = new DBLocalContext())
+				using (var dblocal = new DBLocalContext())
 				{
 					var queryResult = (from proj in dblocal.Project
 									   where proj.ProjectId == idProject
@@ -134,7 +201,8 @@ namespace Manchito.ViewModel
 					return queryResult;
 				}
 
-			}catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
 				return null;
 			}
@@ -163,11 +231,11 @@ namespace Manchito.ViewModel
 				UpdateProject UpdateView = new UpdateProject(Project.ProjectId);
 				await _ViewProject.Navigation.PushAsync(UpdateView);
 			}
-			catch(Exception f)
+			catch (Exception f)
 			{
 				await _ViewProject.DisplayAlert("Error interno", $"Error interno, intentelo mas tarde. {f.Message}", "OK");
 			}
-			
+
 		}
 		#endregion
 	}
