@@ -16,6 +16,7 @@ namespace Manchito.ViewModel
 		public ICommand AddMaintenanceCommand { get; private set; }
 		public ICommand ViewMaintenanceCommand { get; private set; }
 		public ICommand DeleteProjectCommand { get; private set; }
+		public ICommand UpdateProjectCommand { get; private set; }	
 		public int ProjectIdEXternal { get; set; }
 		private INavigation Navigation { get; set; }
 		private List<Maintenance> _Maintenances;
@@ -72,6 +73,8 @@ namespace Manchito.ViewModel
 			});
 			// binding command view maintenance
 			ViewMaintenanceCommand = new Command((t) => { ViewMaintenance(t); });
+			// binding command update project
+			UpdateProjectCommand = new Command(() => { UpdateProject(); });
 		}
 
 		private async void ViewMaintenance(object idNumber)
@@ -146,7 +149,6 @@ namespace Manchito.ViewModel
 				using (var dbLocal = new DBLocalContext())
 				{
 					Maintenances = dbLocal.Maintenance.Where(M => M.ProjectId == Project.ProjectId).ToList();
-					
 				}
 
 			}
@@ -156,6 +158,19 @@ namespace Manchito.ViewModel
 			}
 		}
 
+		private async Task UpdateProject()
+		{
+			try
+			{
+				UpdateProject UpdateView = new UpdateProject(Project.ProjectId);
+				await Navigation.PushAsync(UpdateView);
+			}
+			catch(Exception f)
+			{
+				await _ViewProject.DisplayAlert("Error interno", $"Error interno, intentelo mas tarde. {f.Message}", "OK");
+			}
+			
+		}
 		#endregion
 	}
 }

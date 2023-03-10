@@ -49,6 +49,7 @@
                                 BackgroundColor="Green"
                                 TextColor="White"
                                 Padding="1"
+                                Command="{Binding UpdateProjectCommand}"
                                 BorderColor="WhiteSmoke"
                                 BorderWidth="1"
                                 WidthRequest="120"

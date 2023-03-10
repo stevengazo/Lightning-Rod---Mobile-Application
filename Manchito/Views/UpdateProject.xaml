@@ -4,9 +4,6 @@
              x:Class="Manchito.Views.UpdateProject"
              xmlns:local="clr-namespace:Manchito.ViewModel"
              Title="Actualizar Proyecto">
-    <ContentPage.BindingContext>
-        <local:UpdateProjectViewModel />
-    </ContentPage.BindingContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="500" />
@@ -14,9 +11,7 @@
         </Grid.RowDefinitions>
         <VerticalStackLayout Grid.Row="0" HorizontalOptions="Center" Spacing="20" VerticalOptions="Center" Padding="0,20">
             <!-- Id Proyecto-->
-            <Label FontSize="Subtitle" HorizontalOptions="Center">
-                Proyecto - 00
-            </Label>
+            <Label FontSize="Subtitle" HorizontalOptions="Center" TextColor="{Binding Project.ProjectId}" />
             <!--Alias-->
             <Label FontSize="Subtitle" HorizontalOptions="Center">
                 Alias
@@ -25,6 +20,7 @@
                 BackgroundColor="WhiteSmoke"
                 HorizontalOptions="Center"
                 MaximumWidthRequest="180"
+                Text="{Binding Project.Name, Mode=TwoWay}"
                 Style="{StaticResource CommonEntryStyle}"
                 Placeholder="Nombre del Proyecto"
                 MaxLength="80"              
@@ -32,26 +28,14 @@
             <Label FontSize="Small" HorizontalOptions="Center">
                 Alias: nombre del sitio o lugar
             </Label>
-            
-            <!--Fecha-->
-            <Label FontSize="Small" HorizontalOptions="Center">
-                Fecha
-            </Label>
-            <DatePicker 
-                    BackgroundColor="WhiteSmoke"
-                    MaximumWidthRequest="180"
-                    HorizontalOptions="Center"                       
-                />
-            <Label FontSize="Small" HorizontalOptions="Center">
-                Fecha: inicio del proyecto
-            </Label>
             <!--Estado-->
             <Label FontSize="Small" HorizontalOptions="Center">
                 Estado
             </Label>
             <Picker x:Name="picker"
-                    BackgroundColor="WhiteSmoke"
-                        Margin="0"                        
+                        BackgroundColor="WhiteSmoke"
+                        Margin="0"       
+                        SelectedItem="{Binding Project.Status,Mode=TwoWay}"
                         HorizontalTextAlignment="Center"
                         Title="Seleccione un estado">
                     <Picker.ItemsSource>
