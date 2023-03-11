@@ -4,9 +4,6 @@
              x:Class="Manchito.Views.ViewMaintenance"
              xmlns:local="clr-namespace:Manchito.ViewModel"
              Title="Mantenimiento">
-    <ContentPage.BindingContext>
-        <local:ViewMaintenanceViewModel />
-    </ContentPage.BindingContext>
     <Grid BackgroundColor="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -32,19 +29,19 @@
                     <Label Text="Alias de Mantenimiento" />
                 </Frame>
                 <Frame Grid.Row="1" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="Cell 0" />
+                    <Label Text="{Binding Maintenance.Alias}" />
                 </Frame>
                 <Frame Grid.Row="2" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
                     <Label Text="Fecha de Trabajo" />
                 </Frame>
                 <Frame Grid.Row="2" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="Cell 0" />
+                    <Label Text="{Binding Maintenance.DateOfMaintenance.Date}" />
                 </Frame>
                 <Frame Grid.Row="3" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
                     <Label Text="Estado del Proyecto" />
                 </Frame>
                 <Frame Grid.Row="3" Grid.Column="1" BorderColor="White"  Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="Cell 0" />
+                    <Label Text="{Binding Maintenance.Status}" />
                 </Frame>
                 <Frame Grid.Row="4" Grid.ColumnSpan="2" BorderColor="White" Padding="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0">
                     <Button Text="Validar Mantenimiento"

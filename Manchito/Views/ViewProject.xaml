@@ -24,24 +24,16 @@
                     <ColumnDefinition Width="8*" />
                 </Grid.ColumnDefinitions>
                 <Frame Grid.Column="0" Grid.Row="0" BorderColor="White" Padding="1" Margin="0" >
-                    <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0">
-                        Nombre
-                    </Label>
+                    <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0" Text="Nombre" />
                 </Frame>
                 <Frame Grid.Column="1" Grid.Row="0" BorderColor="White" Padding="1" Margin="10,0,0,0" >
-                    <Label FontSize="Caption" VerticalOptions="Center">
-                        Nombre del Proyecto
-                    </Label>
+                    <Label FontSize="Caption" VerticalOptions="Center" Text="{Binding Project.Name}" />
                 </Frame>
                 <Frame Grid.Column="0" Grid.Row="1" BorderColor="White" Padding="1" >
-                    <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0">
-                        Cliente
-                    </Label>
+                    <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0" Text="Cliente" />
                 </Frame>
                 <Frame Grid.Column="1" Grid.Row="1" BorderColor="White" Padding="1" Margin="10,0,0,0">
-                    <Label VerticalOptions="Center">
-                        Nombre cliente
-                    </Label>
+                    <Label VerticalOptions="Center" Text="{Binding Project.CustomerName}" />
                 </Frame>
                 <Frame Grid.Row="2" Grid.ColumnSpan="2"  Padding="0" BorderColor="White" >
                     <HorizontalStackLayout HorizontalOptions="Center" Margin="0" Spacing="10" Padding="0">

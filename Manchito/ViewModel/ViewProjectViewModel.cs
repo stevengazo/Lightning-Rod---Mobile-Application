@@ -86,7 +86,7 @@ namespace Manchito.ViewModel
 			try
 			{
 				int number = int.Parse(idNumber.ToString());
-				ViewMaintenance viewMaintenance = new ViewMaintenance();
+				ViewMaintenance viewMaintenance = new ViewMaintenance(number);
 				await _ViewProject.Navigation.PushAsync(viewMaintenance);
 
 			}
