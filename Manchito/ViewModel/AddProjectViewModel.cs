@@ -17,6 +17,8 @@ namespace Manchito.ViewModel
 		#region Properties
 		private AddProject _AddProjectView { get; set; }
 
+		private Project _Project = new();
+
 		private string _Alias;
 		public string Alias
 		{
@@ -99,7 +101,6 @@ namespace Manchito.ViewModel
 
 		}
 
-
 		public async Task<int> GetLastIdProject()
 		{
 			try
@@ -118,6 +119,58 @@ namespace Manchito.ViewModel
 			}
 		}
 
+		public void AddMaintenances()
+		{
+			try
+			{
+				using(var dbLocal = new DBLocalContext())
+				{
+					// create the maintanance
+					var lastIdMaintenance = (from maint in dbLocal.Maintenance orderby maint.MaintenanceId descending select maint.MaintenanceId).FirstOrDefault();
+					Maintenance maintenancetmp = new Maintenance()
+					{
+						MaintenanceId = lastIdMaintenance + 1,
+						ProjectId = _Project.ProjectId,
+						Alias = $"Mantenimiento defecto",
+						DateOfMaintenance = DateTime.Today,
+						Status = "En progreso"
+					};
+					dbLocal.Maintenance.Add(maintenancetmp);
+					dbLocal.SaveChanges();
+					_Project.Maintenances.Add(maintenancetmp);
+				}
+			}catch(Exception f){
+				throw new Exception("Error en funcion AddMaintenances");
+			}
+		}
+
+		public void AddCategories()
+		{
+			try
+			{
+				using (var db = new DBLocalContext())
+				{
+					List<Category> categories = new();
+					int lastCategoryId = (from i in db.Category orderby i.CategoryId descending select i.CategoryId).FirstOrDefault();
+					foreach (var item in db.ItemTypes.ToList())
+					{
+						lastCategoryId = lastCategoryId + 1;
+						Category tmpCategory = new() { 
+						CategoryId= lastCategoryId,
+						Alias ="No Asignado",
+						ItemTypeId = item.ItemTypeId,
+						MaintenanceId= _Project.Maintenances.FirstOrDefault().MaintenanceId
+						};
+						categories.Add(tmpCategory);
+					}
+					db.Category.AddRange(categories);
+					db.SaveChanges();
+				}
+			}catch(Exception f)
+			{
+				throw new Exception(f.Message);
+			}
+		}
 		public async Task AddProject()
 		{
 			try
@@ -142,18 +195,8 @@ namespace Manchito.ViewModel
 						};
 						dbLocal.Project.Add(tmpProject);
 						dbLocal.SaveChanges();
-						// create the maintanance
-						var lastIdMaintenance = (from maint in dbLocal.Maintenance orderby maint.MaintenanceId descending select maint.MaintenanceId).FirstOrDefault();
-						Maintenance maintenancetmp = new Maintenance()
-						{
-							MaintenanceId = lastIdMaintenance + 1,
-							ProjectId = tmpProject.ProjectId,
-							Alias = $"Mantenimiento defecto",
-							DateOfMaintenance = DateTime.Today,
-							Status = "En progreso"
-						};
-						dbLocal.Maintenance.Add(maintenancetmp);
-						dbLocal.SaveChanges();
+						AddMaintenances();
+						AddCategories();
 						await _AddProjectView.DisplayAlert("Información", $"Proyecto Agregado con éxito\nProjecto {tmpProject.ProjectId}\nCliente {tmpProject.Name}", "Ok");
 						_AddProjectView.Navigation.RemovePage(_AddProjectView);
 					}

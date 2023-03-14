@@ -92,6 +92,7 @@
                     Text="Cancelar"
                     BackgroundColor="Red"
                     BorderColor="LightPink"
+                    Command="{Binding CancelCommand}"
                     BorderWidth="1"
                     CornerRadius="10"
                     TextColor="White"

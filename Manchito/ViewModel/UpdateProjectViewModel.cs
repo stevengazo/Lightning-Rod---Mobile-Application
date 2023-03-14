@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Manchito.DataBaseContext;
 using Manchito.Model;
 using Manchito.Views;
@@ -15,6 +16,10 @@ namespace Manchito.ViewModel
 
 		#region Properties
 		private Project _Project;
+		private UpdateProject _UpdateProject;
+
+		public ICommand UpdateProjectCommand { get; private set; }
+        public ICommand CancelCommand { get;private set; }  
 
         public Project Project
         {
@@ -22,7 +27,7 @@ namespace Manchito.ViewModel
             set { _Project = value; }
         }
 
-        private UpdateProject _UpdateProject;
+        
 		#endregion
 
 		#region Method
@@ -30,6 +35,10 @@ namespace Manchito.ViewModel
         {
             
             this._UpdateProject = view;
+            // Commands
+            UpdateProjectCommand = new Command(UpdateProject);
+            CancelCommand = new Command(Cancel);
+            // validation of the logic
             if(_UpdateProject.ProjectId >= 0)
             {
 				Project = GetProject(view.ProjectId).Result;
@@ -64,17 +73,33 @@ namespace Manchito.ViewModel
                 return null;
             }
         }
-        private async Task<bool> UpdateProject()
+        private async void UpdateProject()
         {
             try
             {
-                return true;
+                using(var db = new DBLocalContext())
+                {
+                    db.Project.Update(Project);
+                    db.SaveChanges();
+                    await _UpdateProject.DisplayAlert("Información", "Información del proyecto actualizada", "Ok");
+                    _UpdateProject.Navigation.RemovePage(_UpdateProject);
+                }
             }catch (Exception ex)
             {
-                
-                return false;
+                throw new Exception(ex.Message);
             }
         }
+
+        private async void Cancel()
+        {
+            var lastPage = Application.Current.MainPage.Navigation.NavigationStack.ToList().LastOrDefault();
+            if(lastPage is UpdateProject)
+            {
+                Application.Current.MainPage.Navigation.RemovePage(lastPage);
+            }
+
+			
+		}
 
 		#endregion
 
