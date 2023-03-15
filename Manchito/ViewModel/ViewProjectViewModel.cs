@@ -200,7 +200,6 @@ namespace Manchito.ViewModel
 				Application.Current.MainPage.DisplayAlert("Error", $"Error en function GetProjet, {ex.Message}", "ok");
 				return null;
 			}
-
 		}
 
 		private void LoadProject()
@@ -212,6 +211,7 @@ namespace Manchito.ViewModel
 				{
 					tmp = int.Parse(arg.ToString());
 					Project = await GetProject(tmp);
+					await LoadMaintenances();
 				});
 				//MessagingCenter.Unsubscribe<MainPageViewModel, int>(this, "Hi");
 			}catch (Exception ex)

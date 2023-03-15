@@ -5,7 +5,9 @@
              xmlns:local="clr-namespace:Manchito.ViewModel"
              x:Name="ViewProjectPage"
              Title="Información de Proyecto">
-    
+    <ContentPage.BindingContext>
+        <local:ViewProjectViewModel/>
+    </ContentPage.BindingContext>
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*" />
