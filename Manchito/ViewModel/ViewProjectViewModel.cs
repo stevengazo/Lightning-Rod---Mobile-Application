@@ -183,7 +183,7 @@ namespace Manchito.ViewModel
 				return id;
 			}
 		}
-		private async Task<Project> GetProject(int idProject)
+		private async Task< Project> GetProject(int idProject)
 		{
 			try
 			{
@@ -197,20 +197,28 @@ namespace Manchito.ViewModel
 			}
 			catch (Exception ex)
 			{
-				await Application.Current.MainPage.DisplayAlert("Error", $"Error en function GetProjet, {ex.Message}", "ok");
+				Application.Current.MainPage.DisplayAlert("Error", $"Error en function GetProjet, {ex.Message}", "ok");
 				return null;
 			}
 
 		}
 
-		private async void LoadProject()
+		private void LoadProject()
 		{
-			var tmp = 0;
-			MessagingCenter.Subscribe<MainPageViewModel, int>(this, "Hi", async (sender, arg) =>
+			try
 			{
-				tmp = int.Parse(arg.ToString());
-				Project =await GetProject(tmp);
-			});			
+				var tmp = 0;
+				MessagingCenter.Subscribe<MainPageViewModel,int>(this, "Hi", async (sender, arg) =>
+				{
+					tmp = int.Parse(arg.ToString());
+					Project = await GetProject(tmp);
+				});
+				//MessagingCenter.Unsubscribe<MainPageViewModel, int>(this, "Hi");
+			}catch (Exception ex)
+			{
+				Application.Current.MainPage.DisplayAlert("error", $"Eror {ex.Message}", "OK");
+			}
+			
 		}
 
 		private async Task LoadMaintenances()

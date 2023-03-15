@@ -61,9 +61,9 @@ namespace Manchito.ViewModel
 		{
             try
             {
-                int id = int.Parse(t.ToString());
-				MessagingCenter.Send<MainPageViewModel, int>(this, "Hi", id);				
+                int id = int.Parse(t.ToString());				
                 await Application.Current.MainPage.Navigation.PushAsync(new ViewProject());
+				MessagingCenter.Send<MainPageViewModel, int>(this, "Hi", id);
 			}
 			catch (Exception ex)
             {
