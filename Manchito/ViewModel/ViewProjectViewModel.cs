@@ -183,7 +183,7 @@ namespace Manchito.ViewModel
 				return id;
 			}
 		}
-		private Project GetProject(int idProject)
+		private async Task<Project> GetProject(int idProject)
 		{
 			try
 			{
@@ -197,19 +197,20 @@ namespace Manchito.ViewModel
 			}
 			catch (Exception ex)
 			{
+				await Application.Current.MainPage.DisplayAlert("Error", $"Error en function GetProjet, {ex.Message}", "ok");
 				return null;
 			}
+
 		}
 
-		private void LoadProject()
+		private async void LoadProject()
 		{
 			var tmp = 0;
 			MessagingCenter.Subscribe<MainPageViewModel, int>(this, "Hi", async (sender, arg) =>
 			{
 				tmp = int.Parse(arg.ToString());
-				await Application.Current.MainPage.DisplayAlert("Message received", "arg=" + arg, "OK");				
-			});
-			Project = GetProject(tmp);
+				Project =await GetProject(tmp);
+			});			
 		}
 
 		private async Task LoadMaintenances()
@@ -220,7 +221,6 @@ namespace Manchito.ViewModel
 				{
 					Maintenances = dbLocal.Maintenance.Where(M => M.ProjectId == Project.ProjectId).ToList();
 				}
-
 			}
 			catch (Exception ex)
 			{

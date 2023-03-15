@@ -56,17 +56,18 @@ namespace Manchito.ViewModel
             LoadProjectsCommand = new Command(async ()=> await LoadProjects());
 		}
 
-        private  void  ViewProject(object t)
+        [Obsolete]
+        private async void ViewProject(object t)
 		{
             try
             {
                 int id = int.Parse(t.ToString());
 				MessagingCenter.Send<MainPageViewModel, int>(this, "Hi", id);				
-                Application.Current.MainPage.Navigation.PushAsync(new ViewProject());
+                await Application.Current.MainPage.Navigation.PushAsync(new ViewProject());
 			}
 			catch (Exception ex)
             {
-				Application.Current.MainPage.DisplayAlert("Error interno", $"Error: {ex.Message}", "ok");
+				await Application.Current.MainPage.DisplayAlert("Error interno", $"Error: {ex.Message}", "ok");
 			}
         }
 

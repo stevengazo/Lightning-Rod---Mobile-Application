@@ -9,6 +9,7 @@ public partial class ViewProject : ContentPage
 	public ViewProject()
 	{
 			InitializeComponent();
+			BindingContext = new ViewProjectViewModel();
 	}
 	
 }
