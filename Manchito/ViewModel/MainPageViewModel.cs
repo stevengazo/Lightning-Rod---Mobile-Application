@@ -60,8 +60,9 @@ namespace Manchito.ViewModel
 		{
             try
             {
-                ViewProject viewProjecttmp = new ViewProject( t);
-                Application.Current.MainPage.Navigation.PushAsync(viewProjecttmp);
+                int id = int.Parse(t.ToString());
+				MessagingCenter.Send<MainPageViewModel, int>(this, "Hi", id);				
+                Application.Current.MainPage.Navigation.PushAsync(new ViewProject());
 			}
 			catch (Exception ex)
             {

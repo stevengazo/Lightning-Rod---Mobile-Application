@@ -58,16 +58,9 @@ namespace Manchito.ViewModel
 		/// </summary>
 		/// <param name="nav">Navigation</param>
 		/// <param name="_viewProject">View how implement the view</param>
-		public ViewProjectViewModel(ViewProject _viewProject)
+		public ViewProjectViewModel()
 		{
-			_ViewProject = _viewProject;
-			// refresh the data and the project
-			_ViewProject.Appearing += (s, a) =>
-			{
-				// Logic
-				Project = GetProject(ProjectIdEXternal);
-				LoadMaintenances();
-			};
+			LoadProject();
 			// binding command add Project
 			AddMaintenanceCommand = new Command(() => { AddMaintenance(); });
 			// binding command Delete Project
@@ -79,6 +72,7 @@ namespace Manchito.ViewModel
 			ViewMaintenanceCommand = new Command((t) => { ViewMaintenance(t); });
 			// binding command update project
 			UpdateProjectCommand = new Command(() => { UpdateProject(); });
+			
 		}
 
 		private async void ViewMaintenance(object idNumber)
@@ -200,12 +194,22 @@ namespace Manchito.ViewModel
 									   select proj).FirstOrDefault();
 					return queryResult;
 				}
-
 			}
 			catch (Exception ex)
 			{
 				return null;
 			}
+		}
+
+		private void LoadProject()
+		{
+			var tmp = 0;
+			MessagingCenter.Subscribe<MainPageViewModel, int>(this, "Hi", async (sender, arg) =>
+			{
+				tmp = int.Parse(arg.ToString());
+				await Application.Current.MainPage.DisplayAlert("Message received", "arg=" + arg, "OK");				
+			});
+			Project = GetProject(tmp);
 		}
 
 		private async Task LoadMaintenances()
