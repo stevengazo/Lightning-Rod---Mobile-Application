@@ -45,18 +45,43 @@ namespace Manchito.ViewModel
 		#endregion
 
 		#region Methods
-
 		public MainPageViewModel()
-        {
-               
+        {               
             // binding the icommand property with the async method
             ViewProjectCommand = new Command(async (t) =>  ViewProject(t));
 			// binding the icommand property with the async method
 			AddProjectCommand = new Command(async ()=> await AddProject());    
             LoadProjectsCommand = new Command(async ()=> await LoadProjects());
 		}
+		public async Task AddProject()
+		{
+			try
+			{
+				await Application.Current.MainPage.Navigation.PushAsync(new AddProject());
 
-        [Obsolete]
+			}
+			catch (Exception ex)
+			{
+				ErrorMessage = $"Error {ex.Message}";
+			}
+
+		}
+		public async Task LoadProjects()
+		{
+			try
+			{
+				// load the projects in the db
+				using (var db = new DBLocalContext())
+				{
+					Projects = db.Project.ToList();
+				}
+			}
+			catch (Exception ex)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error interno", $"Error: {ex.Message}", "ok");
+			}
+		}
+		[Obsolete]
         private async void ViewProject(object t)
 		{
             try
@@ -69,34 +94,6 @@ namespace Manchito.ViewModel
             {
 				await Application.Current.MainPage.DisplayAlert("Error interno", $"Error: {ex.Message}", "ok");
 			}
-        }
-
-        public async Task LoadProjects()
-        {
-            try
-            {
-				// load the projects in the db
-				using (var db = new DBLocalContext())
-				{
-					Projects = db.Project.ToList();
-				}
-			}
-			catch(Exception ex) {
-                await Application.Current.MainPage.DisplayAlert("Error interno", $"Error: {ex.Message}", "ok");   
-            }
-        }
-
-        public async Task AddProject()
-        {
-            try
-            {
-                await Application.Current.MainPage.Navigation.PushAsync(new AddProject());
-                
-			}catch(Exception ex)
-            {
-                ErrorMessage = $"Error {ex.Message}";
-            }
-            
         }
 		#endregion
 	}

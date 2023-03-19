@@ -15,7 +15,6 @@ namespace Manchito.ViewModel
    public class AddProjectViewModel : INotifyPropertyChangedAbst
     {
 		#region Properties
-		private AddProject _AddProjectView { get; set; }
 
 		private Project _Project = new();
 
@@ -88,11 +87,8 @@ namespace Manchito.ViewModel
 		#endregion
 
 		#region Methods
-		public AddProjectViewModel(AddProject addProject)
-		{
-			/// Allow close the view from this class
-			_AddProjectView = addProject;
-
+		public AddProjectViewModel()
+		{			
 			// Actual date
 			DateProject = DateTime.Today;
 
@@ -118,66 +114,19 @@ namespace Manchito.ViewModel
 				return -1;
 			}
 		}
-
-		public void AddMaintenances()
+		private async void ClosedPage()
 		{
-			try
-			{
-				using(var dbLocal = new DBLocalContext())
-				{
-					// create the maintanance
-					var lastIdMaintenance = (from maint in dbLocal.Maintenance orderby maint.MaintenanceId descending select maint.MaintenanceId).FirstOrDefault();
-					Maintenance maintenancetmp = new Maintenance()
-					{
-						MaintenanceId = lastIdMaintenance + 1,
-						ProjectId = _Project.ProjectId,
-						Alias = $"Mantenimiento defecto",
-						DateOfMaintenance = DateTime.Today,
-						Status = "En progreso"
-					};
-					dbLocal.Maintenance.Add(maintenancetmp);
-					dbLocal.SaveChanges();
-					_Project.Maintenances.Add(maintenancetmp);
-				}
-			}catch(Exception f){
-				throw new Exception("Error en funcion AddMaintenances");
-			}
+			var page = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
+			Application.Current.MainPage.Navigation.RemovePage(page);
 		}
-
-		public void AddCategories()
-		{
-			try
-			{
-				using (var db = new DBLocalContext())
-				{
-					List<Category> categories = new();
-					int lastCategoryId = (from i in db.Category orderby i.CategoryId descending select i.CategoryId).FirstOrDefault();
-					foreach (var item in db.ItemTypes.ToList())
-					{
-						lastCategoryId = lastCategoryId + 1;
-						Category tmpCategory = new() { 
-						CategoryId= lastCategoryId,
-						Alias ="No Asignado",
-						ItemTypeId = item.ItemTypeId,
-						MaintenanceId= _Project.Maintenances.FirstOrDefault().MaintenanceId
-						};
-						categories.Add(tmpCategory);
-					}
-					db.Category.AddRange(categories);
-					db.SaveChanges();
-				}
-			}catch(Exception f)
-			{
-				throw new Exception(f.Message);
-			}
-		}
+	
 		public async Task AddProject()
 		{
 			try
 			{
 				if(Alias== null || Status  == null) {
 					ErrorMessage = "No hay datos cargados";
-					await _AddProjectView.DisplayAlert("Error", $"{ErrorMessage}", "Ok");
+					await Application.Current.MainPage.DisplayAlert("Error", $"{ErrorMessage}", "Ok");
 				}
 				else
 				{
@@ -195,17 +144,15 @@ namespace Manchito.ViewModel
 						};
 						dbLocal.Project.Add(tmpProject);
 						dbLocal.SaveChanges();
-						AddMaintenances();
-						AddCategories();
-						await _AddProjectView.DisplayAlert("Información", $"Proyecto Agregado con éxito\nProjecto {tmpProject.ProjectId}\nCliente {tmpProject.Name}", "Ok");
-						_AddProjectView.Navigation.RemovePage(_AddProjectView);
+						await Application.Current.MainPage.DisplayAlert("Información", $"Proyecto Agregado con éxito\nProjecto {tmpProject.ProjectId}\nCliente {tmpProject.Name}", "Ok");
+						ClosedPage();
 					}
 				}
 			}catch(Exception f)
 			{
 				ErrorMessage =  $"Error interno: {f.Message}";
-				await _AddProjectView.DisplayAlert("Error", $"Error Interno {f.Message}","Ok");
-				_AddProjectView.Navigation.RemovePage(_AddProjectView);
+				await Application.Current.MainPage.DisplayAlert("Error", $"Error Interno {f.Message}","Ok");
+				ClosedPage();
 			}
 		}
 		#endregion

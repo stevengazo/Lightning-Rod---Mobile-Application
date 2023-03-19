@@ -13,8 +13,8 @@ namespace Manchito.ViewModel
 {
 	public class ViewMaintenanceViewModel : INotifyPropertyChangedAbst
 	{
+		#region Properties
 		private Maintenance _Maintenance;
-
 		public Maintenance Maintenance
 		{
 			get { return _Maintenance; }
@@ -25,43 +25,42 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
 		public ViewMaintenance _ViewMaintenance { get; set; }
-		public ViewMaintenanceViewModel(ViewMaintenance VM)
-		{
-			_ViewMaintenance = VM;
+		#endregion
+		#region Methods
+		public ViewMaintenanceViewModel()
+		{			
 			Maintenance = GetMaintenance();
 		}
-		public ViewMaintenanceViewModel()
-		{
 
-		}
-
+		[Obsolete]
 		private Maintenance GetMaintenance()
 		{
 			try
 			{
 				Maintenance maintenance = null;
-				if (_ViewMaintenance.MaintenanceId > 0)
-				{
-					using (var dbLocal = new DBLocalContext())
-					{
-						maintenance = dbLocal.Maintenance.Where(M => M.MaintenanceId == _ViewMaintenance.MaintenanceId).FirstOrDefault();
+				var tmpId = 0;
 
-					}
+				MessagingCenter.Subscribe<ViewProjectViewModel, int>(this, "MaintenanceId", async (sender, arg) =>
+				{
+					tmpId = int.Parse(arg.ToString());					
+				});				
+				if (maintenance !=null)
+				{				
 					return maintenance;
 				}
 				else
 				{
-					_ViewMaintenance.DisplayAlert("Error interno", $"El mantenimiento no se encuentra definido", "Ok");
-					return maintenance;
+					Application.Current.MainPage.DisplayAlert("Error interno", $"El mantenimiento no se encuentra definido", "Ok");
+					return null;
 				}
 			}
 			catch (Exception ex)
 			{
-				_ViewMaintenance.DisplayAlert("Error interno", $"Error. Estos son los detalles del error {ex.Message}", "Ok");
+				Application.Current.MainPage.DisplayAlert("Error interno", $"Error. Estos son los detalles del error {ex.Message}", "Ok");
 				return null;
 			}
 		}
+		#endregion
 	}
 }

@@ -7,15 +7,8 @@ public partial class ViewMaintenance : ContentPage
 	public ViewMaintenance()
 	{
 		InitializeComponent();
-		BindingContext = new  ViewMaintenanceViewModel(this);
+		//BindingContext = new  ViewMaintenanceViewModel();
 	}
-	public ViewMaintenance(int id)
-	{
-		MaintenanceId= id;
-		InitializeComponent();
-		BindingContext = new ViewMaintenanceViewModel(this);
-	}
-
 	private void Button_Clicked(object sender, EventArgs e)
 	{
 
@@ -30,8 +23,6 @@ public partial class ViewMaintenance : ContentPage
 			await DisplayAlert("Error", $"Error {ex.Message}", null);
 		}
 	}
-
-
 	private async void AddItem(object sender, EventArgs e)
 	{
 		try

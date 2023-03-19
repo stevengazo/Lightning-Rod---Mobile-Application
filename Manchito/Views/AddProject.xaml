@@ -2,8 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Manchito.Views.AddProject"
-             xmlns:local="clr-namespace:Manchito.ViewModel"
+             xmlns:VM="clr-namespace:Manchito.ViewModel"
              Title="Agregar Proyecto">
+    <!-- Binding Context -->
+    <ContentPage.BindingContext>
+        <VM:AddProjectViewModel />
+    </ContentPage.BindingContext>        
+    
     <Grid RowSpacing="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="500"></RowDefinition>
