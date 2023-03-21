@@ -170,23 +170,27 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				WeakReferenceMessenger.Default.Register<ProjectViewMessage>(this, async (r, m) => {
-					if (m.Value != 0)
-					{
-						using (var db = new DBLocalContext())
+				if(Project ==null)
+				{
+					WeakReferenceMessenger.Default.Register<ProjectViewMessage>(this, async (r, m) => {
+						if (m.Value != 0)
 						{
-							Project = db.Project.Where(P => P.ProjectId == m.Value).FirstOrDefault();
+							using (var db = new DBLocalContext())
+							{
+								Project = db.Project.Where(P => P.ProjectId == m.Value).FirstOrDefault();
+							}
+							if (Project != null)
+							{
+								LoadMaintenances();
+							}
 						}
-						if (Project != null) {
-							LoadMaintenances();
-						}
-					}
-				});
-			}catch (Exception ex)
+					});
+				}
+			}
+			catch (Exception ex)
 			{
 				Application.Current.MainPage.DisplayAlert("error", $"Eror {ex.Message}", "OK");
-			}
-			
+			}			
 		}
 		private async Task LoadMaintenances()
 		{
@@ -227,7 +231,7 @@ namespace Manchito.ViewModel
 				int number = int.Parse(idNumber.ToString());				
 				ViewMaintenance vMaintPage = new ViewMaintenance();				
 				await Application.Current.MainPage.Navigation.PushAsync(vMaintPage);
-				MessagingCenter.Send<ViewProjectViewModel, int>(this, "MaintenanceId", number);
+				WeakReferenceMessenger.Default.Send(new MaintenanceViewMessage(number));
 			}
 			catch (Exception ex)
 			{

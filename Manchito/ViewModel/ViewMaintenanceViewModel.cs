@@ -1,5 +1,7 @@
-﻿using Kotlin.Contracts;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Kotlin.Contracts;
 using Manchito.DataBaseContext;
+using Manchito.Messages;
 using Manchito.Model;
 using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Manchito.ViewModel
 {
@@ -25,12 +28,33 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
+		public ICommand AppearingCommand { get; private set; }
+
 		public ViewMaintenance _ViewMaintenance { get; set; }
 		#endregion
 		#region Methods
 		public ViewMaintenanceViewModel()
-		{			
-			Maintenance = GetMaintenance();
+		{
+			AppearingCommand = new Command(() => LoadManteinance());
+		}
+
+		private void LoadManteinance()
+		{
+			try
+			{
+				if(Maintenance == null)
+				{
+					WeakReferenceMessenger.Default.Register<MaintenanceViewMessage>(this, async (r, m) => {
+						using (var db = new DBLocalContext())
+						{
+							Maintenance = db.Maintenance.Where(M => M.MaintenanceId == m.Value).FirstOrDefault();
+						}
+					});
+				}
+				}catch(Exception f)
+			{
+				Application.Current.MainPage.DisplayAlert("error", $"Error {f.Message}", "OK");
+			}
 		}
 
 		[Obsolete]

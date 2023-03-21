@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Manchito.Views.ViewMaintenance"
              xmlns:VM="clr-namespace:Manchito.ViewModel"
              Title="Mantenimiento">
@@ -8,6 +9,13 @@
     <ContentPage.BindingContext>
         <VM:ViewMaintenanceViewModel/>
     </ContentPage.BindingContext>
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior 
+               EventName="Appearing"
+               Command="{Binding AppearingCommand}"
+            />
+    </ContentPage.Behaviors>
+
     <Grid BackgroundColor="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -33,13 +41,13 @@
                     <Label Text="Alias de Mantenimiento" />
                 </Frame>
                 <Frame Grid.Row="1" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="{Binding Maintenance.Alias}" />
+                    <Label Text="{Binding Maintenance.Alias, Mode=TwoWay}" />
                 </Frame>
                 <Frame Grid.Row="2" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
                     <Label Text="Fecha de Trabajo" />
                 </Frame>
                 <Frame Grid.Row="2" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="{Binding Maintenance.DateOfMaintenance.Date}" />
+                    <Label Text="{Binding Maintenance.DateOfMaintenance.Date, Mode=TwoWay}" />
                 </Frame>
                 <Frame Grid.Row="3" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
                     <Label Text="Estado del Proyecto" />
