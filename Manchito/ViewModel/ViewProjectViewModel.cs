@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
+using Manchito.Messages;
 using Manchito.Model;
 using Manchito.Views;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -64,7 +66,7 @@ namespace Manchito.ViewModel
 			DeleteProjectCommand = new Command(() => { DeleteProject(); });			
 			ViewMaintenanceCommand = new Command((t) => { ViewMaintenance(t); });			
 			UpdateProjectCommand = new Command(() => UpdateProject() );
-			AppearingCommand = new Command(() => LoadProject());			
+			AppearingCommand = new Command(() => { LoadProjectCommand(); } );
 		}		
 		private async Task AddMaintenance()
 		{
@@ -154,24 +156,6 @@ namespace Manchito.ViewModel
 				return id;
 			}
 		}
-		private async Task< Project> GetProject(int idProject)
-		{
-			try
-			{
-				using (var dblocal = new DBLocalContext())
-				{
-					var queryResult = (from proj in dblocal.Project
-									   where proj.ProjectId == idProject
-									   select proj).FirstOrDefault();
-					return queryResult;
-				}
-			}
-			catch (Exception ex)
-			{
-				Application.Current.MainPage.DisplayAlert("Error", $"Error en function GetProjet, {ex.Message}", "ok");
-				return null;
-			}
-		}
 		private async Task<int> lastCategoryId()
 		{
 			using (var db = new DBLocalContext())
@@ -182,18 +166,22 @@ namespace Manchito.ViewModel
 				return id;
 			}
 		}
-		private void LoadProject()
+		private async Task LoadProjectCommand()
 		{
 			try
 			{
-				var tmp = 0;
-				MessagingCenter.Subscribe<MainPageViewModel,int>(this, "Hi", async (sender, arg) =>
-				{
-					tmp = int.Parse(arg.ToString());
-					Project = await GetProject(tmp);
-					await LoadMaintenances();
+				WeakReferenceMessenger.Default.Register<ProjectViewMessage>(this, async (r, m) => {
+					if (m.Value != 0)
+					{
+						using (var db = new DBLocalContext())
+						{
+							Project = db.Project.Where(P => P.ProjectId == m.Value).FirstOrDefault();
+						}
+						if (Project != null) {
+							LoadMaintenances();
+						}
+					}
 				});
-				//MessagingCenter.Unsubscribe<MainPageViewModel, int>(this, "Hi");
 			}catch (Exception ex)
 			{
 				Application.Current.MainPage.DisplayAlert("error", $"Eror {ex.Message}", "OK");
@@ -204,9 +192,14 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
+				
 				using (var dbLocal = new DBLocalContext())
 				{
-					Maintenances = dbLocal.Maintenance.Where(M => M.ProjectId == Project.ProjectId).ToList();
+					 var tmp= dbLocal.Maintenance.Where(M => M.ProjectId == Project.ProjectId).ToList();
+					if ((tmp.Count > 0))
+					{
+						Maintenances = tmp;
+					}
 				}
 			}
 			catch (Exception ex)

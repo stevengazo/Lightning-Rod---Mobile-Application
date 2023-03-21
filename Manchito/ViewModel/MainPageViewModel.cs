@@ -9,6 +9,8 @@ using System.Windows.Input;
 using Manchito.Model;
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
+using CommunityToolkit.Mvvm.Messaging;
+using Manchito.Messages;
 
 namespace Manchito.ViewModel
 {
@@ -69,7 +71,7 @@ namespace Manchito.ViewModel
 		public async Task LoadProjects()
 		{
 			try
-			{
+			{				
 				// load the projects in the db
 				using (var db = new DBLocalContext())
 				{
@@ -87,8 +89,8 @@ namespace Manchito.ViewModel
             try
             {
                 int id = int.Parse(t.ToString());				
-                await Application.Current.MainPage.Navigation.PushAsync(new ViewProject());
-				MessagingCenter.Send<MainPageViewModel, int>(this, "Hi", id);
+				await Application.Current.MainPage.Navigation.PushAsync(new ViewProject());		
+				WeakReferenceMessenger.Default.Send(new ProjectViewMessage(id));
 			}
 			catch (Exception ex)
             {

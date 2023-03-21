@@ -39,13 +39,13 @@
                     <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0" Text="Nombre" />
                 </Frame>
                 <Frame Grid.Column="1" Grid.Row="0" BorderColor="White" Padding="1" Margin="10,0,0,0" >
-                    <Label FontSize="Caption" VerticalOptions="Center" Text="{Binding Project.Name}" />
+                    <Label FontSize="Caption" VerticalOptions="Center" Text="{Binding Project.Name, Mode=TwoWay}" />
                 </Frame>
                 <Frame Grid.Column="0" Grid.Row="1" BorderColor="White" Padding="1" >
                     <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0" Text="Cliente" />
                 </Frame>
                 <Frame Grid.Column="1" Grid.Row="1" BorderColor="White" Padding="1" Margin="10,0,0,0">
-                    <Label VerticalOptions="Center" Text="{Binding Project.CustomerName}" />
+                    <Label VerticalOptions="Center" Text="{Binding Project.CustomerName,Mode= TwoWay}" />
                 </Frame>
                 <Frame Grid.Row="2" Grid.ColumnSpan="2"  Padding="0" BorderColor="White" >
                     <HorizontalStackLayout HorizontalOptions="Center" Margin="0" Spacing="10" Padding="0">
