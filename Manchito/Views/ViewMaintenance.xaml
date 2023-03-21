@@ -71,82 +71,38 @@
         <Frame Grid.Row="1" BackgroundColor="LightGray" Margin="5" Padding="2">
             <ScrollView>
                 <VerticalStackLayout>
-                   
-                    <!-- Items a implementar -->
-                    <Frame Padding="2">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="ViewItem" />
-                        </Frame.GestureRecognizers>
-  
-                        <VerticalStackLayout Spacing="10" Padding="2">
-                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
-                                <Label Text="Tipo" />
-                                <Label Text="Pararrayos"  Margin="0,0,10,0"/>
-                                <Label Text="Nota:" />
-                                <Label Text="Sector Este"/>
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout 
-                            BackgroundColor="LightGray"
-                            MaximumWidthRequest="300"
-                            MaximumHeightRequest="300"                               
-                            VerticalOptions="Center"
-                            Padding="5"
-                            HorizontalOptions="Center"
-                            >
-                                <Label>
-                                    Sin Fotografias
-                                </Label>
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Frame>
-
-                    <Frame Padding="2">
-       
-                        <VerticalStackLayout Spacing="10" Padding="2">
-                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
-                                <Label Text="Tipo" />
-                                <Label Text="Bajante"  Margin="0,0,10,0"/>
-                                <Label Text="Nota:" />
-                                <Label Text="Sector OEste"/>
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout 
-                            BackgroundColor="LightGray"
-                            MaximumWidthRequest="300"
-                            MaximumHeightRequest="300"                               
-                            VerticalOptions="Center"
-                            Padding="5"
-                            HorizontalOptions="Center"
-                            >
-                                <Label>
-                                    Sin Fotografias
-                                </Label>
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Frame>
-                    <Frame Padding="2">
-
-                        <VerticalStackLayout Spacing="10" Padding="2">
-                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
-                                <Label Text="Tipo" />
-                                <Label Text="Bajante"  Margin="0,0,10,0"/>
-                                <Label Text="Nota:" />
-                                <Label Text="Sector Este"/>
-                            </HorizontalStackLayout>
-                            <HorizontalStackLayout 
-                            BackgroundColor="LightGray"
-                            MaximumWidthRequest="300"
-                            MaximumHeightRequest="300"                               
-                            VerticalOptions="Center"
-                            Padding="5"
-                            HorizontalOptions="Center"
-                            >
-                                <Label>
-                                    Sin Fotografias
-                                </Label>
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Frame>                    
-
+                    <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="2" Margin="0">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ViewItem" />
+                                    </Frame.GestureRecognizers>
+                                    <VerticalStackLayout Spacing="10" Padding="2">
+                                        <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                            <Label Text="Tipo" />
+                                            <Label Text="{Binding ItemType.Name}"  Margin="0,0,10,0"/>
+                                            <Label Text="Alias:" />
+                                            <Label Text="{Binding Alias}"/>
+                                        </HorizontalStackLayout>
+                                        <HorizontalStackLayout 
+                                                BackgroundColor="LightGray"
+                                                MaximumWidthRequest="300"
+                                                MaximumHeightRequest="300"                               
+                                                VerticalOptions="Center"
+                                                Padding="5"
+                                                HorizontalOptions="Center"
+                                                >
+                                            <Label>
+                                                Sin Fotografias
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+     
                 </VerticalStackLayout>
             </ScrollView>            
         </Frame>

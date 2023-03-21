@@ -105,7 +105,7 @@ namespace Manchito.ViewModel
 								dbLocal.Add(categoryTmp);
 								dbLocal.SaveChanges();								
 							}
-							await Application.Current.MainPage.DisplayAlert("Informacion", "Items por defecto agregados al mantenimiento", "OK");
+							//await Application.Current.MainPage.DisplayAlert("Informacion", "Items por defecto agregados al mantenimiento", "OK");
 						}
 					}
 				}

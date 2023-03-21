@@ -18,6 +18,17 @@ namespace Manchito.ViewModel
 	{
 		#region Properties
 		private Maintenance _Maintenance;
+		private List<Category> _Categories;
+		public List<Category> Categories
+		{
+			get { return _Categories; }
+			set { _Categories = value; 
+			if(Categories != null)
+				{
+					OnPropertyChanged(nameof(Categories));
+				}
+			}
+		}
 		public Maintenance Maintenance
 		{
 			get { return _Maintenance; }
@@ -29,15 +40,15 @@ namespace Manchito.ViewModel
 			}
 		}
 		public ICommand AppearingCommand { get; private set; }
-
 		public ViewMaintenance _ViewMaintenance { get; set; }
 		#endregion
+
+
 		#region Methods
 		public ViewMaintenanceViewModel()
 		{
 			AppearingCommand = new Command(() => LoadManteinance());
 		}
-
 		private void LoadManteinance()
 		{
 			try
@@ -49,7 +60,15 @@ namespace Manchito.ViewModel
 						{
 							Maintenance = db.Maintenance.Where(M => M.MaintenanceId == m.Value).FirstOrDefault();
 						}
+						if(Maintenance != null)
+						{
+							loadCategories();
+						}
 					});
+				}
+				else
+				{
+					WeakReferenceMessenger.Default.Unregister<MaintenanceViewMessage>(this);
 				}
 				}catch(Exception f)
 			{
@@ -57,34 +76,16 @@ namespace Manchito.ViewModel
 			}
 		}
 
-		[Obsolete]
-		private Maintenance GetMaintenance()
+		private void loadCategories()
 		{
-			try
+			using(var db = new DBLocalContext())
 			{
-				Maintenance maintenance = null;
-				var tmpId = 0;
-
-				MessagingCenter.Subscribe<ViewProjectViewModel, int>(this, "MaintenanceId", async (sender, arg) =>
-				{
-					tmpId = int.Parse(arg.ToString());					
-				});				
-				if (maintenance !=null)
-				{				
-					return maintenance;
-				}
-				else
-				{
-					Application.Current.MainPage.DisplayAlert("Error interno", $"El mantenimiento no se encuentra definido", "Ok");
-					return null;
-				}
-			}
-			catch (Exception ex)
-			{
-				Application.Current.MainPage.DisplayAlert("Error interno", $"Error. Estos son los detalles del error {ex.Message}", "Ok");
-				return null;
+				Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId).Include(C=>C.ItemType).ToList();
 			}
 		}
+
+
+
 		#endregion
 	}
 }
