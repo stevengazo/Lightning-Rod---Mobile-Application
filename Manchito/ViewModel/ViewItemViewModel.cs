@@ -21,22 +21,32 @@ namespace Manchito.ViewModel
 
 		private async void TakePhoto()
 		{
-			if (MediaPicker.Default.IsCaptureSupported)
+			try
 			{
-				FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
-				if (photo != null)
+				if (MediaPicker.Default.IsCaptureSupported)
 				{
-					// save the file into local storage
-					string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+					FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
+					if (photo != null)
+					{
+						var dcimFolder = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures));
+						await Application.Current.MainPage.DisplayAlert("Info", $"DCMI FOlder {dcimFolder}", "ok");
+						// save the file into local storage
+						//string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+						string localFilePath = Path.Combine("/storage/emulated/0/download", photo.FileName);
 
-					using Stream sourceStream = await photo.OpenReadAsync();
-					using FileStream localFileStream = File.OpenWrite(localFilePath);
+						using Stream sourceStream = await photo.OpenReadAsync();
+						using FileStream localFileStream = File.OpenWrite(localFilePath);
 
-					await sourceStream.CopyToAsync(localFileStream);
-				
-				await Application.Current.MainPage.DisplayAlert("Info", $"Foto Guardada en {localFilePath}", "ok");
+						await sourceStream.CopyToAsync(localFileStream);
+
+						await Application.Current.MainPage.DisplayAlert("Info", $"Foto Guardada en {localFilePath}", "ok");
+					}
 				}
+			}catch(Exception ex)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error Interno", $"Error: {ex.Message}", "ok");
 			}
+			
 		}
 	}
 }
