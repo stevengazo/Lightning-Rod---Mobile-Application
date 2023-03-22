@@ -40,6 +40,7 @@ namespace Manchito.ViewModel
 			}
 		}
 		public ICommand AppearingCommand { get; private set; }
+		public ICommand ValidateDataCommand { get; private set; }
 		public ViewMaintenance _ViewMaintenance { get; set; }
 		#endregion
 
@@ -48,7 +49,14 @@ namespace Manchito.ViewModel
 		public ViewMaintenanceViewModel()
 		{
 			AppearingCommand = new Command(() => LoadManteinance());
+			ValidateDataCommand = new Command(() => ValidateDataPage());
 		}
+
+		private void ValidateDataPage()
+		{
+			Application.Current.MainPage.Navigation.PushAsync(new ValidateData());
+		}
+
 		private void LoadManteinance()
 		{
 			try

@@ -57,6 +57,7 @@
                 </Frame>
                 <Frame Grid.Row="4" Grid.ColumnSpan="2" BorderColor="White" Padding="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0">
                     <Button Text="Validar Mantenimiento"
+                            Command="{Binding ValidateDataCommand}"
                             BackgroundColor="Blue"
                             CornerRadius="15"
                             WidthRequest="240"

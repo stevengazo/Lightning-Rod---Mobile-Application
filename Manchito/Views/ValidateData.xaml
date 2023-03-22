@@ -3,14 +3,123 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:VM="clr-namespace:Manchito.ViewModel"
              x:Class="Manchito.Views.ValidateData"           
-             Title="ValidateData">
+             Title="Información">
     <ContentPage.BindingContext>
         <VM:ValidateDataViewModel />
     </ContentPage.BindingContext>
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0"  HorizontalOptions="Center" Text="Elementos Clave" FontSize="Title" />
+        <Frame Grid.Row="1" BorderColor="White">
+            <ScrollView>
+                <VerticalStackLayout>
+                    <Label HorizontalOptions="Center" FontSize="Body">Recuerde seleccionar todos los elementos del mantenimiento</Label>
+                    <Label Padding="5">
+                        Pararrayos: Revision de la ubicación, altura y estado del pararrayos
+                    </Label>
+                    <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                    <Label Padding="5">
+                        Bajante: Revision del estado, recorrido, protecciones. contador de eventos y rotulacion.
+                    </Label>
+                    <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                    <Label Padding="5">
+                        Sistema de Puesta a Tierra: revision de ubicacion, electrodos, cableado, registro principal, mediciones.
+                    </Label>
+                    <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                    <Label Padding="5">
+                        Montaje: altura y estado del montaje usado para el pararrayos.
+                    </Label>
+                    <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                    <Label Padding="5">
+                        Unificaciones: comprobacion de la unificacion de la malla
+                    </Label>
+                    <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                    <Label Padding="5">
+                        Supresores: tableros y equipos sin proteccion.
+                    </Label>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Frame>
+        <Label Grid.Row="2" FontSize="Subtitle" HorizontalOptions="Center">
+            Elementos Agregados del Mantenimiento
+        </Label>
+        <Frame Grid.Row="3" BackgroundColor="Aquamarine" BorderColor="White">
+            <ScrollView>
+                <VerticalStackLayout BackgroundColor="gray">
+                    <!-- Item -->
+                    <Frame Padding="2" Margin="5">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer  />
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10" Padding="2">
+                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                <Label Text="Tipo" />
+                                <Label Text="ejemplo"  Margin="0,0,10,0"/>
+                                <Label Text="Alias:" />
+                                <Label Text="ejempo"/>
+                                <Label Text="Alias:" />
+                                <Label Text="ejempo"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+
+
+                    <!-- Item -->
+                    <Frame Padding="2" Margin="5">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer  />
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10" Padding="2">
+                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                <Label Text="Tipo" />
+                                <Label Text="ejemplo"  Margin="0,0,10,0"/>
+                                <Label Text="Alias:" />
+                                <Label Text="ejempo"/>
+                                <Label Text="Alias:" />
+                                <Label Text="ejempo"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <!-- Item -->
+                    <Frame Padding="2" Margin="5">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer  />
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10" Padding="2">
+                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                <Label Text="Tipo" />
+                                <Label Text="ejemplo"  Margin="0,0,10,0"/>
+                                <Label Text="Alias:" />
+                                <Label Text="ejempo"/>
+                                <Label Text="Alias:" />
+                                <Label Text="ejempo"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <!-- Item -->
+                    <Frame Padding="2" Margin="5">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer  />
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10" Padding="2">
+                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                <Label Text="Tipo" />
+                                <Label Text="ejemplo"  Margin="0,0,10,0"/>
+                                <Label Text="Alias:" />
+                                <Label Text="ejempo"/>
+                                <Label Text="Alias:" />
+                                <Label Text="ejempo"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Frame>
+    </Grid>
 </ContentPage>
