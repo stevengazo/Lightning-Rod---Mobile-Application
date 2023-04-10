@@ -111,7 +111,6 @@ namespace Manchito.ViewModel
 								var DirectoryPathtmp = Path.Combine(PathDirectoryFilesAndroid, $"{Project.ProjectId}-{Project.Name}", $"{tmp.MaintenanceId}-{tmp.Alias}",$"{categoryTmp.CategoryId}-{categoryTmp.Alias}");
 								Directory.CreateDirectory(DirectoryPathtmp);
 							}							
-							//await Application.Current.MainPage.DisplayAlert("Informacion", "Items por defecto agregados al mantenimiento", "OK");
 						}
 					}
 				}

@@ -119,7 +119,7 @@ namespace Manchito.ViewModel
 			var page = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
 			Application.Current.MainPage.Navigation.RemovePage(page);
 		}
-	
+			
 
 		public bool AddDirectoryAndroid(string ProjectName,int ProjectId)
 		{
@@ -178,6 +178,24 @@ namespace Manchito.ViewModel
 				ClosedPage();
 			}
 		}
+
+		public async Task<Project> GetProjectAsync(int id)
+		{
+			try
+			{
+				using (var db = new DBLocalContext())
+				{
+					var data = await (from i in db.Project
+								where i.ProjectId == id
+								select i).FirstOrDefaultAsync();
+					return data;
+				}
+			}catch(Exception e)
+			{
+				return null;
+			}
+		}
+
 		#endregion
 	}
 }
