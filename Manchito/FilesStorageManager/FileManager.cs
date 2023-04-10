@@ -1,4 +1,6 @@
 ﻿
+using Manchito.Model;
+
 namespace Manchito.FilesStorageManager
 {
 	/// <summary>
@@ -23,8 +25,8 @@ namespace Manchito.FilesStorageManager
 		{
 			try
 			{
-
-				return true;
+				var f = System.IO.Directory.Exists(path);
+				return f;
 			}
 			catch (Exception f)
 			{
@@ -42,7 +44,7 @@ namespace Manchito.FilesStorageManager
 		{
 			try
 			{
-
+				System.IO.Directory.CreateDirectory(path);
 				return true;
 			}catch(Exception f)
 			{
@@ -56,11 +58,14 @@ namespace Manchito.FilesStorageManager
 		/// <param name="path">Path to save the image</param>
 		/// <param name="image">Image to save</param>
 		/// <returns>True if the image was save, False if present an error </returns>
-		public static bool SaveImageFile(string path, Image image)
+		public static bool SaveFile(string path, FileResult file)
 		{
 			try
 			{
-
+				string localFilePath = Path.Combine(path,file.FileName);
+				using Stream sourceStream = file.OpenReadAsync().Result;
+				using FileStream localFileStream = File.OpenWrite(localFilePath);
+				sourceStream.CopyToAsync(localFileStream);
 				return true;
 			}
 			catch (Exception f)

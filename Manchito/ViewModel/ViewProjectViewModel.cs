@@ -88,6 +88,9 @@ namespace Manchito.ViewModel
 						dbLocal.SaveChanges();
 						await LoadMaintenances();
 						await Application.Current.MainPage.DisplayAlert("Informacion", "Mantenimiento Agregado", "OK");
+						//Create Directory // Project/Mantenance
+						var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"{Project.ProjectId}-{Project.Name}",$"{tmp.MaintenanceId}-{tmp.Alias}");
+						Directory.CreateDirectory(DirectoryPath);
 						// base items of the maintenance
 						List<Category> itemsCategories = new List<Category>();
 						using (var local = new DBLocalContext())
@@ -103,8 +106,11 @@ namespace Manchito.ViewModel
 									MaintenanceId = tmp.MaintenanceId
 								};														
 								dbLocal.Add(categoryTmp);
-								dbLocal.SaveChanges();								
-							}
+								dbLocal.SaveChanges();
+								//Create Directory // Project/Mantenance/Category
+								var DirectoryPathtmp = Path.Combine(PathDirectoryFilesAndroid, $"{Project.ProjectId}-{Project.Name}", $"{tmp.MaintenanceId}-{tmp.Alias}",$"{categoryTmp.CategoryId}-{categoryTmp.Alias}");
+								Directory.CreateDirectory(DirectoryPathtmp);
+							}							
 							//await Application.Current.MainPage.DisplayAlert("Informacion", "Items por defecto agregados al mantenimiento", "OK");
 						}
 					}

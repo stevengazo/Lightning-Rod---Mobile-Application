@@ -14,7 +14,7 @@ namespace Manchito.ViewModel
 {
    public class AddProjectViewModel : INotifyPropertyChangedAbst
     {
-		#region Properties
+		#region Properties		
 
 		private Project _Project = new();
 
@@ -120,6 +120,28 @@ namespace Manchito.ViewModel
 			Application.Current.MainPage.Navigation.RemovePage(page);
 		}
 	
+
+		public bool AddDirectoryAndroid(string ProjectName,int ProjectId)
+		{
+			try
+			{
+				var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"{ProjectId.ToString()}-{ProjectName}" );
+				if (!Directory.Exists(DirectoryPath))
+				{
+					Directory.CreateDirectory(DirectoryPath);
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			catch(Exception f)
+			{
+				Application.Current.MainPage.DisplayAlert("AddDirectoryAndroid Error", $"Error: {f.Message}", "Ok");
+				return false;
+			}
+		}
 		public async Task AddProject()
 		{
 			try
@@ -144,6 +166,7 @@ namespace Manchito.ViewModel
 						};
 						dbLocal.Project.Add(tmpProject);
 						dbLocal.SaveChanges();
+						AddDirectoryAndroid(tmpProject.Name, tmpProject.ProjectId);
 						await Application.Current.MainPage.DisplayAlert("Información", $"Proyecto Agregado con éxito\nProjecto {tmpProject.ProjectId}\nCliente {tmpProject.Name}", "Ok");
 						ClosedPage();
 					}

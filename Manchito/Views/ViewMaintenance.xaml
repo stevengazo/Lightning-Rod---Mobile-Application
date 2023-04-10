@@ -111,7 +111,7 @@
             <HorizontalStackLayout HorizontalOptions="Center" Margin="3" Padding="3">
                 <Button Text="Agregar Item"
                         CornerRadius="15"
-                        Clicked="AddItem"
+                        Command="{Binding AddCategoryCommand}"
                         HeightRequest="50"
                         BackgroundColor="Blue"
                         TextColor="White"/>
