@@ -2,6 +2,7 @@
 using Android.Webkit;
 using AndroidX.Core.Content;
 using Manchito.FilesStorageManager;
+using Manchito.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +30,17 @@ namespace Manchito.ViewModel
 					FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
 					if (photo != null)
 					{
-						var dcimFolder = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures));
-						await Application.Current.MainPage.DisplayAlert("Info", $"DCMI FOlder {dcimFolder}", "ok");
-						// save the file into local storage												
-						var data = FileManager.SaveFile("/storage/emulated/0/Pictures", photo);
+						var temporalDirectory= Path.Combine(FileSystem.AppDataDirectory, "Pictures");
+						if(Directory.Exists(temporalDirectory))
+						{
+							Directory.Delete(temporalDirectory, true);						
+						}
+						Directory.CreateDirectory(temporalDirectory);
+						var data = FileManager.SaveFile(temporalDirectory, photo);
 						if (data)
 						{
-							await Application.Current.MainPage.DisplayAlert("Info", $"Foto Guardada", "ok");
+							await Application.Current.MainPage.Navigation.PushModalAsync(new ViewPhoto());
 						}
-
 					}
 				}
 			}
