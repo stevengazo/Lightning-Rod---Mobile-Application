@@ -32,6 +32,7 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
+				bool SaveIt = false;
 				if (MediaPicker.Default.IsCaptureSupported)
 				{
 					FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
@@ -43,11 +44,10 @@ namespace Manchito.ViewModel
 							Directory.Delete(temporalDirectory, true);						
 						}
 						Directory.CreateDirectory(temporalDirectory);
-						var data = FileManager.SaveFile(temporalDirectory, photo);
-						if (data)
-						{
-							await Application.Current.MainPage.Navigation.PushModalAsync(new ViewPhoto());
-						}
+						SaveIt = FileManager.SaveFile(temporalDirectory, photo);						
+					}
+					if (SaveIt) {
+						
 					}
 				}
 			}

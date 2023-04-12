@@ -67,13 +67,14 @@
         </ScrollView>
         <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center">
             <Button x:Name="btnAgregar"
-                    BackgroundColor="Blue"
+                    BackgroundColor="Green"
                     Command="{Binding AddProjectCommand}"
                     TextColor="White"
                     Text="Agregar Proyecto"
-                    FontSize="Medium"                                   
+                    FontSize="Medium"      
+                    CornerRadius="15"
                     MaximumHeightRequest="50"
-                   MinimumWidthRequest="120"                    
+                   MinimumWidthRequest="240"                    
                     />
         </HorizontalStackLayout>
     </Grid>

@@ -9,30 +9,31 @@
     </ContentPage.BindingContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.8*" />
+            <RowDefinition Height="0.65*" />
             <RowDefinition Height="3*" />
-            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.4*" />
         </Grid.RowDefinitions>
-        <Frame Grid.Row="0" BackgroundColor="White">
+        <Frame Grid.Row="0" BackgroundColor="White" BorderColor="White">
             <VerticalStackLayout >
                 <Label FontSize="Title" HorizontalOptions="Center">
                     Fotografias
                 </Label>
-                <Label FontSize="Body" HorizontalOptions="Center">
+                <Label FontSize="Caption" HorizontalTextAlignment="Center" >
                     Verifique que haya tomado todas las fotos reelevantes para esta area.
                 </Label>
             </VerticalStackLayout>
         </Frame>
-        <Frame Grid.Row="1" BackgroundColor="AntiqueWhite">
+        <Frame Grid.Row="1" Margin="10" BackgroundColor="AntiqueWhite">
             
         </Frame>
-        <Frame Grid.Row="2" BackgroundColor="AntiqueWhite" HorizontalOptions="Center">
+        <Frame Grid.Row="2" BorderColor="White" HorizontalOptions="Center">
             <Button 
                 Text="Tomar Fotografia"
                 WidthRequest="240"
+                HeightRequest="50"
                 Command="{Binding TakePhotoCommand}"
                 BorderColor="WhiteSmoke"
-                BackgroundColor="Blue"
+                BackgroundColor="Green"
                 TextColor="White"
                 CornerRadius="30"
                 />

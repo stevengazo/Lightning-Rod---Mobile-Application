@@ -18,7 +18,7 @@
 
     <Grid BackgroundColor="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1.1*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
@@ -75,7 +75,7 @@
                     <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame Padding="2" Margin="0">
+                                <Frame Padding="2" Margin="0,2,0,2">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="ViewItem" />
                                     </Frame.GestureRecognizers>
@@ -113,7 +113,8 @@
                         CornerRadius="15"
                         Command="{Binding AddCategoryCommand}"
                         HeightRequest="50"
-                        BackgroundColor="Blue"
+                        WidthRequest="240"
+                        BackgroundColor="Green"
                         TextColor="White"/>
             </HorizontalStackLayout>
         </Frame>
