@@ -1,8 +1,10 @@
 ﻿using Android.Provider;
 using Android.Webkit;
 using AndroidX.Core.Content;
+using CommunityToolkit.Mvvm.Input;
 using Manchito.FilesStorageManager;
 using Manchito.Views;
+using Microsoft.EntityFrameworkCore.Update;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,42 +20,66 @@ namespace Manchito.ViewModel
 
         public ViewItemViewModel()
         {
-			try
-			{
-				TakePhotoCommand = new Command(() => { TakePhotoAndroid(); }) ;
-			}catch(Exception ex)
-			{
-				Application.Current.MainPage.DisplayAlert("Error TakePhotoAndroid ", $"Error: {ex.Message}", "ok");
-			}
-            
+			TakePhotoCommand = new AsyncRelayCommand(TakePhotoAndroid);
         }
 
-		private static async void TakePhotoAndroid()
+		private async Task OpenViewPhoto()
 		{
 			try
 			{
-				bool SaveIt = false;
+				var page = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
+				
+				ViewPhoto vPhoto = new();
+				if (page.GetType() == vPhoto.GetType())
+				{
+					Application.Current.MainPage.Navigation.RemovePage(page);
+
+				}
+					await Application.Current.MainPage.Navigation.PushAsync(vPhoto,true);
+			}
+			catch(Exception ex )
+			{
+				await Application.Current.MainPage.DisplayAlert("Error OpenViewPhoto ", $"Error: {ex.Message}", "ok");
+			}
+		}
+
+		private async Task  TakePhotoAndroid()
+		{
+			try
+			{
+				var temporalDirectory = Path.Combine(FileSystem.AppDataDirectory, "Pictures");
 				if (MediaPicker.Default.IsCaptureSupported)
 				{
 					FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
 					if (photo != null)
 					{
-						var temporalDirectory= Path.Combine(FileSystem.AppDataDirectory, "Pictures");
+						photo.FileName = $"Img-D{DateTime.Today.ToString("yyy-MM-dd")}-T{DateTime.Now.ToString("HH-mm-ss")}";						
 						if(Directory.Exists(temporalDirectory))
 						{
 							Directory.Delete(temporalDirectory, true);						
 						}
-						Directory.CreateDirectory(temporalDirectory);
-						SaveIt = FileManager.SaveFile(temporalDirectory, photo);						
-					}
-					if (SaveIt) {
+							Directory.CreateDirectory(temporalDirectory);
+						// save the file into local storage
+						string localFilePath = Path.Combine(temporalDirectory , photo.FileName);
+						using (Stream sourceStream = await photo.OpenReadAsync()) {
+							using(FileStream localFileStream = File.OpenWrite(localFilePath))
+							{
+								var r= sourceStream.CopyToAsync(localFileStream).IsCompletedSuccessfully;
+								if (r)
+								{								
+								await	OpenViewPhoto();
+								}
+
+							}
+						}
 						
 					}
+			
 				}
 			}
 			catch (Exception ex)
 			{
-				await Application.Current.MainPage.DisplayAlert("Error TakePhotoAndroid ", $"Error: {ex.Message}", "ok");
+				await Application.Current.MainPage.DisplayAlert("Error TakePhotoAndroid ", $"Error: {ex.Message}", "ok");				
 			}
 		}
 	}

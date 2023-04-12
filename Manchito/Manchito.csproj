@@ -69,6 +69,9 @@
 	  <MauiXaml Update="Views\ViewMaintenance.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\ViewPhoto.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\ViewProject.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
