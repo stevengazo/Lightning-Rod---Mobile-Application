@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Manchito.ViewModel
 {
@@ -10,7 +11,6 @@ namespace Manchito.ViewModel
 	{
 
 		private string _UrlPhoto;
-
 		public string UrlPhoto
 		{
 			get { return _UrlPhoto; }
@@ -20,12 +20,11 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
+		public ICommand LoadPhotoCommand { get; private set; }
 
 		public ViewPhotoViewModel()
 		{
-			
-			loadPhoto();
+			LoadPhotoCommand = new Command(()=>loadPhoto());
 		}
 
 		private void loadPhoto()
@@ -40,7 +39,7 @@ namespace Manchito.ViewModel
 				}
 			}catch(Exception ex)
 			{
-				Application.Current.MainPage.DisplayAlert("Error", ex.Message, "ok");
+				Application.Current.MainPage.DisplayAlert("Error loadPhoto", ex.Message, "ok");
 			}
 			
 		}
