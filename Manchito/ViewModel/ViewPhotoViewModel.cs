@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Manchito.ViewModel
 {
 	public class ViewPhotoViewModel : INotifyPropertyChangedAbst
 	{
 
-		private string _UrlPhoto;
+		public ICommand LoadPhotoCommand { get; private set; }
 
-		public string UrlPhoto
+		private ImageSource _UrlPhoto;
+		public ImageSource UrlPhoto
 		{
 			get { return _UrlPhoto; }
 			set { _UrlPhoto = value;
@@ -20,14 +22,10 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
-
 		public ViewPhotoViewModel()
 		{
-			
-			loadPhoto();
+			LoadPhotoCommand = new Command(() => { loadPhoto(); }) ;
 		}
-
 		private void loadPhoto()
 		{
 			try
@@ -36,11 +34,11 @@ namespace Manchito.ViewModel
 				if (Directory.Exists(temporalDirectory))
 				{
 					var datas = Directory.GetFiles(temporalDirectory).FirstOrDefault();
-					UrlPhoto = datas;
+					UrlPhoto = ImageSource.FromFile(datas);
 				}
 			}catch(Exception ex)
 			{
-				Application.Current.MainPage.DisplayAlert("Error", ex.Message, "ok");
+				Application.Current.MainPage.DisplayAlert("Error LoadPhoto Function", ex.Message, "ok");
 			}
 			
 		}
