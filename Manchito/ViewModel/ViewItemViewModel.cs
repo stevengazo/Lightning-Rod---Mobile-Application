@@ -18,10 +18,17 @@ namespace Manchito.ViewModel
 
         public ViewItemViewModel()
         {
-            TakePhotoCommand = new Command(() => TakePhoto());
+			try
+			{
+				TakePhotoCommand = new Command(() => { TakePhotoAndroid(); }) ;
+			}catch(Exception ex)
+			{
+				Application.Current.MainPage.DisplayAlert("Error TakePhotoAndroid ", $"Error: {ex.Message}", "ok");
+			}
+            
         }
 
-		private async void TakePhotoAndroid()
+		private static async void TakePhotoAndroid()
 		{
 			try
 			{
@@ -48,11 +55,6 @@ namespace Manchito.ViewModel
 			{
 				await Application.Current.MainPage.DisplayAlert("Error TakePhotoAndroid ", $"Error: {ex.Message}", "ok");
 			}
-		}
-
-		private async void TakePhoto()
-		{
-			TakePhotoAndroid();
 		}
 	}
 }
