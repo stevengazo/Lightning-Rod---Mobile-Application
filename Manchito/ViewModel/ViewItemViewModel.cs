@@ -47,26 +47,24 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				var temporalDirectory = Path.Combine(PathDirectoryFilesAndroid, "PicturesTmp");
+				bool SaveIt = false;
 				if (MediaPicker.Default.IsCaptureSupported)
 				{
 					FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
 					if (photo != null)
 					{
-						photo.FileName = $"Img-D{DateTime.Today.ToString("yyy-MM-dd")}-T{DateTime.Now.ToString("HH-mm-ss-fff")}.jpg";						
-						if(!Directory.Exists(temporalDirectory))
+						var temporalDirectory= Path.Combine(FileSystem.AppDataDirectory, "Pictures");
+						if(Directory.Exists(temporalDirectory))
 						{
-							Directory.CreateDirectory(temporalDirectory);
+							Directory.Delete(temporalDirectory, true);						
 						}
-							
-						// save the file into local storage
-						string localFilePath = Path.Combine(temporalDirectory , photo.FileName);
-						using Stream sourceStream = await photo.OpenReadAsync();
-						using FileStream localFileStream = File.OpenWrite(localFilePath);
-						sourceStream.CopyToAsync(localFileStream);
-						ViewPhoto vPhoto = new();
-						Application.Current.MainPage.Navigation.PushAsync(vPhoto, true);
+						Directory.CreateDirectory(temporalDirectory);
+						SaveIt = FileManager.SaveFile(temporalDirectory, photo);						
 					}
+					if (SaveIt) {
+						
+					}
+			
 				}
 			}
 			catch (Exception ex)
