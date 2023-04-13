@@ -13,6 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static Android.Content.ClipData;
+using static Android.Graphics.Paint;
 
 namespace Manchito.ViewModel
 {
@@ -105,7 +107,7 @@ namespace Manchito.ViewModel
 						WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
 							using (var db = new DBLocalContext())
 							{
-								Maintenance = db.Maintenance.Where(M => M.MaintenanceId == m.Value).FirstOrDefault();
+								Maintenance = db.Maintenance.Where(M => M.MaintenanceId == m.Value).Include(M=>M.Project).FirstOrDefault();
 							}
 							if (Maintenance != null)
 							{
@@ -214,10 +216,18 @@ namespace Manchito.ViewModel
 								// cargar datos
 								db.Category.Add(categoryTmp);
 								db.SaveChanges();
+								
 								// cargar datos de nuevo
 								LoadCategories();
 								var project = GetProject(Maintenance.ProjectId);
-								var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"{project.ProjectId}-{project.Name}", $"{categoryTmp.MaintenanceId}-{categoryTmp.Alias}");
+
+								//Create Directory // Project/Mantenance/Category
+								var DirectoryPathtmp = Path.Combine(
+									PathDirectoryFilesAndroid,
+									$"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
+									$"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}",
+									$"C-{categoryTmp.CategoryId}_{action}_{categoryTmp.Alias}");
+								Directory.CreateDirectory(DirectoryPathtmp);								
 							}
 						}
 					}
@@ -228,6 +238,8 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error AddCategory", $"Error {ex.Message}", null);
 			}
 		}
+
+	
 
 
 		#endregion

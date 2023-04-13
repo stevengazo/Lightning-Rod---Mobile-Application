@@ -125,7 +125,7 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"{ProjectId.ToString()}-{ProjectName}" );
+				var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{ProjectId.ToString()}_{ProjectName}" );
 				if (!Directory.Exists(DirectoryPath))
 				{
 					Directory.CreateDirectory(DirectoryPath);

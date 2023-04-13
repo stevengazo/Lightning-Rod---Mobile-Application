@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static Android.Content.ClipData;
 
 namespace Manchito.ViewModel
 {
@@ -48,13 +49,40 @@ namespace Manchito.ViewModel
 		}
 
 		public ICommand TakePhotoCommand { get; private set; }
+		public ICommand TakeVideoCommand { get; private set; }
 		public ICommand AppearingCommand { get; private set; }
 
 		public ViewCategoryViewModel()
 		{
 			Title = "";
 			TakePhotoCommand = new AsyncRelayCommand(TakePhotoAndroid);
+			TakeVideoCommand = new AsyncRelayCommand(TakeVideoAndroid);
 			AppearingCommand = new Command(()=>LoadCategory());
+		}
+
+		private async Task TakeVideoAndroid()
+		{
+			try
+			{
+				if (MediaPicker.Default.IsCaptureSupported)
+				{
+					FileResult photo = await MediaPicker.Default.CaptureVideoAsync();
+					photo.FileName = $"VID D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")}.mp4";
+					if (photo != null)
+					{
+						// save the file into local storage
+						string tempPath = await FolderPathAndroid();
+						string localFilePath = Path.Combine(tempPath, photo.FileName);
+						using Stream sourceStream = await photo.OpenReadAsync();
+						using FileStream localFileStream = File.OpenWrite(localFilePath);
+						await sourceStream.CopyToAsync(localFileStream);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error TakePhotoAndroid ", $"Error: {ex.Message}", "ok");
+			}
 		}
 
 		/// <summary>
@@ -70,7 +98,11 @@ namespace Manchito.ViewModel
 					WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
 						using (var db = new DBLocalContext())
 						{
-							CategoryItem = db.Category.Where(M => M.CategoryId == m.Value).Include(T=>T.ItemType).Include(C=>C.Maintenance).Include(C => C.Maintenance.Project).FirstOrDefault();
+							CategoryItem = db.Category.Where(M => M.CategoryId == m.Value)
+														.Include(T=>T.ItemType)
+														.Include(C=>C.Maintenance)
+														.Include(C => C.Maintenance.Project)
+														.FirstOrDefault();
 						}
 						if (CategoryItem != null)
 						{
@@ -88,6 +120,36 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", f.Message, "OK");
 			}
 		}
+
+
+		private async Task<string> FolderPathAndroid()
+		{
+			try
+			{
+				if (CategoryItem != null)
+				{
+					var Pj = CategoryItem.Maintenance.Project;
+					var Man = CategoryItem.Maintenance;
+					var Cat = CategoryItem;
+					string categoryPath = Path.Combine(
+									PathDirectoryFilesAndroid,
+								$"P-{Pj.ProjectId}_{Pj.Name}",
+									$"M-{Man.MaintenanceId}_{Man.Alias}",
+									$"C-{Cat.CategoryId}_{Cat.ItemType.Name}_{Cat.Alias}");
+					return categoryPath;
+				}
+				else
+				{
+					return string.Empty;
+				}
+			}
+			catch(Exception f)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error FolderPathAndroid", $"Error: {f.Message}", "ok");
+				return string.Empty;
+			}
+		}
+
 		private async Task<bool> CheckAndroidDirectory()
 		{
 			try
@@ -97,10 +159,17 @@ namespace Manchito.ViewModel
 					var Pj = CategoryItem.Maintenance.Project;
 					var Man = CategoryItem.Maintenance;
 					var Cat = CategoryItem;
-					//string categoryPath = Path.Combine(PathDirectoryFilesAndroid, $"{Pj.ProjectId}-{Pj.Name}", $"{Man.MaintenanceId}-{Man.Alias}", );
+					string categoryPath = await FolderPathAndroid();
+					if (Directory.Exists(categoryPath))
+					{
+						return true;
+					}
+					else
+					{
+						Directory.CreateDirectory(categoryPath);
+						return true;
+					}
 					return false;
-					throw new NotImplementedException();
-					
 				}
 				else
 				{
@@ -121,10 +190,12 @@ namespace Manchito.ViewModel
 				if (MediaPicker.Default.IsCaptureSupported)
 				{
 					FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
+					photo.FileName = $"IMG D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")} .jpg";
 					if (photo != null)
 					{
 						// save the file into local storage
-						string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+						string tempPath = await FolderPathAndroid();
+						string localFilePath = Path.Combine(tempPath, photo.FileName);
 						using Stream sourceStream = await photo.OpenReadAsync();
 						using FileStream localFileStream = File.OpenWrite(localFilePath);
 						await sourceStream.CopyToAsync(localFileStream);

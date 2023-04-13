@@ -89,7 +89,7 @@ namespace Manchito.ViewModel
 						await LoadMaintenances();
 						await Application.Current.MainPage.DisplayAlert("Informacion", "Mantenimiento Agregado", "OK");
 						//Create Directory // Project/Mantenance
-						var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"{Project.ProjectId}-{Project.Name}",$"{tmp.MaintenanceId}-{tmp.Alias}");
+						var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Project.ProjectId}_{Project.Name}",$"M-{tmp.MaintenanceId}_{tmp.Alias}");
 						Directory.CreateDirectory(DirectoryPath);
 						// base items of the maintenance
 						List<Category> itemsCategories = new List<Category>();
@@ -98,17 +98,21 @@ namespace Manchito.ViewModel
 							var itemstypes = local.ItemTypes.ToList();
 							foreach (var item in itemstypes)
 							{
-								Category categoryTmp = new Category()
+								Category Cat = new Category()
 								{
 									CategoryId = await lastCategoryId() + 1,
 									Alias = "No Asignado",
 									ItemTypeId = item.ItemTypeId,
 									MaintenanceId = tmp.MaintenanceId
 								};														
-								dbLocal.Add(categoryTmp);
+								dbLocal.Add(Cat);
 								dbLocal.SaveChanges();
 								//Create Directory // Project/Mantenance/Category
-								var DirectoryPathtmp = Path.Combine(PathDirectoryFilesAndroid, $"{Project.ProjectId}-{Project.Name}", $"{tmp.MaintenanceId}-{tmp.Alias}",$"{categoryTmp.CategoryId}-{categoryTmp.Alias}");
+								var DirectoryPathtmp = Path.Combine(
+									PathDirectoryFilesAndroid, 
+									$"P-{Project.ProjectId}_{Project.Name}", 
+									$"M-{tmp.MaintenanceId}_{tmp.Alias}",
+									$"C-{Cat.CategoryId}_{item.Name}_{Cat.Alias}");
 								Directory.CreateDirectory(DirectoryPathtmp);
 							}							
 						}
