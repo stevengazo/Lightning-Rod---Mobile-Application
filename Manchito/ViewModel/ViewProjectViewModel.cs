@@ -229,7 +229,7 @@ namespace Manchito.ViewModel
 			}
 
 		}
-		private async void ViewMaintenance(object idNumber)
+		private async Task ViewMaintenance(object idNumber)
 		{
 			try
 			{				

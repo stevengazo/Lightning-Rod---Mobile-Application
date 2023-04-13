@@ -1,4 +1,5 @@
 ﻿using Android.Widget;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Kotlin.Contracts;
 using Manchito.DataBaseContext;
@@ -44,7 +45,7 @@ namespace Manchito.ViewModel
 		public ICommand ViewCategoryCommand { get; private set; }
 		public ICommand ValidateDataCommand { get; private set; }
 		public ICommand AddCategoryCommand { get; private set; }
-		public ViewMaintenance _ViewMaintenance { get; set; }
+		public ViewMaintenance ViewMaintenance { get; set; }
 		#endregion
 
 		#region Methods
@@ -53,41 +54,41 @@ namespace Manchito.ViewModel
 			AppearingCommand = new Command(() => LoadManteinance());
 			ValidateDataCommand = new Command(() => ValidateDataPage());
 			AddCategoryCommand = new Command(() => AddCategory());
-			ViewCategoryCommand = new Command((O) => ViewCategory(O));
+			ViewCategoryCommand = new Command( (O) =>  ViewCategory(O));
 		}
 
 		private async void ViewCategory(Object id)
 		{
 			try
 			{
-				int idNumber = int.Parse(id.ToString());
-				await Application.Current.MainPage.Navigation.PushAsync(new ViewItem(), true);
-				WeakReferenceMessenger.Default.Send(new NameItemViewMessage(idNumber));
+				int number = int.Parse(id.ToString());				
+				await Application.Current.MainPage.Navigation.PushAsync(new ViewCategory(), true);
+				WeakReferenceMessenger.Default.Cleanup();
+				WeakReferenceMessenger.Default.Send(new NameItemViewMessage(number));
 			}
-			catch(Exception f)
+			catch (Exception ex)
 			{
-				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", f.Message, "OK");
-
+				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", $"Error interno {ex.Message}", "Ok");				
 			}
 		}
 
-		private void ValidateDataPage()
+		private static void ValidateDataPage()
 		{
 			Application.Current.MainPage.Navigation.PushAsync(new ValidateData());
 		}
-		private Project GetProject(int id)
+		private static Project GetProject(int id)
 		{
 			try
 			{
-				using(var db = new DBLocalContext())
-				{
-					var data = (from i in db.Project
-								where i.ProjectId == id
-								select i).FirstOrDefault();
-					return data;
-				}
-			}catch(Exception f)
+				using var db = new DBLocalContext();
+				var data = (from i in db.Project
+							where i.ProjectId == id
+							select i).FirstOrDefault();
+				return data;
+			}
+			catch(Exception f)
 			{
+				Application.Current.MainPage.DisplayAlert("Error ValidateDataPage", $"Error {f.Message}", "OK");
 				return null;
 			}
 		}
@@ -96,18 +97,22 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				if(Maintenance == null)
+				var d = WeakReferenceMessenger.Default.IsRegistered<NameItemViewMessage>(this);
+				if (!d)
 				{
-					WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
-						using (var db = new DBLocalContext())
-						{
-							Maintenance = db.Maintenance.Where(M => M.MaintenanceId == m.Value).FirstOrDefault();
-						}
-						if(Maintenance != null)
-						{
-							loadCategories();
-						}
-					});
+					if (Maintenance == null)
+					{
+						WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
+							using (var db = new DBLocalContext())
+							{
+								Maintenance = db.Maintenance.Where(M => M.MaintenanceId == m.Value).FirstOrDefault();
+							}
+							if (Maintenance != null)
+							{
+								LoadCategories();
+							}
+						});
+					}
 				}
 				else
 				{
@@ -115,27 +120,21 @@ namespace Manchito.ViewModel
 				}
 				}catch(Exception f)
 			{
-				Application.Current.MainPage.DisplayAlert("error", $"Error {f.Message}", "OK");
+				Application.Current.MainPage.DisplayAlert("Error LoadMaintenance", $"Error {f.Message}", "OK");
 			}
 		}
 
-		private void loadCategories()
+		private void LoadCategories()
 		{
-			using(var db = new DBLocalContext())
-			{
-				Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId).Include(C=>C.ItemType).ToList();
-			}
+			using var db = new DBLocalContext();
+			Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId).Include(C => C.ItemType).ToList();
 		}
-		private async Task<int> GetLastCategoryId()
+		private static async Task<int> GetLastCategoryId()
 		{
 			try
 			{
-				using (var db = new DBLocalContext())
-				{
-					return (from i in db.Category
-							orderby i.CategoryId descending
-							select i.CategoryId).FirstOrDefault();
-				}
+				using var db = new DBLocalContext();
+				return (from i in db.Category orderby i.CategoryId descending select i.CategoryId).FirstOrDefault();
 			}
 			catch (Exception e)
 			{
@@ -143,16 +142,14 @@ namespace Manchito.ViewModel
 				return -1;
 			}
 		}
-		private async Task<ItemType> GetItemType(int id)
+		private static async Task<ItemType> GetItemType(int id)
 		{
 			try
 			{
-				using (var db = new DBLocalContext())
-				{
-					return (from item in db.ItemTypes
-							where item.ItemTypeId == id
-							select item).FirstOrDefault();
-				}
+				using var db = new DBLocalContext();
+				return (from item in db.ItemTypes
+						where item.ItemTypeId == id
+						select item).FirstOrDefault();
 			}
 			catch (Exception e)
 			{
@@ -160,16 +157,14 @@ namespace Manchito.ViewModel
 				return null;
 			}
 		}
-		private async Task<ItemType> GetItemType(string name)
+		private static async Task<ItemType> GetItemType(string name)
 		{
 			try
 			{
-				using (var db = new DBLocalContext())
-				{
-					return (from item in db.ItemTypes
-							where item.Name.Equals(name)
-							select item).FirstOrDefault();
-				}
+				using var db = new DBLocalContext();
+				return (from item in db.ItemTypes
+						where item.Name.Equals(name)
+						select item).FirstOrDefault();
 			}
 			catch (Exception e)
 			{
@@ -177,7 +172,7 @@ namespace Manchito.ViewModel
 				return null;
 			}
 		}
-		private async Task<string[]> GetItemTypeName()
+		private static async Task<string[]> GetItemTypeName()
 		{
 			try
 			{
@@ -208,22 +203,21 @@ namespace Manchito.ViewModel
 							var ItemType =await GetItemType(action);
 							if(ItemType!=null)
 							{
-								using( var db = new DBLocalContext())
+								using DBLocalContext db = new();
+								Category categoryTmp = new()
 								{
-									Category categoryTmp = new Category() {
-										CategoryId = (await GetLastCategoryId() + 1),
-										Alias = result,
-										ItemTypeId = ItemType.ItemTypeId,
-										MaintenanceId = Maintenance.MaintenanceId										
-									};
-									// cargar datos
-									db.Category.Add(categoryTmp);
-									db.SaveChanges();
-									// cargar datos de nuevo
-									loadCategories();
-									var project = GetProject(Maintenance.ProjectId);
-									var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"{project.ProjectId.ToString()}-{project.Name}", $"{categoryTmp.MaintenanceId.ToString()}-{categoryTmp.Alias}");
-								}
+									CategoryId = (await GetLastCategoryId() + 1),
+									Alias = result,
+									ItemTypeId = ItemType.ItemTypeId,
+									MaintenanceId = Maintenance.MaintenanceId
+								};
+								// cargar datos
+								db.Category.Add(categoryTmp);
+								db.SaveChanges();
+								// cargar datos de nuevo
+								LoadCategories();
+								var project = GetProject(Maintenance.ProjectId);
+								var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"{project.ProjectId}-{project.Name}", $"{categoryTmp.MaintenanceId}-{categoryTmp.Alias}");
 							}
 						}
 					}
@@ -231,7 +225,7 @@ namespace Manchito.ViewModel
 			}
 			catch (Exception ex)
 			{
-				await Application.Current.MainPage.DisplayAlert("Error", $"Error {ex.Message}", null);
+				await Application.Current.MainPage.DisplayAlert("Error AddCategory", $"Error {ex.Message}", null);
 			}
 		}
 

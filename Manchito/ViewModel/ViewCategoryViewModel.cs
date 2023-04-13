@@ -8,6 +8,7 @@ using Manchito.FilesStorageManager;
 using Manchito.Messages;
 using Manchito.Model;
 using Manchito.Views;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,17 @@ namespace Manchito.ViewModel
 	public class ViewCategoryViewModel : INotifyPropertyChangedAbst
 	{
 		private Category _Category;
+
+		private string _Title;
+
+		public string Title
+		{
+			get { return _Title; }
+			set { _Title = value;
+				if (Title != null) { OnPropertyChanged(nameof(Title)); }
+			}
+		}
+
 
 		public Category CategoryItem
 		{
@@ -40,36 +52,44 @@ namespace Manchito.ViewModel
 
 		public ViewCategoryViewModel()
 		{
+			Title = "";
 			TakePhotoCommand = new AsyncRelayCommand(TakePhotoAndroid);
-			TakePhotoCommand = new AsyncRelayCommand(LoadCategory);
+			AppearingCommand = new Command(()=>LoadCategory());
 		}
 
-
+		/// <summary>
+		/// Catch the value and load the category in memory
+		/// </summary>
+		/// <returns></returns>
 		public async Task LoadCategory()
 		{
 			try
 			{
-				if (CategoryItem != null)
+				if (CategoryItem == null)
 				{
 					WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
 						using (var db = new DBLocalContext())
 						{
-							CategoryItem = db.Category.Where(M => M.CategoryId == m.Value).FirstOrDefault();
+							CategoryItem = db.Category.Where(M => M.CategoryId == m.Value).Include(T=>T.ItemType) .FirstOrDefault();
 						}
 						if (CategoryItem != null)
 						{
-							// Load Category
+							Title = $"{CategoryItem.ItemType.Name} - {CategoryItem.Alias}";
 						}
 					});
-
+				}
+				else
+				{
+					WeakReferenceMessenger.Default.UnregisterAll(this);
 				}
 			}
 			catch (Exception f)
 			{
-				Application.Current.MainPage.DisplayAlert("Error ViewCategory", f.Message, "OK");
+				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", f.Message, "OK");
 			}
 		}
 
+		
 		private async Task TakePhotoAndroid()
 		{
 			try

@@ -63,7 +63,7 @@
 	  <MauiXaml Update="Views\ValidateData.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ViewItem.xaml">
+	  <MauiXaml Update="Views\ViewCategory.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ViewMaintenance.xaml">
@@ -121,6 +121,12 @@
 	  <PackageReference Include="CommunityToolkit.Maui.Markup">
 	    <Version>3.1.0</Version>
 	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\ViewCategory.xaml.cs">
+	    <DependentUpon>ViewCategory.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>
