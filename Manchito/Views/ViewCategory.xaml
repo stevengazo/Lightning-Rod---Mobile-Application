@@ -31,7 +31,37 @@
             </VerticalStackLayout>
         </Frame>
         <Frame Grid.Row="1" Margin="10" BackgroundColor="AntiqueWhite">
-            
+            <!--Carrousell-->
+            <CarouselView ItemsSource="{Binding Photos}">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Frame  HasShadow="True"
+                                    BorderColor="DarkGray"
+                                    CornerRadius="5"
+                                    Margin="20"
+                                    HeightRequest="300"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="CenterAndExpand">
+                                    <StackLayout>
+                                        <Label Text="Imagen "
+                                                FontAttributes="Bold"
+                                                FontSize="18"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center" />
+                                        <Image Source="{Binding FilePath,Mode= OneWay}"
+                                                Aspect="AspectFill"
+                                                HeightRequest="300"
+                                                WidthRequest="300"
+                                               HorizontalOptions="Center" />
+                                                                   
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+
         </Frame>
         <Frame Grid.Row="2" BorderColor="White" HorizontalOptions="Center" Padding="0">
             <HorizontalStackLayout HorizontalOptions="Center" Padding="0" Margin="0">

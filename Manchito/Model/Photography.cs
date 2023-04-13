@@ -26,11 +26,11 @@ namespace Manchito.Model
 		/// <summary>
 		/// Parent of this object
 		/// </summary>
-		public Item Item { get; set; }
+		public Category Category { get; set; }
 		/// <summary>
 		/// internal id of the parent
 		/// </summary>
-		public int ItemId { get; set; }
+		public int CategoryId { get; set; }
 
 	}
 }

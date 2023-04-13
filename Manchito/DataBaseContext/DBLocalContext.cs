@@ -13,7 +13,6 @@ namespace Manchito.DataBaseContext
 
 		public DbSet<AudioNote> AudioNote { get; set; }	
 		public DbSet<Category> Category { get; set; }
-		public DbSet<Item> Item { get; set; }
 		public DbSet<ItemType> ItemTypes { get; set; }
 		public DbSet<Maintenance> Maintenance { get; set; }
 		public DbSet<Note> Note { get; set; }

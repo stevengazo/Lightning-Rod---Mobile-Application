@@ -128,8 +128,15 @@ namespace Manchito.ViewModel
 
 		private void LoadCategories()
 		{
-			using var db = new DBLocalContext();
-			Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId).Include(C => C.ItemType).ToList();
+			try
+			{
+				using var db = new DBLocalContext();
+				Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId).Include(C => C.ItemType).ToList();
+			}catch(Exception f)
+			{
+				Application.Current.MainPage.DisplayAlert("Error LoadCategories ", $"Error: {f.Message}", "ok");
+			}
+			
 		}
 		private static async Task<int> GetLastCategoryId()
 		{

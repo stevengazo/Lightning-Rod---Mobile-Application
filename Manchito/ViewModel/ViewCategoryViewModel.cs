@@ -26,6 +26,19 @@ namespace Manchito.ViewModel
 
 		private string _Title;
 
+		private List<Photography> _Photos;
+
+		public List<Photography> Photos
+		{
+			get { return _Photos; }
+			set { _Photos = value; 
+			if(Photos != null)
+				{
+					OnPropertyChanged(nameof(Photos));
+				}
+			}
+		}
+
 		public string Title
 		{
 			get { return _Title; }
@@ -33,7 +46,6 @@ namespace Manchito.ViewModel
 				if (Title != null) { OnPropertyChanged(nameof(Title)); }
 			}
 		}
-
 
 		public Category CategoryItem
 		{
@@ -76,6 +88,7 @@ namespace Manchito.ViewModel
 						using Stream sourceStream = await photo.OpenReadAsync();
 						using FileStream localFileStream = File.OpenWrite(localFilePath);
 						await sourceStream.CopyToAsync(localFileStream);
+						loadImages();
 					}
 				}
 			}
@@ -108,10 +121,12 @@ namespace Manchito.ViewModel
 						{
 							Title = $"{CategoryItem.ItemType.Name} - {CategoryItem.Alias}";
 						}
+						await loadImages();
 					});
 				}
 				else
 				{
+					loadImages();
 					WeakReferenceMessenger.Default.UnregisterAll(this);
 				}
 			}
@@ -121,6 +136,22 @@ namespace Manchito.ViewModel
 			}
 		}
 
+
+		private async Task loadImages()
+		{
+			try
+			{
+				List<Photography> photos=new();
+				using (DBLocalContext db = new())
+				{
+					photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).ToList();
+				}
+				Photos = photos;
+			}catch(Exception f)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
+			}
+		}
 
 		private async Task<string> FolderPathAndroid()
 		{
@@ -150,6 +181,24 @@ namespace Manchito.ViewModel
 			}
 		}
 
+		private int GetLastPhotographyId()
+		{
+			try
+			{
+				using (var db = new DBLocalContext())
+				{
+					var num = (from i in db.Photography
+							   orderby i.PhotographyId descending
+							   select i.PhotographyId).FirstOrDefault();
+					return num;
+				}
+			}catch(Exception f)
+			{
+				return -20;
+			}
+
+		}
+		
 		private async Task<bool> CheckAndroidDirectory()
 		{
 			try
@@ -183,6 +232,30 @@ namespace Manchito.ViewModel
 				return false;
 			}
 		}
+		
+
+		private async Task RegisterPhoto(string pathFile)
+		{
+			try
+			{
+				Photography photography = new() { 
+					DateTaked= DateTime.Now,
+					CategoryId = CategoryItem.CategoryId,
+					FilePath = pathFile,
+					PhotographyId = (GetLastPhotographyId()+1)
+				};
+				using (DBLocalContext db = new())
+				{
+					db.Add(photography);
+					db.SaveChanges();
+				}
+			}catch(Exception f)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error RegisterPhoto ", $"Error: {f.Message}", "ok");
+			}
+		}
+
+		
 		private async Task TakePhotoAndroid()
 		{
 			try
@@ -199,6 +272,7 @@ namespace Manchito.ViewModel
 						using Stream sourceStream = await photo.OpenReadAsync();
 						using FileStream localFileStream = File.OpenWrite(localFilePath);
 						await sourceStream.CopyToAsync(localFileStream);
+						await RegisterPhoto(localFilePath);
 					}
 				}
 			}

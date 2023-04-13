@@ -38,6 +38,7 @@ namespace Manchito.Model
 		/// <summary>
 		/// List of item associate with the category
 		/// </summary>
-		public ICollection<Item> Items { get; set; }
+		public ICollection<Photography> Photographies { get; set; }
+		public ICollection<Note> Notes { get; set; }
 	}
 }
