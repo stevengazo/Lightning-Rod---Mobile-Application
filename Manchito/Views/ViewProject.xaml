@@ -19,9 +19,9 @@
     </ContentPage.Behaviors>
     <Grid >
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.55*" />
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="0.3*"  />
+            <RowDefinition Height="0.25*"  />
         </Grid.RowDefinitions>
         <!-- HEADER -->
         <Frame Grid.Row="0" Padding="5" BorderColor="White" >
@@ -49,8 +49,7 @@
                 </Frame>
                 <Frame Grid.Row="2" Grid.ColumnSpan="2"  Padding="0" BorderColor="White" >
                     <HorizontalStackLayout HorizontalOptions="Center" Margin="0" Spacing="10" Padding="0">
-                        <Button Text="Modificar"
-                                
+                        <Button Text="Modificar"                                
                                 BackgroundColor="Green"
                                 TextColor="White"
                                 Padding="1"
@@ -79,7 +78,7 @@
                     <CollectionView SelectionMode="Single" ItemsSource="{Binding Maintenances,Mode=OneWay}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame Padding="0" Margin="0">
+                                <Frame Padding="0" Margin="0,2,0,2">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding BindingContext.ViewMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  CommandParameter="{Binding MaintenanceId}"  />
                                     </Frame.GestureRecognizers>
@@ -106,9 +105,9 @@
                 <Button 
                         Command="{Binding AddMaintenanceCommand}"
                         CornerRadius="15"
-                        WidthRequest="200"
+                        WidthRequest="240"
                         HeightRequest="50"
-                        BackgroundColor="Blue"  
+                        BackgroundColor="Green"  
                         TextColor="White"
                         Text="Agregar Mantenimiento"/>
             </HorizontalStackLayout>

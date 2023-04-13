@@ -3,48 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Manchito.Views.ViewPhoto"
-             xmlns:local="clr-namespace:Manchito.ViewModel"
-             Title="ViewPhoto">
-    <ContentPage.BindingContext>
-        <local:ViewPhotoViewModel></local:ViewPhotoViewModel>
-    </ContentPage.BindingContext>
-    <Grid>
-        <Grid.RowDefinitions >
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Frame Grid.Row="0">
-            <Label FontSize="Subtitle">
-                Imagen Capturada
-            </Label>
-        </Frame>
-        <Frame Grid.Row="0">
-            <VerticalStackLayout>
-                <Image
-                    WidthRequest="340" 
-                    HeightRequest="600"
-                    Source="{Binding UrlPhoto}"
-                    >
-                    <Image.Behaviors>
-                        <toolkit:EventToCommandBehavior 
-                               EventName="Appearing"
-                               Command="{Binding LoadPhotoCommand}" />
-                    </Image.Behaviors>
-                </Image>
-                <HorizontalStackLayout>
-                    <Button Text="Grabar" 
-                            BorderColor="Red" 
-                            TextColor="White"
-                            BackgroundColor="LightPink"
-                            />
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
-        </Frame>
-        <Frame Grid.Row="0">
-
-        </Frame>
-    </Grid>
-        
-    
+             Title="Imagen Capturada">
+    <VerticalStackLayout>
+        <Label>
+            dfa
+        </Label>
+    </VerticalStackLayout>
 </ContentPage>

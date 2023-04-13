@@ -1,8 +1,10 @@
 ﻿using Android.Provider;
 using Android.Webkit;
 using AndroidX.Core.Content;
+using CommunityToolkit.Mvvm.Input;
 using Manchito.FilesStorageManager;
 using Manchito.Views;
+using Microsoft.EntityFrameworkCore.Update;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +20,34 @@ namespace Manchito.ViewModel
 
         public ViewItemViewModel()
         {
-            TakePhotoCommand = new Command(() => TakePhoto());
+			TakePhotoCommand = new AsyncRelayCommand(TakePhotoAndroid);
         }
 
-		private async void TakePhotoAndroid()
+		private async Task OpenViewPhoto()
 		{
 			try
 			{
+				var page = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
+				
+				ViewPhoto vPhoto = new();
+				if (page.GetType() == vPhoto.GetType())
+				{
+					Application.Current.MainPage.Navigation.RemovePage(page);
+
+				}
+					await Application.Current.MainPage.Navigation.PushAsync(vPhoto,true);
+			}
+			catch(Exception ex )
+			{
+				await Application.Current.MainPage.DisplayAlert("Error OpenViewPhoto ", $"Error: {ex.Message}", "ok");
+			}
+		}
+
+		private async Task  TakePhotoAndroid()
+		{
+			try
+			{
+				bool SaveIt = false;
 				if (MediaPicker.Default.IsCaptureSupported)
 				{
 					FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
@@ -36,23 +59,18 @@ namespace Manchito.ViewModel
 							Directory.Delete(temporalDirectory, true);						
 						}
 						Directory.CreateDirectory(temporalDirectory);
-						var data = FileManager.SaveFile(temporalDirectory, photo);
-						if (data)
-						{
-							await Application.Current.MainPage.Navigation.PushModalAsync(new ViewPhoto());
-						}
+						SaveIt = FileManager.SaveFile(temporalDirectory, photo);						
 					}
+					if (SaveIt) {
+						
+					}
+			
 				}
 			}
 			catch (Exception ex)
 			{
-				await Application.Current.MainPage.DisplayAlert("Error Interno", $"Error: {ex.Message}", "ok");
+				await Application.Current.MainPage.DisplayAlert("Error TakePhotoAndroid ", $"Error: {ex.Message}", "ok");				
 			}
-		}
-
-		private async void TakePhoto()
-		{
-			TakePhotoAndroid();
 		}
 	}
 }

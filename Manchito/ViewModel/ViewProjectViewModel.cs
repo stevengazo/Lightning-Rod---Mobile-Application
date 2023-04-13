@@ -221,7 +221,7 @@ namespace Manchito.ViewModel
 			try
 			{
 				UpdateProject UpdateView = new UpdateProject(Project.ProjectId);
-				await Application.Current.MainPage.Navigation.PushAsync(UpdateView);
+				await Application.Current.MainPage.Navigation.PushAsync(UpdateView,true);
 			}
 			catch (Exception f)
 			{
@@ -235,7 +235,7 @@ namespace Manchito.ViewModel
 			{				
 				int number = int.Parse(idNumber.ToString());				
 				ViewMaintenance vMaintPage = new ViewMaintenance();				
-				await Application.Current.MainPage.Navigation.PushAsync(vMaintPage);
+				await Application.Current.MainPage.Navigation.PushAsync(vMaintPage,true);
 				WeakReferenceMessenger.Default.Send(new MaintenanceViewMessage(number));
 			}
 			catch (Exception ex)

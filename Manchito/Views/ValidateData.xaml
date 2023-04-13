@@ -9,48 +9,46 @@
     </ContentPage.BindingContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="3*" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="2.5*" />
             <RowDefinition Height="30" />
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0"  HorizontalOptions="Center" Text="Elementos Clave" FontSize="Title" />
         <Frame Grid.Row="1" BorderColor="White">
-            <ScrollView>
-                <VerticalStackLayout>
-                    <Label HorizontalOptions="Center" FontSize="Body">Recuerde seleccionar todos los elementos del mantenimiento</Label>
-                    <Label Padding="5">
-                        Pararrayos: Revision de la ubicación, altura y estado del pararrayos
-                    </Label>
-                    <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
-                    <Label Padding="5">
-                        Bajante: Revision del estado, recorrido, protecciones. contador de eventos y rotulacion.
-                    </Label>
-                    <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
-                    <Label Padding="5">
-                        Sistema de Puesta a Tierra: revision de ubicacion, electrodos, cableado, registro principal, mediciones.
-                    </Label>
-                    <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
-                    <Label Padding="5">
-                        Montaje: altura y estado del montaje usado para el pararrayos.
-                    </Label>
-                    <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
-                    <Label Padding="5">
-                        Unificaciones: comprobacion de la unificacion de la malla
-                    </Label>
-                    <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
-                    <Label Padding="5">
-                        Supresores: tableros y equipos sin proteccion.
-                    </Label>
-                </VerticalStackLayout>
-            </ScrollView>
+            <VerticalStackLayout>
+                <Label HorizontalOptions="Center" FontSize="Body">Recuerde seleccionar todos los elementos del mantenimiento</Label>
+                <Label Padding="5" FontSize="Caption">
+                    Pararrayos: Revision de la ubicación, altura y estado del pararrayos
+                </Label>
+                <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                <Label Padding="5"  FontSize="Caption">
+                    Bajante: Revision del estado, recorrido, protecciones. contador de eventos y rotulacion.
+                </Label>
+                <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                <Label Padding="5" FontSize="Caption">
+                    Sistema de Puesta a Tierra: revision de ubicacion, electrodos, cableado, registro principal, mediciones.
+                </Label>
+                <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                <Label Padding="5" FontSize="Caption">
+                    Montaje: altura y estado del montaje usado para el pararrayos.
+                </Label>
+                <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                <Label Padding="5" FontSize="Caption">
+                    Unificaciones: comprobacion de la unificacion de la malla
+                </Label>
+                <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                <Label Padding="5" FontSize="Caption">
+                    Supresores: tableros y equipos sin proteccion.
+                </Label>
+            </VerticalStackLayout>
         </Frame>
-        <Label Grid.Row="2" FontSize="Subtitle" HorizontalOptions="Center">
+        <Label Grid.Row="2" FontSize="Subtitle" HorizontalOptions="Center" Margin="0">
             Elementos Agregados del Mantenimiento
         </Label>
-        <Frame Grid.Row="3" BackgroundColor="Aquamarine" BorderColor="White">
+        <Frame Grid.Row="3" Margin="0" BorderColor="White">
             <ScrollView>
-                <VerticalStackLayout BackgroundColor="gray">
+                <VerticalStackLayout BackgroundColor="gray" >
                     <!-- Item -->
                     <Frame Padding="2" Margin="5">
                         <Frame.GestureRecognizers>
