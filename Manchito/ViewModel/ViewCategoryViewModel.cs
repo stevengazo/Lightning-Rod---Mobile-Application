@@ -70,7 +70,7 @@ namespace Manchito.ViewModel
 					WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
 						using (var db = new DBLocalContext())
 						{
-							CategoryItem = db.Category.Where(M => M.CategoryId == m.Value).Include(T=>T.ItemType) .FirstOrDefault();
+							CategoryItem = db.Category.Where(M => M.CategoryId == m.Value).Include(T=>T.ItemType).Include(C=>C.Maintenance).Include(C => C.Maintenance.Project).FirstOrDefault();
 						}
 						if (CategoryItem != null)
 						{
@@ -88,8 +88,32 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", f.Message, "OK");
 			}
 		}
+		private async Task<bool> CheckAndroidDirectory()
+		{
+			try
+			{
+				if(CategoryItem!=null)
+				{
+					var Pj = CategoryItem.Maintenance.Project;
+					var Man = CategoryItem.Maintenance;
+					var Cat = CategoryItem;
+					//string categoryPath = Path.Combine(PathDirectoryFilesAndroid, $"{Pj.ProjectId}-{Pj.Name}", $"{Man.MaintenanceId}-{Man.Alias}", );
+					return false;
+					throw new NotImplementedException();
+					
+				}
+				else
+				{
+					return false;
+				}
 
-		
+			}
+			catch(Exception e)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error CheckAndroidDirectory", $"Error: {e.Message}", "ok");
+				return false;
+			}
+		}
 		private async Task TakePhotoAndroid()
 		{
 			try
