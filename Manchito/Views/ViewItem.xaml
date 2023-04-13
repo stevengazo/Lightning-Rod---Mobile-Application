@@ -2,11 +2,18 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Manchito.Views.ViewItem"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:local="clr-namespace:Manchito.ViewModel"
     Title="Item - ">
     <ContentPage.BindingContext>
-        <local:ViewItemViewModel />
+        <local:ViewCategoryViewModel />
     </ContentPage.BindingContext>
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior 
+               EventName="Appearing"
+               Command="{Binding AppearingCommand}"
+            />
+    </ContentPage.Behaviors>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.65*" />

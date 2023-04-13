@@ -236,7 +236,7 @@ namespace Manchito.ViewModel
 				int number = int.Parse(idNumber.ToString());				
 				ViewMaintenance vMaintPage = new ViewMaintenance();				
 				await Application.Current.MainPage.Navigation.PushAsync(vMaintPage,true);
-				WeakReferenceMessenger.Default.Send(new MaintenanceViewMessage(number));
+				WeakReferenceMessenger.Default.Send(new NameItemViewMessage(number));
 			}
 			catch (Exception ex)
 			{

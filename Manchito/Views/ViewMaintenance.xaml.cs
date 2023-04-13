@@ -15,13 +15,7 @@ public partial class ViewMaintenance : ContentPage
     }
 
 	private async void ViewItem(object sender, EventArgs r)
-	{
-		try
-		{
-			await Navigation.PushAsync(new ViewItem());
-		}catch(Exception ex) {
-			await DisplayAlert("Error", $"Error {ex.Message}", null);
-		}
+	{		
 	}
 	private async void AddItem(object sender, EventArgs e)
 	{

@@ -41,6 +41,7 @@ namespace Manchito.ViewModel
 			}
 		}
 		public ICommand AppearingCommand { get; private set; }
+		public ICommand ViewCategoryCommand { get; private set; }
 		public ICommand ValidateDataCommand { get; private set; }
 		public ICommand AddCategoryCommand { get; private set; }
 		public ViewMaintenance _ViewMaintenance { get; set; }
@@ -52,6 +53,22 @@ namespace Manchito.ViewModel
 			AppearingCommand = new Command(() => LoadManteinance());
 			ValidateDataCommand = new Command(() => ValidateDataPage());
 			AddCategoryCommand = new Command(() => AddCategory());
+			ViewCategoryCommand = new Command((O) => ViewCategory(O));
+		}
+
+		private async void ViewCategory(Object id)
+		{
+			try
+			{
+				int idNumber = int.Parse(id.ToString());
+				await Application.Current.MainPage.Navigation.PushAsync(new ViewItem(), true);
+				WeakReferenceMessenger.Default.Send(new NameItemViewMessage(idNumber));
+			}
+			catch(Exception f)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", f.Message, "OK");
+
+			}
 		}
 
 		private void ValidateDataPage()
@@ -81,7 +98,7 @@ namespace Manchito.ViewModel
 			{
 				if(Maintenance == null)
 				{
-					WeakReferenceMessenger.Default.Register<MaintenanceViewMessage>(this, async (r, m) => {
+					WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
 						using (var db = new DBLocalContext())
 						{
 							Maintenance = db.Maintenance.Where(M => M.MaintenanceId == m.Value).FirstOrDefault();
@@ -94,7 +111,7 @@ namespace Manchito.ViewModel
 				}
 				else
 				{
-					WeakReferenceMessenger.Default.Unregister<MaintenanceViewMessage>(this);
+					WeakReferenceMessenger.Default.Unregister<NameItemViewMessage>(this);
 				}
 				}catch(Exception f)
 			{

@@ -2,9 +2,9 @@
 
 namespace Manchito.Messages
 {
-	public class MaintenanceViewMessage : ValueChangedMessage<int>
+	public class NameItemViewMessage : ValueChangedMessage<int>
 	{
-		public MaintenanceViewMessage(int value) : base(value)
+		public NameItemViewMessage(int value) : base(value)
 		{
 		}
 	}
