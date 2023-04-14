@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,16 +49,46 @@ namespace Manchito.ViewModel
 		public ICommand ViewCategoryCommand { get; private set; }
 		public ICommand ValidateDataCommand { get; private set; }
 		public ICommand AddCategoryCommand { get; private set; }
+		public ICommand ShareMaintenanceCommand { get; private set; }
 		public ViewMaintenance ViewMaintenance { get; set; }
 		#endregion
 
 		#region Methods
 		public ViewMaintenanceViewModel()
 		{
+			ShareMaintenanceCommand = new Command(()=>ShareMaintenance());
 			AppearingCommand = new Command(() => LoadManteinance());
 			ValidateDataCommand = new Command(() => ValidateDataPage());
 			AddCategoryCommand = new Command(() => AddCategory());
 			ViewCategoryCommand = new Command( (O) =>  ViewCategory(O));
+		}
+
+		private async Task ShareMaintenance()
+		{
+			string startPath = Path.Combine(
+									PathDirectoryFilesAndroid,
+									$"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
+									$"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}");
+			string zipPath = Path.Combine(
+									PathDirectoryFilesAndroid,
+									$"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
+									$"P-{Maintenance.Project.Name}-{Maintenance.Alias}.zip");
+			if (File.Exists(zipPath))
+			{
+				// create new zip file
+				File.Delete(zipPath);
+			}
+			ZipFile.CreateFromDirectory(startPath, zipPath);
+			if (File.Exists(zipPath))
+			{
+				await Share.Default.RequestAsync(new ShareFileRequest
+				{
+					Title = "Compartir Archivo",
+					File = new ShareFile(zipPath)
+				});
+			}
+
+
 		}
 
 		private async void ViewCategory(Object id)

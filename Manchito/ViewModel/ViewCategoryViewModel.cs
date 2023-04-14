@@ -10,6 +10,7 @@ using Manchito.Model;
 using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,31 +73,44 @@ namespace Manchito.ViewModel
 			Title = "";
 			TakePhotoCommand = new AsyncRelayCommand(TakePhotoAndroid);
 			TakeVideoCommand = new AsyncRelayCommand(TakeVideoAndroid);
-			AppearingCommand = new Command(()=>LoadCategory());
+			AppearingCommand = new AsyncRelayCommand(LoadCategory);
 			ShareItemCommand = new Command((O) => SharePhoto(O));
 			DeleteItemCommand = new Command((O) => DeletePhoto(O));
 		}
-
-		private void DeletePhoto(object o)
+		private async Task DeletePhoto(object o)
 		{
 			var Response = Application.Current.MainPage.DisplayAlert("Alerta", "Deseas borrar este dato", "Yes", "No");
 		}
-
-		private void SharePhoto(object o)
+		private async Task SharePhoto(object o)
 		{
-			
-		}
+			try
+			{
+				int number = int.Parse(o.ToString());
+				Photography photographytmp = new();
+				using (var db = new DBLocalContext())
+				{
+					photographytmp = db.Photography.Where(P => P.PhotographyId == number).FirstOrDefault();
+				}
+				if (photographytmp != null)
+				{
+					await Share.Default.RequestAsync(new ShareFileRequest { Title = "Compartir Imagen", File = new ShareFile(photographytmp.FilePath) });
+				}
+			}catch(Exception f)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error SharePhoto ", $"Error: {f.Message}", "ok");
+			}
 
+		}
 		private async Task TakeVideoAndroid()
 		{
 			try
 			{
 				if (MediaPicker.Default.IsCaptureSupported)
 				{
-					FileResult photo = await MediaPicker.Default.CaptureVideoAsync();
-					photo.FileName = $"VID D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")}.mp4";
+					FileResult photo = await MediaPicker.Default.CaptureVideoAsync();				
 					if (photo != null)
 					{
+						photo.FileName = $"VID D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")}.mp4";
 						// save the file into local storage
 						string tempPath = await FolderPathAndroid();
 						string localFilePath = Path.Combine(tempPath, photo.FileName);
@@ -123,14 +137,15 @@ namespace Manchito.ViewModel
 			{
 				if (CategoryItem == null)
 				{
+
 					WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
 						using (var db = new DBLocalContext())
 						{
-							CategoryItem = db.Category.Where(M => M.CategoryId == m.Value)
-														.Include(T=>T.ItemType)
-														.Include(C=>C.Maintenance)
+							CategoryItem = await db.Category.Where(M => M.CategoryId == m.Value)
+														.Include(T => T.ItemType)
+														.Include(C => C.Maintenance)
 														.Include(C => C.Maintenance.Project)
-														.FirstOrDefault();
+														.FirstOrDefaultAsync();
 						}
 						if (CategoryItem != null)
 						{
@@ -141,7 +156,6 @@ namespace Manchito.ViewModel
 				}
 				else
 				{
-					loadImages();
 					WeakReferenceMessenger.Default.UnregisterAll(this);
 				}
 			}
@@ -150,8 +164,6 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", f.Message, "OK");
 			}
 		}
-
-
 		private async Task loadImages()
 		{
 			try
@@ -167,7 +179,6 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
 			}
 		}
-
 		private async Task<string> FolderPathAndroid()
 		{
 			try
@@ -195,16 +206,15 @@ namespace Manchito.ViewModel
 				return string.Empty;
 			}
 		}
-
-		private int GetLastPhotographyId()
+		private async Task <int> GetLastPhotographyId()
 		{
 			try
 			{
 				using (var db = new DBLocalContext())
 				{
-					var num = (from i in db.Photography
+					var num = await (from i in db.Photography
 							   orderby i.PhotographyId descending
-							   select i.PhotographyId).FirstOrDefault();
+							   select i.PhotographyId).FirstOrDefaultAsync();
 					return num;
 				}
 			}catch(Exception f)
@@ -213,7 +223,6 @@ namespace Manchito.ViewModel
 			}
 
 		}
-		
 		private async Task<bool> CheckAndroidDirectory()
 		{
 			try
@@ -247,8 +256,6 @@ namespace Manchito.ViewModel
 				return false;
 			}
 		}
-		
-
 		private async Task RegisterPhoto(string pathFile)
 		{
 			try
@@ -257,7 +264,7 @@ namespace Manchito.ViewModel
 					DateTaked= DateTime.Now,
 					CategoryId = CategoryItem.CategoryId,
 					FilePath = pathFile,
-					PhotographyId = (GetLastPhotographyId()+1)
+					PhotographyId = ( await GetLastPhotographyId()+1)
 				};
 				using (DBLocalContext db = new())
 				{
@@ -269,8 +276,6 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error RegisterPhoto ", $"Error: {f.Message}", "ok");
 			}
 		}
-
-		
 		private async Task TakePhotoAndroid()
 		{
 			try

@@ -50,7 +50,7 @@ namespace Manchito.ViewModel
 		public MainPageViewModel()
         {               
             // binding the icommand property with the async method
-            ViewProjectCommand = new Command(async (t) =>  ViewProject(t));
+            ViewProjectCommand = new Command(async (t) => ViewProject(t));
 			// binding the icommand property with the async method
 			AddProjectCommand = new Command(async ()=> await AddProject());    
             LoadProjectsCommand = new Command(async ()=> await LoadProjects());
@@ -71,21 +71,19 @@ namespace Manchito.ViewModel
 		public async Task LoadProjects()
 		{
 			try
-			{				
+			{
+				await CheckForStoragePermission();
 				// load the projects in the db
-				using (var db = new DBLocalContext())
-				{
-					Projects = db.Project.Include(P=>P.Maintenances).ToList();
-
-				}
+				using DBLocalContext db = new DBLocalContext();
+				Projects = db.Project.Include(P => P.Maintenances).ToList();
 			}
 			catch (Exception ex)
 			{
 				await Application.Current.MainPage.DisplayAlert("Error interno", $"Error: {ex.Message}", "ok");
 			}
 		}
-		[Obsolete]
-        private async void ViewProject(object t)
+	
+		private static async void ViewProject(object t)
 		{
             try
             {
@@ -98,6 +96,26 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error interno", $"Error: {ex.Message}", "ok");
 			}
         }
+		public static async Task CheckForStoragePermission()
+		{
+
+			var statusStorageRead = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+			var statusStorageWrite = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+			var statusCamera = await Permissions.CheckStatusAsync<Permissions.Camera>();
+			if (statusStorageRead != PermissionStatus.Granted)
+			{
+				await Permissions.RequestAsync< Permissions.StorageRead> ();				
+			}
+			if (statusStorageWrite != PermissionStatus.Granted)
+			{
+				await Permissions.RequestAsync<Permissions.StorageWrite>();
+			}
+			if (statusCamera != PermissionStatus.Granted)
+			{
+				await Permissions.RequestAsync<Permissions.Camera>();
+			}
+			
+		}
 		#endregion
 	}
 }

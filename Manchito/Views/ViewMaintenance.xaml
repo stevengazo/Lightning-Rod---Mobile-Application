@@ -56,16 +56,32 @@
                         <Label Text="{Binding Maintenance.Status}" />
                     </Frame>
                     <Frame Grid.Row="4" Grid.ColumnSpan="2" BorderColor="White" Padding="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0">
-                        <Button Text="Validar Mantenimiento"
+                    <HorizontalStackLayout Padding="1" HeightRequest="40">
+                        <Button Text="Validar"
                             Command="{Binding ValidateDataCommand}"
                             BackgroundColor="Blue"
                             CornerRadius="15"
-                            WidthRequest="240"
+                            WidthRequest="180"
                             HeightRequest="35"
                             Padding="5"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"/>
-                    </Frame>
+
+                        <ImageButton                
+                            WidthRequest="50"
+                            HeightRequest="50"                                            
+                            Command="{Binding ShareMaintenanceCommand}"
+                            BorderColor="blue" 
+                            BackgroundColor="blue"
+                            Padding="4"
+                            Margin="5,0,0,0"
+                            Aspect="AspectFill"
+                            Source="share.svg"
+                            CornerRadius="15"
+                            />
+                    </HorizontalStackLayout>
+                        
+                </Frame>
 
                 </Grid>
             </Frame>

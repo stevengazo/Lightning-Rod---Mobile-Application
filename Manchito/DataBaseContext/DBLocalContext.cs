@@ -35,7 +35,7 @@ namespace Manchito.DataBaseContext
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			Project _Project = new() {
+			/*Project _Project = new() {
 				ProjectId = 1,
 				Name = "Sample Name",
 				CustomerContactName = "Customer Contact Name",
@@ -50,7 +50,7 @@ namespace Manchito.DataBaseContext
 				Status = "In progress",
 				ProjectId= _Project.ProjectId
 			};
-			modelBuilder.Entity<Maintenance>().HasData(_Maintenance);
+			modelBuilder.Entity<Maintenance>().HasData(_Maintenance);*/
 			List<ItemType> itemTypes = new() {
 				new()
 				{
@@ -81,6 +81,11 @@ namespace Manchito.DataBaseContext
 				{
 					ItemTypeId= 6,
 					Name="Supresores"
+				},
+				new()
+				{
+					ItemTypeId= 7,
+					Name="Otros"
 				},
 			};
 			modelBuilder.Entity<ItemType>().HasData(itemTypes);			
