@@ -88,7 +88,7 @@ namespace Manchito.ViewModel
 						using Stream sourceStream = await photo.OpenReadAsync();
 						using FileStream localFileStream = File.OpenWrite(localFilePath);
 						await sourceStream.CopyToAsync(localFileStream);
-						loadImages();
+						await loadImages();
 					}
 				}
 			}

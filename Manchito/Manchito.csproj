@@ -129,4 +129,12 @@
 	  </Compile>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiImage Include="Resources\Icons\delete.svg" />
+	  <MauiImage Include="Resources\Icons\edit.svg" />
+	  <MauiImage Include="Resources\Icons\photo.svg" />
+	  <MauiImage Include="Resources\Icons\play.svg" />
+	  <MauiImage Include="Resources\Icons\stop.svg" />
+	</ItemGroup>
+
 </Project>
