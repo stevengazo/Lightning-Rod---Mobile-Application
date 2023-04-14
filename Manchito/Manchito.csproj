@@ -48,6 +48,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Icons\share.svg" />
+	  <None Remove="Resources\Icons\video.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Views\AddItem.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -130,6 +135,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiImage Include="Resources\Icons\video.svg" />
+	  <MauiImage Include="Resources\Icons\share.svg" />
 	  <MauiImage Include="Resources\Icons\delete.svg" />
 	  <MauiImage Include="Resources\Icons\edit.svg" />
 	  <MauiImage Include="Resources\Icons\photo.svg" />

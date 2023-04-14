@@ -9,6 +9,7 @@ using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,9 +116,17 @@ namespace Manchito.ViewModel
 							}
 						});
 					}
+					else
+					{
+						LoadCategories();
+					}
 				}
 				else
 				{
+					if (Maintenance != null)
+					{
+						LoadCategories();
+					}
 					WeakReferenceMessenger.Default.Unregister<NameItemViewMessage>(this);
 				}
 				}catch(Exception f)
@@ -131,7 +140,11 @@ namespace Manchito.ViewModel
 			try
 			{
 				using var db = new DBLocalContext();
-				Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId).Include(C => C.ItemType).ToList();
+				
+				Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId)
+										.Include(C => C.ItemType)
+										.Include(M =>M.Photographies.Take(3)).ToList();
+
 			}catch(Exception f)
 			{
 				Application.Current.MainPage.DisplayAlert("Error LoadCategories ", $"Error: {f.Message}", "ok");

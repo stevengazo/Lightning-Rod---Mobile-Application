@@ -16,48 +16,47 @@
                Command="{Binding AppearingCommand}"
             />
     </ContentPage.Behaviors>
-
     <Grid BackgroundColor="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1.1*"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="70"/>
-        </Grid.RowDefinitions>
-        <!-- Header -->
-        <Frame Grid.Row="0"  BorderColor="White" Padding="10">
-            <Grid ZIndex="1" RowSpacing="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
-                    <ColumnDefinition Width="5*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.ColumnSpan="2" FontSize="Title" Text="Información del Proyecto" HorizontalOptions="Center" />
-                <Frame Grid.Row="1" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,5,0,0">
-                    <Label Text="Alias de Mantenimiento" />
-                </Frame>
-                <Frame Grid.Row="1" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="{Binding Maintenance.Alias, Mode=TwoWay}" />
-                </Frame>
-                <Frame Grid.Row="2" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="Fecha de Trabajo" />
-                </Frame>
-                <Frame Grid.Row="2" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="{Binding Maintenance.DateOfMaintenance.Date, Mode=TwoWay}" />
-                </Frame>
-                <Frame Grid.Row="3" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="Estado del Proyecto" />
-                </Frame>
-                <Frame Grid.Row="3" Grid.Column="1" BorderColor="White"  Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="{Binding Maintenance.Status}" />
-                </Frame>
-                <Frame Grid.Row="4" Grid.ColumnSpan="2" BorderColor="White" Padding="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0">
-                    <Button Text="Validar Mantenimiento"
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.1*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="70"/>
+            </Grid.RowDefinitions>
+            <!-- Header -->
+            <Frame Grid.Row="0"  BorderColor="White" Padding="10">
+                <Grid ZIndex="1" RowSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.ColumnSpan="2" FontSize="Title" Text="Información del Proyecto" HorizontalOptions="Center" />
+                    <Frame Grid.Row="1" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,5,0,0">
+                        <Label Text="Alias de Mantenimiento" />
+                    </Frame>
+                    <Frame Grid.Row="1" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                        <Label Text="{Binding Maintenance.Alias, Mode=TwoWay}" />
+                    </Frame>
+                    <Frame Grid.Row="2" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                        <Label Text="Fecha de Trabajo" />
+                    </Frame>
+                    <Frame Grid.Row="2" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                        <Label Text="{Binding Maintenance.DateOfMaintenance.Date, Mode=TwoWay}" />
+                    </Frame>
+                    <Frame Grid.Row="3" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                        <Label Text="Estado del Proyecto" />
+                    </Frame>
+                    <Frame Grid.Row="3" Grid.Column="1" BorderColor="White"  Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                        <Label Text="{Binding Maintenance.Status}" />
+                    </Frame>
+                    <Frame Grid.Row="4" Grid.ColumnSpan="2" BorderColor="White" Padding="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0">
+                        <Button Text="Validar Mantenimiento"
                             Command="{Binding ValidateDataCommand}"
                             BackgroundColor="Blue"
                             CornerRadius="15"
@@ -66,58 +65,65 @@
                             Padding="5"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"/>
-                </Frame>                
+                    </Frame>
 
-            </Grid>
-        </Frame>
-        <Frame Grid.Row="1" BackgroundColor="LightGray" Margin="5" Padding="2">
-            <ScrollView>
-                <VerticalStackLayout>
-                    <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame Padding="2" Margin="0,2,0,2">
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
-                                    </Frame.GestureRecognizers>
-                                    <VerticalStackLayout Spacing="10" Padding="2">
-                                        <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
-                                            <Label Text="Tipo" />
-                                            <Label Text="{Binding ItemType.Name}"  Margin="0,0,10,0"/>
-                                            <Label Text="Alias:" />
-                                            <Label Text="{Binding Alias}"/>
-                                        </HorizontalStackLayout>
-                                        <HorizontalStackLayout 
-                                                BackgroundColor="LightGray"
-                                                MaximumWidthRequest="300"
-                                                MaximumHeightRequest="300"                               
-                                                VerticalOptions="Center"
-                                                Padding="5"
-                                                HorizontalOptions="Center"
-                                                >
-                                            <Label>
-                                                Sin Fotografias
-                                            </Label>
-                                        </HorizontalStackLayout>
-                                    </VerticalStackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-     
-                </VerticalStackLayout>
-            </ScrollView>            
-        </Frame>
-        <Frame Grid.Row="2" BackgroundColor="White" Padding="0" BorderColor="White">
-            <HorizontalStackLayout HorizontalOptions="Center" Margin="3" Padding="3">
-                <Button Text="Agregar Item"
+                </Grid>
+            </Frame>
+            <Frame Grid.Row="1" BackgroundColor="LightGray" Margin="5" Padding="2">
+                <ScrollView>
+                    <VerticalStackLayout>
+                        <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame Padding="2" Margin="0,2,0,2">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
+                                        </Frame.GestureRecognizers>
+                                        <VerticalStackLayout Spacing="10" Padding="2">
+                                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                                <Label Text="Tipo" />
+                                                <Label Text="{Binding ItemType.Name}"  Margin="0,0,10,0"/>
+                                                <Label Text="Alias:" />
+                                                <Label Text="{Binding Alias}"/>
+                                            </HorizontalStackLayout>
+                                            <StackLayout BackgroundColor="LightGray">
+                                                <CollectionView SelectionMode="None" ItemsSource="{Binding Photographies,Mode=OneWay}" HorizontalOptions="Center" ItemsLayout="HorizontalList" >
+                                                    <CollectionView.ItemTemplate >
+                                                        <DataTemplate >
+                                                            <Image  Source="{Binding FilePath,Mode= TwoWay}"
+                                                                        Aspect="AspectFill"                                                                                                                                        
+                                                                        HeightRequest="100"
+                                                                        Rotation="90"
+                                                                        Margin="2"
+                                                                        WidthRequest="100"
+                                                                        HorizontalOptions="Center" >
+                                                                <Image.GestureRecognizers>
+                                                                    <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
+                                                                </Image.GestureRecognizers>
+                                                            </Image>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+                                            </StackLayout>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Frame>
+            <Frame Grid.Row="2" BackgroundColor="White" Padding="0" BorderColor="White">
+                <HorizontalStackLayout HorizontalOptions="Center" Margin="3" Padding="3">
+                    <Button Text="Agregar Item"
                         CornerRadius="15"
                         Command="{Binding AddCategoryCommand}"
                         HeightRequest="50"
                         WidthRequest="240"
                         BackgroundColor="Green"
                         TextColor="White"/>
-            </HorizontalStackLayout>
-        </Frame>
-    </Grid>
+                </HorizontalStackLayout>
+            </Frame>
+        </Grid>
 </ContentPage>

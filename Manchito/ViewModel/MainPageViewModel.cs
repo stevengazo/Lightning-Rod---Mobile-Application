@@ -75,7 +75,8 @@ namespace Manchito.ViewModel
 				// load the projects in the db
 				using (var db = new DBLocalContext())
 				{
-					Projects = db.Project.ToList();
+					Projects = db.Project.Include(P=>P.Maintenances).ToList();
+
 				}
 			}
 			catch (Exception ex)

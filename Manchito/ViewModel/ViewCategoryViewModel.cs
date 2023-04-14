@@ -63,6 +63,9 @@ namespace Manchito.ViewModel
 		public ICommand TakePhotoCommand { get; private set; }
 		public ICommand TakeVideoCommand { get; private set; }
 		public ICommand AppearingCommand { get; private set; }
+		public ICommand ShareItemCommand { get; private set; }
+		public ICommand DeleteItemCommand { get; private set; }
+
 
 		public ViewCategoryViewModel()
 		{
@@ -70,6 +73,18 @@ namespace Manchito.ViewModel
 			TakePhotoCommand = new AsyncRelayCommand(TakePhotoAndroid);
 			TakeVideoCommand = new AsyncRelayCommand(TakeVideoAndroid);
 			AppearingCommand = new Command(()=>LoadCategory());
+			ShareItemCommand = new Command((O) => SharePhoto(O));
+			DeleteItemCommand = new Command((O) => DeletePhoto(O));
+		}
+
+		private void DeletePhoto(object o)
+		{
+			var Response = Application.Current.MainPage.DisplayAlert("Alerta", "Deseas borrar este dato", "Yes", "No");
+		}
+
+		private void SharePhoto(object o)
+		{
+			
 		}
 
 		private async Task TakeVideoAndroid()
@@ -144,7 +159,7 @@ namespace Manchito.ViewModel
 				List<Photography> photos=new();
 				using (DBLocalContext db = new())
 				{
-					photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).ToList();
+					photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I=>I.CategoryId).ToList();
 				}
 				Photos = photos;
 			}catch(Exception f)
@@ -273,6 +288,7 @@ namespace Manchito.ViewModel
 						using FileStream localFileStream = File.OpenWrite(localFilePath);
 						await sourceStream.CopyToAsync(localFileStream);
 						await RegisterPhoto(localFilePath);
+						await loadImages();
 					}
 				}
 			}
