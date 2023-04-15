@@ -57,12 +57,11 @@ namespace Manchito.ViewModel
 		public ViewMaintenanceViewModel()
 		{
 			ShareMaintenanceCommand = new Command(async ()=> await ShareMaintenance());
-			AppearingCommand = new Command(() => LoadManteinance());
-			ValidateDataCommand = new Command(() => ValidateDataPage());
-			AddCategoryCommand = new Command(() => AddCategory());
-			ViewCategoryCommand = new Command( (O) =>  ViewCategory(O));
+			AppearingCommand = new Command(async() => await LoadManteinance());
+			ValidateDataCommand = new Command(async () =>await ValidateDataPage());
+			AddCategoryCommand = new Command(async () => await AddCategory());
+			ViewCategoryCommand = new Command(async (O) => await ViewCategory(O));
 		}
-
 		private async Task ShareMaintenance()
 		{
 			string startPath = Path.Combine(
@@ -87,11 +86,8 @@ namespace Manchito.ViewModel
 					File = new ShareFile(zipPath)
 				});
 			}
-
-
 		}
-
-		private async void ViewCategory(Object id)
+		private async Task ViewCategory(Object id)
 		{
 			try
 			{
@@ -105,10 +101,9 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", $"Error interno {ex.Message}", "Ok");				
 			}
 		}
-
-		private static void ValidateDataPage()
+		private async Task ValidateDataPage()
 		{
-			Application.Current.MainPage.Navigation.PushAsync(new ValidateData());
+			await Application.Current.MainPage.Navigation.PushAsync(new ValidateData());
 		}
 		private static Project GetProject(int id)
 		{
@@ -126,11 +121,10 @@ namespace Manchito.ViewModel
 				return null;
 			}
 		}
-
-		private void LoadManteinance()
+		private async Task LoadManteinance()
 		{
 			try
-			{
+			{				
 				var d = WeakReferenceMessenger.Default.IsRegistered<NameItemViewMessage>(this);
 				if (!d)
 				{
@@ -139,11 +133,11 @@ namespace Manchito.ViewModel
 						WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
 							using (var db = new DBLocalContext())
 							{
-								Maintenance = db.Maintenance.Where(M => M.MaintenanceId == m.Value).Include(M=>M.Project).FirstOrDefault();
+								Maintenance = await db.Maintenance.Where(M => M.MaintenanceId == m.Value).Include(M=>M.Project).SingleOrDefaultAsync();
 							}
 							if (Maintenance != null)
 							{
-								LoadCategories();
+							await LoadCategories();
 							}
 						});
 					}
@@ -162,11 +156,10 @@ namespace Manchito.ViewModel
 				}
 				}catch(Exception f)
 			{
-				Application.Current.MainPage.DisplayAlert("Error LoadMaintenance", $"Error {f.Message}", "OK");
+				await Application.Current.MainPage.DisplayAlert("Error LoadMaintenance", $"Error {f.Message}", "OK");
 			}
 		}
-
-		private void LoadCategories()
+		private async Task LoadCategories()
 		{
 			try
 			{
@@ -178,9 +171,8 @@ namespace Manchito.ViewModel
 
 			}catch(Exception f)
 			{
-				Application.Current.MainPage.DisplayAlert("Error LoadCategories ", $"Error: {f.Message}", "ok");
+				await Application.Current.MainPage.DisplayAlert("Error LoadCategories ", $"Error: {f.Message}", "ok");
 			}
-			
 		}
 		private static async Task<int> GetLastCategoryId()
 		{
@@ -241,7 +233,7 @@ namespace Manchito.ViewModel
 				return null;
 			}
 		}
-		private async void AddCategory()
+		private async Task AddCategory()
 		{
 			try
 			{
@@ -269,7 +261,7 @@ namespace Manchito.ViewModel
 								db.SaveChanges();
 								
 								// cargar datos de nuevo
-								LoadCategories();
+								await LoadCategories();
 								var project = GetProject(Maintenance.ProjectId);
 
 								//Create Directory // Project/Mantenance/Category
@@ -289,10 +281,6 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error AddCategory", $"Error {ex.Message}", null);
 			}
 		}
-
-	
-
-
 		#endregion
 	}
 }

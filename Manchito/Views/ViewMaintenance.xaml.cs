@@ -11,28 +11,14 @@ public partial class ViewMaintenance : ContentPage
 	}
 	private void Button_Clicked(object sender, EventArgs e)
 	{
-
-    }
-
-	private async void ViewItem(object sender, EventArgs r)
-	{		
+		throw new NotImplementedException();
 	}
-	private async void AddItem(object sender, EventArgs e)
+	private async Task ViewItem(object sender, EventArgs r)
 	{
-		try
-		{
-			string action = await DisplayActionSheet("¿Qué tipo de item deseas añadir?", "Cancelar", null, "Pararrayos", "Montaje", "Bajante", "Sistema Puesta a Tierra", "Unificaciones", "Supresores");
-			if (action != null)
-			{
-				if (!action.Equals("Cancelar"))
-				{
-					string result = await DisplayPromptAsync("Alias", "Digite el nombre del item a agregar");
-				}
-			}
-			//await Navigation.PushAsync(new AddItem());
-		}catch (Exception ex)
-		{
-			await DisplayAlert("Error", $"Error {ex.Message}", null);
-		}
+		throw new NotImplementedException();
+	}
+	private async Task AddItem(object sender, EventArgs e)
+	{
+		throw new NotImplementedException();
 	}
 }
