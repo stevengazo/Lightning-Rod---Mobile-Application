@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
 using Manchito.Views;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Windows.Input;
 
 namespace Manchito.ViewModel
 {
@@ -36,7 +30,7 @@ namespace Manchito.ViewModel
 					OnPropertyChanged(nameof(Maintenances));
 				}
 			}
-		}		
+		}
 		private Project _Project;
 		public Project Project
 		{
@@ -62,12 +56,12 @@ namespace Manchito.ViewModel
 		public ViewProjectViewModel()
 		{
 			// binding commands to the Property
-			AddMaintenanceCommand = new Command(() => { AddMaintenance(); });		
-			DeleteProjectCommand = new Command(() => { DeleteProject(); });			
-			ViewMaintenanceCommand = new Command((t) => { ViewMaintenance(t); });			
-			UpdateProjectCommand = new Command(() => UpdateProject() );
-			AppearingCommand = new Command(() => { LoadProjectCommand(); } );
-		}		
+			AddMaintenanceCommand = new Command(() => { AddMaintenance(); });
+			DeleteProjectCommand = new Command(() => { DeleteProject(); });
+			ViewMaintenanceCommand = new Command((t) => { ViewMaintenance(t); });
+			UpdateProjectCommand = new Command(() => UpdateProject());
+			AppearingCommand = new Command(() => { LoadProjectCommand(); });
+		}
 		private async Task AddMaintenance()
 		{
 			try
@@ -75,9 +69,9 @@ namespace Manchito.ViewModel
 				Model.Maintenance tmp = new Maintenance()
 				{
 					ProjectId = Project.ProjectId,
-					MaintenanceId = GetLastMaintenanceId()+1,
-					DateOfMaintenance= DateTime.Now
-				};						
+					MaintenanceId = GetLastMaintenanceId() + 1,
+					DateOfMaintenance = DateTime.Now
+				};
 				tmp.Alias = await Application.Current.MainPage.DisplayPromptAsync("Ingreso mantenimiento", "¿Deseas añadir un mantenimiento?", "Agregar", "Cancelar", null, 50);
 				tmp.Status = await Application.Current.MainPage.DisplayActionSheet("Estatus del mantenimiento", "Cancelar", null, "En ejecución", "Concluido", "Pendiente ejecución");
 				if (!string.IsNullOrEmpty(tmp.Alias) && !string.IsNullOrEmpty(tmp.Status) && !tmp.Status.Equals("Cancelar"))
@@ -89,7 +83,7 @@ namespace Manchito.ViewModel
 						await LoadMaintenances();
 						await Application.Current.MainPage.DisplayAlert("Informacion", "Mantenimiento Agregado", "OK");
 						//Create Directory // Project/Mantenance
-						var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Project.ProjectId}_{Project.Name}",$"M-{tmp.MaintenanceId}_{tmp.Alias}");
+						var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Project.ProjectId}_{Project.Name}", $"M-{tmp.MaintenanceId}_{tmp.Alias}");
 						Directory.CreateDirectory(DirectoryPath);
 						// base items of the maintenance
 						List<Category> itemsCategories = new List<Category>();
@@ -104,17 +98,17 @@ namespace Manchito.ViewModel
 									Alias = "No Asignado",
 									ItemTypeId = item.ItemTypeId,
 									MaintenanceId = tmp.MaintenanceId
-								};														
+								};
 								dbLocal.Add(Cat);
 								dbLocal.SaveChanges();
 								//Create Directory // Project/Mantenance/Category
 								var DirectoryPathtmp = Path.Combine(
-									PathDirectoryFilesAndroid, 
-									$"P-{Project.ProjectId}_{Project.Name}", 
+									PathDirectoryFilesAndroid,
+									$"P-{Project.ProjectId}_{Project.Name}",
 									$"M-{tmp.MaintenanceId}_{tmp.Alias}",
 									$"C-{Cat.CategoryId}_{item.Name}_{Cat.Alias}");
 								Directory.CreateDirectory(DirectoryPathtmp);
-							}							
+							}
 						}
 					}
 				}
@@ -124,7 +118,7 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
 				await ClosePage();
 			}
-		}		
+		}
 		private async Task ClosePage()
 		{
 			var page = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
@@ -138,7 +132,7 @@ namespace Manchito.ViewModel
 				if (result.Equals(true))
 				{
 					using (var dbLocal = new DBLocalContext())
-					{	
+					{
 						var query = (from maint in dbLocal.Maintenance where maint.ProjectId == Project.ProjectId select maint).ToList();
 						dbLocal.RemoveRange(query);
 						dbLocal.SaveChanges();
@@ -179,9 +173,10 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				if(Project ==null)
+				if (Project == null)
 				{
-					WeakReferenceMessenger.Default.Register<ProjectViewMessage>(this, async (r, m) => {
+					WeakReferenceMessenger.Default.Register<ProjectViewMessage>(this, async (r, m) =>
+					{
 						if (m.Value != 0)
 						{
 							using (var db = new DBLocalContext())
@@ -199,16 +194,16 @@ namespace Manchito.ViewModel
 			catch (Exception ex)
 			{
 				Application.Current.MainPage.DisplayAlert("error", $"Eror {ex.Message}", "OK");
-			}			
+			}
 		}
 		private async Task LoadMaintenances()
 		{
 			try
 			{
-				
+
 				using (var dbLocal = new DBLocalContext())
 				{
-					 var tmp= dbLocal.Maintenance.Where(M => M.ProjectId == Project.ProjectId).ToList();
+					var tmp = dbLocal.Maintenance.Where(M => M.ProjectId == Project.ProjectId).ToList();
 					if ((tmp.Count > 0))
 					{
 						Maintenances = tmp;
@@ -225,7 +220,7 @@ namespace Manchito.ViewModel
 			try
 			{
 				UpdateProject UpdateView = new UpdateProject(Project.ProjectId);
-				await Application.Current.MainPage.Navigation.PushAsync(UpdateView,true);
+				await Application.Current.MainPage.Navigation.PushAsync(UpdateView, true);
 			}
 			catch (Exception f)
 			{
@@ -236,10 +231,10 @@ namespace Manchito.ViewModel
 		private async Task ViewMaintenance(object idNumber)
 		{
 			try
-			{				
-				int number = int.Parse(idNumber.ToString());				
-				ViewMaintenance vMaintPage = new ViewMaintenance();				
-				await Application.Current.MainPage.Navigation.PushAsync(vMaintPage,true);
+			{
+				int number = int.Parse(idNumber.ToString());
+				ViewMaintenance vMaintPage = new ViewMaintenance();
+				await Application.Current.MainPage.Navigation.PushAsync(vMaintPage, true);
 				WeakReferenceMessenger.Default.Send(new NameItemViewMessage(number));
 			}
 			catch (Exception ex)

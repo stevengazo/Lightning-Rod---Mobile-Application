@@ -1,22 +1,11 @@
-﻿using Android.Widget;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using Kotlin.Contracts;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
 using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using static Android.Content.ClipData;
-using static Android.Graphics.Paint;
 
 namespace Manchito.ViewModel
 {
@@ -28,8 +17,10 @@ namespace Manchito.ViewModel
 		public List<Category> Categories
 		{
 			get { return _Categories; }
-			set { _Categories = value; 
-			if(Categories != null)
+			set
+			{
+				_Categories = value;
+				if (Categories != null)
 				{
 					OnPropertyChanged(nameof(Categories));
 				}
@@ -38,7 +29,9 @@ namespace Manchito.ViewModel
 		public Maintenance Maintenance
 		{
 			get { return _Maintenance; }
-			set { _Maintenance = value;
+			set
+			{
+				_Maintenance = value;
 				if (value != null)
 				{
 					OnPropertyChanged(nameof(Maintenance));
@@ -56,9 +49,9 @@ namespace Manchito.ViewModel
 		#region Methods
 		public ViewMaintenanceViewModel()
 		{
-			ShareMaintenanceCommand = new Command(async ()=> await ShareMaintenance());
-			AppearingCommand = new Command(async() => await LoadManteinance());
-			ValidateDataCommand = new Command(async () =>await ValidateDataPage());
+			ShareMaintenanceCommand = new Command(async () => await ShareMaintenance());
+			AppearingCommand = new Command(async () => await LoadManteinance());
+			ValidateDataCommand = new Command(async () => await ValidateDataPage());
 			AddCategoryCommand = new Command(async () => await AddCategory());
 			ViewCategoryCommand = new Command(async (O) => await ViewCategory(O));
 		}
@@ -91,14 +84,14 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				int number = int.Parse(id.ToString());				
+				int number = int.Parse(id.ToString());
 				await Application.Current.MainPage.Navigation.PushAsync(new ViewCategory(), true);
 				WeakReferenceMessenger.Default.Cleanup();
 				WeakReferenceMessenger.Default.Send(new NameItemViewMessage(number));
 			}
 			catch (Exception ex)
 			{
-				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", $"Error interno {ex.Message}", "Ok");				
+				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", $"Error interno {ex.Message}", "Ok");
 			}
 		}
 		private async Task ValidateDataPage()
@@ -115,7 +108,7 @@ namespace Manchito.ViewModel
 							select i).FirstOrDefault();
 				return data;
 			}
-			catch(Exception f)
+			catch (Exception f)
 			{
 				Application.Current.MainPage.DisplayAlert("Error ValidateDataPage", $"Error {f.Message}", "OK");
 				return null;
@@ -124,20 +117,21 @@ namespace Manchito.ViewModel
 		private async Task LoadManteinance()
 		{
 			try
-			{				
+			{
 				var d = WeakReferenceMessenger.Default.IsRegistered<NameItemViewMessage>(this);
 				if (!d)
 				{
 					if (Maintenance == null)
 					{
-						WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
+						WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) =>
+						{
 							using (var db = new DBLocalContext())
 							{
-								Maintenance = await db.Maintenance.Where(M => M.MaintenanceId == m.Value).Include(M=>M.Project).SingleOrDefaultAsync();
+								Maintenance = await db.Maintenance.Where(M => M.MaintenanceId == m.Value).Include(M => M.Project).SingleOrDefaultAsync();
 							}
 							if (Maintenance != null)
 							{
-							await LoadCategories();
+								await LoadCategories();
 							}
 						});
 					}
@@ -154,7 +148,8 @@ namespace Manchito.ViewModel
 					}
 					WeakReferenceMessenger.Default.Unregister<NameItemViewMessage>(this);
 				}
-				}catch(Exception f)
+			}
+			catch (Exception f)
 			{
 				await Application.Current.MainPage.DisplayAlert("Error LoadMaintenance", $"Error {f.Message}", "OK");
 			}
@@ -164,12 +159,13 @@ namespace Manchito.ViewModel
 			try
 			{
 				using var db = new DBLocalContext();
-				
+
 				Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId)
 										.Include(C => C.ItemType)
-										.Include(M =>M.Photographies.Take(3)).ToList();
+										.Include(M => M.Photographies.Take(3)).ToList();
 
-			}catch(Exception f)
+			}
+			catch (Exception f)
 			{
 				await Application.Current.MainPage.DisplayAlert("Error LoadCategories ", $"Error: {f.Message}", "ok");
 			}
@@ -222,12 +218,13 @@ namespace Manchito.ViewModel
 			try
 			{
 				string[] namesOfTypes;
-				using (var db= new DBLocalContext())
+				using (var db = new DBLocalContext())
 				{
 					namesOfTypes = (from item in db.ItemTypes select item.Name).ToArray();
 				}
 				return namesOfTypes;
-			}catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				await Application.Current.MainPage.DisplayAlert("Error GetItemTypeName", e.Message, "OK");
 				return null;
@@ -238,15 +235,16 @@ namespace Manchito.ViewModel
 			try
 			{
 				var ArrayName = await GetItemTypeName();
-				string action = await Application.Current.MainPage.DisplayActionSheet("¿Qué tipo de item deseas añadir?", "Cancelar", null,ArrayName);
+				string action = await Application.Current.MainPage.DisplayActionSheet("¿Qué tipo de item deseas añadir?", "Cancelar", null, ArrayName);
 				if (action != null)
 				{
 					if (!action.Equals("Cancelar"))
 					{
 						string result = await Application.Current.MainPage.DisplayPromptAsync("Alias", "Digite el nombre del item a agregar");
-						if (result != null) {
-							var ItemType =await GetItemType(action);
-							if(ItemType!=null)
+						if (result != null)
+						{
+							var ItemType = await GetItemType(action);
+							if (ItemType != null)
 							{
 								using DBLocalContext db = new();
 								Category categoryTmp = new()
@@ -259,7 +257,7 @@ namespace Manchito.ViewModel
 								// cargar datos
 								db.Category.Add(categoryTmp);
 								db.SaveChanges();
-								
+
 								// cargar datos de nuevo
 								await LoadCategories();
 								var project = GetProject(Maintenance.ProjectId);
@@ -270,11 +268,11 @@ namespace Manchito.ViewModel
 									$"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
 									$"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}",
 									$"C-{categoryTmp.CategoryId}_{action}_{categoryTmp.Alias}");
-								Directory.CreateDirectory(DirectoryPathtmp);								
+								Directory.CreateDirectory(DirectoryPathtmp);
 							}
 						}
 					}
-				}				
+				}
 			}
 			catch (Exception ex)
 			{

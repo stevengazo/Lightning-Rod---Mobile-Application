@@ -1,17 +1,12 @@
 ﻿using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Manchito.DataBaseContext
 {
-	public class DBLocalContext: DbContext 
+	public class DBLocalContext : DbContext
 	{
 
-		public DbSet<AudioNote> AudioNote { get; set; }	
+		public DbSet<AudioNote> AudioNote { get; set; }
 		public DbSet<Category> Category { get; set; }
 		public DbSet<ItemType> ItemTypes { get; set; }
 		public DbSet<Maintenance> Maintenance { get; set; }
@@ -20,7 +15,8 @@ namespace Manchito.DataBaseContext
 		public DbSet<Project> Project { get; set; }
 
 
-		public DBLocalContext() { 
+		public DBLocalContext()
+		{
 			SQLitePCL.Batteries_V2.Init();
 			this.Database.EnsureCreated();
 
@@ -35,22 +31,6 @@ namespace Manchito.DataBaseContext
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			/*Project _Project = new() {
-				ProjectId = 1,
-				Name = "Sample Name",
-				CustomerContactName = "Customer Contact Name",
-				CustomerName = "Customer Name"
-			};
-			modelBuilder.Entity<Project>().HasData(_Project);
-
-			Maintenance _Maintenance = new() { 
-				MaintenanceId = 1,
-				DateOfMaintenance = DateTime.Now,
-				Alias = "Alias Sample Site",
-				Status = "In progress",
-				ProjectId= _Project.ProjectId
-			};
-			modelBuilder.Entity<Maintenance>().HasData(_Maintenance);*/
 			List<ItemType> itemTypes = new() {
 				new()
 				{
@@ -88,7 +68,7 @@ namespace Manchito.DataBaseContext
 					Name="Otros"
 				},
 			};
-			modelBuilder.Entity<ItemType>().HasData(itemTypes);			
+			modelBuilder.Entity<ItemType>().HasData(itemTypes);
 		}
 	}
 }

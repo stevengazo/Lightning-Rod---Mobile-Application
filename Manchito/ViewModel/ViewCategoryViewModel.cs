@@ -1,23 +1,10 @@
-﻿using Android.Provider;
-using Android.Webkit;
-using AndroidX.Core.Content;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
-using Manchito.FilesStorageManager;
 using Manchito.Messages;
 using Manchito.Model;
-using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Update;
-using Microsoft.Maui.ApplicationModel.DataTransfer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using static Android.Content.ClipData;
 
 namespace Manchito.ViewModel
 {
@@ -32,8 +19,10 @@ namespace Manchito.ViewModel
 		public List<Photography> Photos
 		{
 			get { return _Photos; }
-			set { _Photos = value; 
-			if(Photos != null)
+			set
+			{
+				_Photos = value;
+				if (Photos != null)
 				{
 					OnPropertyChanged(nameof(Photos));
 				}
@@ -43,7 +32,9 @@ namespace Manchito.ViewModel
 		public string Title
 		{
 			get { return _Title; }
-			set { _Title = value;
+			set
+			{
+				_Title = value;
 				if (Title != null) { OnPropertyChanged(nameof(Title)); }
 			}
 		}
@@ -95,7 +86,8 @@ namespace Manchito.ViewModel
 				{
 					await Share.Default.RequestAsync(new ShareFileRequest { Title = "Compartir Imagen", File = new ShareFile(photographytmp.FilePath) });
 				}
-			}catch(Exception f)
+			}
+			catch (Exception f)
 			{
 				await Application.Current.MainPage.DisplayAlert("Error SharePhoto ", $"Error: {f.Message}", "ok");
 			}
@@ -107,7 +99,7 @@ namespace Manchito.ViewModel
 			{
 				if (MediaPicker.Default.IsCaptureSupported)
 				{
-					FileResult photo = await MediaPicker.Default.CaptureVideoAsync();				
+					FileResult photo = await MediaPicker.Default.CaptureVideoAsync();
 					if (photo != null)
 					{
 						photo.FileName = $"VID D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")}.mp4";
@@ -138,7 +130,8 @@ namespace Manchito.ViewModel
 				if (CategoryItem == null)
 				{
 
-					WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) => {
+					WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) =>
+					{
 						using (var db = new DBLocalContext())
 						{
 							CategoryItem = await db.Category.Where(M => M.CategoryId == m.Value)
@@ -168,13 +161,14 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				List<Photography> photos=new();
+				List<Photography> photos = new();
 				using (DBLocalContext db = new())
 				{
-					photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I=>I.CategoryId).ToList();
+					photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I => I.CategoryId).ToList();
 				}
 				Photos = photos;
-			}catch(Exception f)
+			}
+			catch (Exception f)
 			{
 				await Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
 			}
@@ -200,24 +194,25 @@ namespace Manchito.ViewModel
 					return string.Empty;
 				}
 			}
-			catch(Exception f)
+			catch (Exception f)
 			{
 				await Application.Current.MainPage.DisplayAlert("Error FolderPathAndroid", $"Error: {f.Message}", "ok");
 				return string.Empty;
 			}
 		}
-		private async Task <int> GetLastPhotographyId()
+		private async Task<int> GetLastPhotographyId()
 		{
 			try
 			{
 				using (var db = new DBLocalContext())
 				{
 					var num = await (from i in db.Photography
-							   orderby i.PhotographyId descending
-							   select i.PhotographyId).FirstOrDefaultAsync();
+									 orderby i.PhotographyId descending
+									 select i.PhotographyId).FirstOrDefaultAsync();
 					return num;
 				}
-			}catch(Exception f)
+			}
+			catch (Exception f)
 			{
 				return -20;
 			}
@@ -227,7 +222,7 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				if(CategoryItem!=null)
+				if (CategoryItem != null)
 				{
 					var Pj = CategoryItem.Maintenance.Project;
 					var Man = CategoryItem.Maintenance;
@@ -250,7 +245,7 @@ namespace Manchito.ViewModel
 				}
 
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				await Application.Current.MainPage.DisplayAlert("Error CheckAndroidDirectory", $"Error: {e.Message}", "ok");
 				return false;
@@ -260,18 +255,20 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				Photography photography = new() { 
-					DateTaked= DateTime.Now,
+				Photography photography = new()
+				{
+					DateTaked = DateTime.Now,
 					CategoryId = CategoryItem.CategoryId,
 					FilePath = pathFile,
-					PhotographyId = ( await GetLastPhotographyId()+1)
+					PhotographyId = (await GetLastPhotographyId() + 1)
 				};
 				using (DBLocalContext db = new())
 				{
 					db.Add(photography);
 					db.SaveChanges();
 				}
-			}catch(Exception f)
+			}
+			catch (Exception f)
 			{
 				await Application.Current.MainPage.DisplayAlert("Error RegisterPhoto ", $"Error: {f.Message}", "ok");
 			}

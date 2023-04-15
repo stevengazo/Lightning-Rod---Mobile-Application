@@ -1,7 +1,4 @@
-﻿
-using Manchito.Model;
-
-namespace Manchito.FilesStorageManager
+﻿namespace Manchito.FilesStorageManager
 {
 	/// <summary>
 	/// Manage the access and load of the files in the app (Android system)
@@ -12,7 +9,8 @@ namespace Manchito.FilesStorageManager
 		/// Get the base path 
 		/// </summary>
 		/// <returns></returns>
-		public static string GetBase() {
+		public static string GetBase()
+		{
 			return "/storage/emulated/0/Proyectos";
 		}
 
@@ -46,7 +44,8 @@ namespace Manchito.FilesStorageManager
 			{
 				System.IO.Directory.CreateDirectory(path);
 				return true;
-			}catch(Exception f)
+			}
+			catch (Exception f)
 			{
 				Console.WriteLine(f.Message);
 				return false;
@@ -62,7 +61,7 @@ namespace Manchito.FilesStorageManager
 		{
 			try
 			{
-				string localFilePath = Path.Combine(path,file.FileName);
+				string localFilePath = Path.Combine(path, file.FileName);
 				using Stream sourceStream = file.OpenReadAsync().Result;
 				using FileStream localFileStream = File.OpenWrite(localFilePath);
 				sourceStream.CopyToAsync(localFileStream);

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Manchito.Model
+﻿namespace Manchito.Model
 {
 	/// <summary>
 	/// Object of the type of category part of the maintenance
@@ -34,7 +28,7 @@ namespace Manchito.Model
 		/// <summary>
 		/// Internal id of the item type
 		/// </summary>
-		public int ItemTypeId { get;set; }
+		public int ItemTypeId { get; set; }
 		/// <summary>
 		/// List of item associate with the category
 		/// </summary>

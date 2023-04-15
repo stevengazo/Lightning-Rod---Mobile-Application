@@ -1,19 +1,12 @@
 ﻿using Manchito.DataBaseContext;
 using Manchito.Model;
-using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Manchito.ViewModel
 {
-   public class AddProjectViewModel : INotifyPropertyChangedAbst
-    {
+	public class AddProjectViewModel : INotifyPropertyChangedAbst
+	{
 		#region Properties		
 
 		private Project _Project = new();
@@ -22,8 +15,10 @@ namespace Manchito.ViewModel
 		public string Alias
 		{
 			get { return _Alias; }
-			set { _Alias = value;
-				if(_Alias != null)
+			set
+			{
+				_Alias = value;
+				if (_Alias != null)
 				{
 					OnPropertyChanged(nameof(Alias));
 				}
@@ -33,10 +28,12 @@ namespace Manchito.ViewModel
 		public DateTime DateProject
 		{
 			get { return _DateProject; }
-			set { _DateProject = value;
-				if(_DateProject != null)
+			set
+			{
+				_DateProject = value;
+				if (_DateProject != null)
 				{
-					OnPropertyChanged(nameof(DateProject));	
+					OnPropertyChanged(nameof(DateProject));
 				}
 			}
 		}
@@ -44,8 +41,10 @@ namespace Manchito.ViewModel
 		public string Status
 		{
 			get { return _Status; }
-			set { _Status = value;
-				if(_Status != null)
+			set
+			{
+				_Status = value;
+				if (_Status != null)
 				{
 					OnPropertyChanged(nameof(Status));
 				}
@@ -55,8 +54,10 @@ namespace Manchito.ViewModel
 		public string CustomerName
 		{
 			get { return _customerName; }
-			set { _customerName = value;
-				if(_customerName!= null)
+			set
+			{
+				_customerName = value;
+				if (_customerName != null)
 				{
 					OnPropertyChanged(nameof(CustomerName));
 				}
@@ -66,8 +67,10 @@ namespace Manchito.ViewModel
 		public string CustomerContactName
 		{
 			get { return _CustomerContactName; }
-			set { _CustomerContactName = value; 
-				if(CustomerContactName != null)
+			set
+			{
+				_CustomerContactName = value;
+				if (CustomerContactName != null)
 				{
 					OnPropertyChanged(nameof(CustomerContactName));
 				}
@@ -78,17 +81,20 @@ namespace Manchito.ViewModel
 		public string ErrorMessage
 		{
 			get { return _ErrorMessage; }
-			set { _ErrorMessage = value;
-				if(_ErrorMessage != null ) {
+			set
+			{
+				_ErrorMessage = value;
+				if (_ErrorMessage != null)
+				{
 					OnPropertyChanged(nameof(ErrorMessage));
-				}			
+				}
 			}
 		}
 		#endregion
 
 		#region Methods
 		public AddProjectViewModel()
-		{			
+		{
 			// Actual date
 			DateProject = DateTime.Today;
 
@@ -101,15 +107,16 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				using(var dblocal = new DBLocalContext())
+				using (var dblocal = new DBLocalContext())
 				{
 					int queryResult = await (from proj in dblocal.Project
-									   orderby proj.ProjectId descending
-									   select proj.ProjectId
+											 orderby proj.ProjectId descending
+											 select proj.ProjectId
 									).FirstOrDefaultAsync();
 					return queryResult;
 				}
-			}catch(Exception f)
+			}
+			catch (Exception f)
 			{
 				return -1;
 			}
@@ -119,13 +126,13 @@ namespace Manchito.ViewModel
 			var page = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
 			Application.Current.MainPage.Navigation.RemovePage(page);
 		}
-			
 
-		public bool AddDirectoryAndroid(string ProjectName,int ProjectId)
+
+		public bool AddDirectoryAndroid(string ProjectName, int ProjectId)
 		{
 			try
 			{
-				var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{ProjectId.ToString()}_{ProjectName}" );
+				var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{ProjectId.ToString()}_{ProjectName}");
 				if (!Directory.Exists(DirectoryPath))
 				{
 					Directory.CreateDirectory(DirectoryPath);
@@ -136,7 +143,7 @@ namespace Manchito.ViewModel
 					return false;
 				}
 			}
-			catch(Exception f)
+			catch (Exception f)
 			{
 				Application.Current.MainPage.DisplayAlert("AddDirectoryAndroid Error", $"Error: {f.Message}", "Ok");
 				return false;
@@ -146,7 +153,8 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				if(Alias== null || Status  == null) {
+				if (Alias == null || Status == null)
+				{
 					ErrorMessage = "No hay datos cargados";
 					await Application.Current.MainPage.DisplayAlert("Error", $"{ErrorMessage}", "Ok");
 				}
@@ -154,13 +162,14 @@ namespace Manchito.ViewModel
 				{
 					int projectid = await GetLastIdProject();
 					projectid++;
-					using(var dbLocal = new DBLocalContext())
+					using (var dbLocal = new DBLocalContext())
 					{
 						// add the project to the db
-						Model.Project tmpProject = new Model.Project() { 
+						Model.Project tmpProject = new Model.Project()
+						{
 							ProjectId = projectid,
 							Name = Alias,
-							CustomerName= this._customerName,
+							CustomerName = this._customerName,
 							CustomerContactName = this._CustomerContactName,
 							Status = this._Status
 						};
@@ -171,10 +180,11 @@ namespace Manchito.ViewModel
 						ClosedPage();
 					}
 				}
-			}catch(Exception f)
+			}
+			catch (Exception f)
 			{
-				ErrorMessage =  $"Error interno: {f.Message}";
-				await Application.Current.MainPage.DisplayAlert("Error", $"Error Interno {f.Message}","Ok");
+				ErrorMessage = $"Error interno: {f.Message}";
+				await Application.Current.MainPage.DisplayAlert("Error", $"Error Interno {f.Message}", "Ok");
 				ClosedPage();
 			}
 		}
@@ -186,11 +196,12 @@ namespace Manchito.ViewModel
 				using (var db = new DBLocalContext())
 				{
 					var data = await (from i in db.Project
-								where i.ProjectId == id
-								select i).FirstOrDefaultAsync();
+									  where i.ProjectId == id
+									  select i).FirstOrDefaultAsync();
 					return data;
 				}
-			}catch(Exception e)
+			}
+			catch (Exception e)
 			{
 				return null;
 			}

@@ -1,4 +1,3 @@
-using Manchito.ViewModel;
 namespace Manchito.Views;
 
 public partial class ViewMaintenance : ContentPage

@@ -1,11 +1,4 @@
-﻿using Manchito.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Manchito.Model
+﻿namespace Manchito.Model
 {
 	/// <summary>
 	/// Class to define the Audio Notes Recorded
@@ -27,7 +20,7 @@ namespace Manchito.Model
 		/// <summary>
 		/// Parent Item
 		/// </summary>
-		public int CategoryId { get; set; }	
-		
+		public int CategoryId { get; set; }
+
 	}
 }
