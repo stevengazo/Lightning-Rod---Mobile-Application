@@ -36,7 +36,7 @@
                         <ColumnDefinition Width="5*"/>
                         <ColumnDefinition Width="5*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Row="0" Grid.ColumnSpan="2" FontSize="Title" Text="Información del Proyecto" HorizontalOptions="Center" />
+                    <Label Grid.Row="0" Grid.ColumnSpan="2" FontSize="Title" Text="Información del Mantenimiento" HorizontalOptions="Center" />
                     <Frame Grid.Row="1" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,5,0,0">
                         <Label Text="Alias de Mantenimiento" />
                     </Frame>
@@ -47,7 +47,7 @@
                         <Label Text="Fecha de Trabajo" />
                     </Frame>
                     <Frame Grid.Row="2" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                        <Label Text="{Binding Maintenance.DateOfMaintenance.Date, Mode=TwoWay}" />
+                    <Label Text="{Binding Maintenance.DateOfMaintenance.Date, StringFormat='{0:MMMM dd, yyyy}', Mode=TwoWay}" />
                     </Frame>
                     <Frame Grid.Row="3" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
                         <Label Text="Estado del Proyecto" />

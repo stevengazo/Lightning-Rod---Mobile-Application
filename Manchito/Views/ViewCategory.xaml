@@ -84,7 +84,6 @@
                     </DataTemplate>
                 </CarouselView.ItemTemplate>
             </CarouselView>
-
         </Frame>
         <Frame Grid.Row="2" BorderColor="White" HorizontalOptions="Center" Padding="0">
             <HorizontalStackLayout HorizontalOptions="Center" Padding="0" Margin="0">
