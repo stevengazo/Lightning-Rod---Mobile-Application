@@ -48,16 +48,16 @@
                                     <Image Source="{Binding FilePath,Mode= TwoWay}" ZIndex="1"
                                                 Aspect="AspectFill"
                                                 HeightRequest="350"
-                                                Rotation="90"
+                                                
                                                 WidthRequest="450"
                                                HorizontalOptions="Center" />
                                     <HorizontalStackLayout Margin="0,0,0,0" HorizontalOptions="End" ZIndex="2">
                                         <ImageButton                
-                                            WidthRequest="60"
-                                            HeightRequest="60"                                            
+                                            WidthRequest="55"
+                                            HeightRequest="55"                                            
                                             Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ViewCategoryPage}}"  
                                             CommandParameter="{Binding PhotographyId}"                                                                                        
-                                            BorderColor="Red" 
+                                            BorderColor="White" 
                                             BackgroundColor="Red"
                                             Padding="5.5"
                                             Aspect="AspectFill"
@@ -65,13 +65,14 @@
                                             CornerRadius="20"
                                             />
                                         <ImageButton                
-                                            WidthRequest="60"
-                                            HeightRequest="60"                                            
+                                            WidthRequest="55"
+                                            HeightRequest="55"                                            
                                             Command="{Binding BindingContext.ShareItemCommand, Source={x:Reference ViewCategoryPage}}"  
                                             CommandParameter="{Binding PhotographyId}"
-                                            BorderColor="blue" 
+                                            BorderColor="White"                                            
+                                            BorderWidth="2"
                                             BackgroundColor="blue"
-                                            Padding="5.5"
+                                            Padding="4.5"
                                             Aspect="AspectFill"
                                             Source="share.svg"
                                             CornerRadius="20"
@@ -88,20 +89,20 @@
         <Frame Grid.Row="2" BorderColor="White" HorizontalOptions="Center" Padding="0">
             <HorizontalStackLayout HorizontalOptions="Center" Padding="0" Margin="0">
                 <ImageButton                
-                WidthRequest="60"
-                HeightRequest="60"
+                WidthRequest="80"
+                HeightRequest="50"
                 Margin="0,0,5,0"
                 Command="{Binding TakePhotoCommand}"
                 BorderColor="DarkGreen" 
                 BackgroundColor="Green"
                 Padding="5.5"
-                Aspect="AspectFill"
+                Aspect="AspectFit"
                 Source="photo.svg"
                 CornerRadius="20"
                 />
                 <ImageButton                
-                WidthRequest="60"
-                HeightRequest="60"
+                WidthRequest="80"
+                HeightRequest="50"
                 Margin="0,0,5,0"
                 Command="{Binding TakeVideoCommand}"
                 BorderColor="blue" 

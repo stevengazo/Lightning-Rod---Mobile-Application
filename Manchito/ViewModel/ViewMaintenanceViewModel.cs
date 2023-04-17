@@ -49,31 +49,30 @@ namespace Manchito.ViewModel
 		#region Methods
 		public ViewMaintenanceViewModel()
 		{
-			ShareMaintenanceCommand = new Command(async () => await ShareMaintenance());
+			ShareMaintenanceCommand = new Command(async () => ShareMaintenance());
 			AppearingCommand = new Command(async () => await LoadManteinance());
 			ValidateDataCommand = new Command(async () => await ValidateDataPage());
 			AddCategoryCommand = new Command(async () => await AddCategory());
 			ViewCategoryCommand = new Command(async (O) => await ViewCategory(O));
 		}
-		private async Task ShareMaintenance()
+		private void ShareMaintenance()
 		{
 			string startPath = Path.Combine(
 									PathDirectoryFilesAndroid,
 									$"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
 									$"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}");
 			string zipPath = Path.Combine(
-									PathDirectoryFilesAndroid,
-									$"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
+									FileSystem.CacheDirectory,
 									$"P-{Maintenance.Project.Name}-{Maintenance.Alias}.zip");
 			if (File.Exists(zipPath))
 			{
 				// create new zip file
 				File.Delete(zipPath);
 			}
-			ZipFile.CreateFromDirectory(startPath, zipPath);
+			ZipFile.CreateFromDirectory(startPath, zipPath,CompressionLevel.Optimal,true);
 			if (File.Exists(zipPath))
 			{
-				await Share.Default.RequestAsync(new ShareFileRequest
+				Share.Default.RequestAsync(new ShareFileRequest
 				{
 					Title = "Compartir Archivo",
 					File = new ShareFile(zipPath)

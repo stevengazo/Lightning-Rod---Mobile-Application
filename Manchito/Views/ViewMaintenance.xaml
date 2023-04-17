@@ -68,16 +68,16 @@
                             VerticalOptions="Center"/>
 
                         <ImageButton                
-                            WidthRequest="50"
-                            HeightRequest="50"                                            
+                            WidthRequest="45"
+                            HeightRequest="45"                                            
                             Command="{Binding ShareMaintenanceCommand}"
                             BorderColor="blue" 
                             BackgroundColor="blue"
-                            Padding="4"
+                            Padding="4.5"
                             Margin="5,0,0,0"
                             Aspect="AspectFill"
                             Source="share.svg"
-                            CornerRadius="15"
+                            CornerRadius="20"
                             />
                     </HorizontalStackLayout>
                         
