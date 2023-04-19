@@ -21,11 +21,11 @@
                 Alias
             </Label>
             <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
-                <Entry  BackgroundColor="WhiteSmoke"
+                <Entry  
                         Text="{Binding Alias}"                        
                         HorizontalOptions="Center"
                         WidthRequest="240"
-                        
+                        TextColor="Black"
                         Placeholder="Nombre del Proyecto"
                         MaxLength="80">
                 </Entry>
@@ -38,11 +38,11 @@
                 Nombre Del Cliente
             </Label>
             <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
-                <Entry  BackgroundColor="WhiteSmoke"
+                <Entry  
                         Text="{Binding CustomerName}"
                         HorizontalOptions="Center"
                         WidthRequest="240"
-                        
+                        TextColor="Black"
                         Placeholder="Ejemplo S.A."
                         MaxLength="80">
                 </Entry>
@@ -52,11 +52,11 @@
                 Nombre del Contacto del cliente
             </Label>
             <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
-                <Entry  BackgroundColor="WhiteSmoke"
+                <Entry  
                         Text="{Binding CustomerContactName}"
                         HorizontalOptions="Center"
-                        WidthRequest="240"
-                        
+                        WidthRequest="240"   
+                        TextColor="Black"
                         Placeholder="Pepito"
                         MaxLength="80">
                 </Entry>
@@ -69,8 +69,8 @@
             <Frame BorderColor="White" CornerRadius="5" Padding="0">
                 <DatePicker 
                     Date="{Binding DateProject}"                    
-                    BackgroundColor="WhiteSmoke"                    
-                    WidthRequest="240"
+                    WidthRequest="240"                    
+                    TextColor="Black"
                     HorizontalOptions="Center"                       
                 />
             </Frame>
@@ -85,7 +85,7 @@
                 <Picker x:Name="picker"
                         Margin="0"                               
                         SelectedItem="{Binding Status}"
-                        BackgroundColor="WhiteSmoke"
+                        TextColor="Black"
                         HorizontalTextAlignment="Center"
                         WidthRequest="240"
                         Title="Seleccione un estado">
@@ -101,7 +101,7 @@
                 Estado: situación del proyecto
             </Label>
         </VerticalStackLayout>
-        <HorizontalStackLayout Grid.Row="1" BackgroundColor="Azure" Spacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+        <HorizontalStackLayout Grid.Row="1"  Spacing="5" HorizontalOptions="Center" VerticalOptions="Center">
             <Button BackgroundColor="Green" 
                     TextColor="White"                     
                     MinimumWidthRequest="30"  

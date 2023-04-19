@@ -16,14 +16,14 @@
                Command="{Binding AppearingCommand}"
             />
     </ContentPage.Behaviors>
-    <Grid BackgroundColor="{AppThemeBinding Light=black, Dark=white}">
+    <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1.1*"/>
                 <RowDefinition Height="3*"/>
                 <RowDefinition Height="70"/>
             </Grid.RowDefinitions>
             <!-- Header -->
-            <Frame Grid.Row="0"  BorderColor="White" Padding="10">
+        <Frame Grid.Row="0" CornerRadius="0"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" Padding="10">
                 <Grid ZIndex="1" RowSpacing="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
@@ -37,25 +37,25 @@
                         <ColumnDefinition Width="5*"/>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.ColumnSpan="2" FontSize="Title" Text="Información del Mantenimiento" HorizontalOptions="Center" />
-                    <Frame Grid.Row="1" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,5,0,0">
+                <Frame Grid.Row="1" Grid.Column="0" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,5,0,0" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
                     <Label Text="Alias de Mantenimiento" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
-                    <Frame Grid.Row="1" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                <Frame Grid.Row="1" Grid.Column="1"  Padding="2" HorizontalOptions="Start" VerticalOptions="Center" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
                             <Label Text="{Binding Maintenance.Alias, Mode=TwoWay}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
-                    <Frame Grid.Row="2" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="Fecha de Trabajo" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                <Frame Grid.Row="2" Grid.Column="0"  Padding="2" HorizontalOptions="Start" VerticalOptions="Center" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
+                    <Label Text="Fecha de Trabajo" BackgroundColor="{AppThemeBinding Light=white, Dark=black}"  />
                     </Frame>
-                    <Frame Grid.Row="2" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                <Frame Grid.Row="2" Grid.Column="1"  Padding="2" HorizontalOptions="Start" VerticalOptions="Center"  BorderColor="{AppThemeBinding Light=white, Dark=black}"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" >
                     <Label Text="{Binding Maintenance.DateOfMaintenance.Date, StringFormat='{0:MMMM dd, yyyy}', Mode=TwoWay}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
-                    <Frame Grid.Row="3" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                <Frame Grid.Row="3" Grid.Column="0" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
                     <Label Text="Estado del Proyecto" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
-                    <Frame Grid.Row="3" Grid.Column="1" BorderColor="White"  Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
+                <Frame Grid.Row="3" Grid.Column="1" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
                         <Label Text="{Binding Maintenance.Status}" />
                     </Frame>
-                    <Frame Grid.Row="4" Grid.ColumnSpan="2" BorderColor="White" Padding="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0">
+                <Frame Grid.Row="4" Grid.ColumnSpan="2" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" Padding="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0">
                     <HorizontalStackLayout Padding="1" HeightRequest="40">
                         <Button Text="Validar"
                             Command="{Binding ValidateDataCommand}"
@@ -63,14 +63,15 @@
                             CornerRadius="15"
                             WidthRequest="180"
                             HeightRequest="35"
+                            TextColor="White"
                             Padding="5"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"/>
-                        <ImageButton                
+                        <ImageButton   
+                            BorderColor= "{AppThemeBinding Light=white, Dark=black}"
                             WidthRequest="45"
                             HeightRequest="45"                                            
                             Command="{Binding ShareMaintenanceCommand}"
-                            BorderColor="blue" 
                             BackgroundColor="blue"
                             Padding="4.5"
                             Margin="5,0,0,0"
@@ -79,29 +80,27 @@
                             CornerRadius="20"
                             />
                     </HorizontalStackLayout>
-                        
                 </Frame>
-
-                </Grid>
+            </Grid>
             </Frame>
-            <Frame Grid.Row="1" BackgroundColor="LightGray" Margin="5" Padding="2">
+        <Frame Grid.Row="1"  Margin="5" Padding="2" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
                 <ScrollView>
                     <VerticalStackLayout>
                         <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <Frame Padding="2" Margin="0,2,0,2">
+                                    <Frame Padding="2" Margin="0,2,0,2" >
                                         <Frame.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
                                         </Frame.GestureRecognizers>
-                                        <VerticalStackLayout Spacing="10" Padding="2">
+                                    <VerticalStackLayout Spacing="10" Padding="2" BackgroundColor="{AppThemeBinding Light=white, Dark=gray}" >
                                             <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
                                             <Label Text="Tipo" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                                             <Label Text="{Binding ItemType.Name}"  Margin="0,0,10,0" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                                             <Label Text="Alias:" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                                             <Label Text="{Binding Alias}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                                             </HorizontalStackLayout>
-                                            <StackLayout BackgroundColor="LightGray">
+                                        <StackLayout BackgroundColor="{AppThemeBinding Light=white, Dark=gray}">
                                                 <CollectionView SelectionMode="None" ItemsSource="{Binding Photographies,Mode=OneWay}" HorizontalOptions="Center" ItemsLayout="HorizontalList" >
                                                     <CollectionView.ItemTemplate >
                                                         <DataTemplate >
@@ -129,16 +128,14 @@
                     </VerticalStackLayout>
                 </ScrollView>
             </Frame>
-            <Frame Grid.Row="2" BackgroundColor="White" Padding="0" BorderColor="White">
-                <HorizontalStackLayout HorizontalOptions="Center" Margin="3" Padding="3">
-                    <Button Text="Agregar Item"
+        <Frame Grid.Row="2" BackgroundColor="{AppThemeBinding Light=White, Dark=black}" HorizontalOptions="Center" Padding="0" BorderColor="{AppThemeBinding Light=White, Dark=black}">
+            <Button Text="Agregar Item"
                         CornerRadius="15"
                         Command="{Binding AddCategoryCommand}"
                         HeightRequest="50"
                         WidthRequest="240"
                         BackgroundColor="Green"
                         TextColor="White"/>
-                </HorizontalStackLayout>
-            </Frame>
+        </Frame>
         </Grid>
 </ContentPage>

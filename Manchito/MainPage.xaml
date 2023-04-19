@@ -25,13 +25,13 @@
             <RowDefinition Height="3*" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
-        <HorizontalStackLayout Grid.Row="0"  HorizontalOptions="Center" Padding="5" VerticalOptions="Center" BackgroundColor="White">
+        <HorizontalStackLayout Grid.Row="0"  HorizontalOptions="Center" Padding="5" VerticalOptions="Center">
             <Label FontSize="Title" TextColor="{AppThemeBinding Light=black, Dark=white}">
                 Lista de Proyectos
             </Label>
         </HorizontalStackLayout>
         <ScrollView Grid.Row="1" 
-                    BackgroundColor="{AppThemeBinding Light=black, Dark=gray}"
+                    BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=gray}"
                     Padding="10,10,10,10">
             <VerticalStackLayout x:Name="containerlist" Spacing="5">
                 <CollectionView SelectionMode="Single" ItemsSource="{Binding Projects,Mode=OneWay}">
@@ -42,8 +42,8 @@
                                     Margin="2" 
                                     VerticalOptions="Center"
                                     HeightRequest="80"
-                                    BackgroundColor="{AppThemeBinding Light=black, Dark=white}"
-                                    BorderColor="Gray"                                                                    
+                                    BackgroundColor="{AppThemeBinding Light=LightGray, Dark=Gray}"
+                                    BorderColor= "{AppThemeBinding Light=Gray, Dark=White}"                      
                                     >
                                 <Frame.Behaviors>
                                     <toolkit:AnimationBehavior>
@@ -57,7 +57,7 @@
                                         <TapGestureRecognizer  Command="{Binding BindingContext.ViewProjectCommand, Source={x:Reference MyMainPage}}"  CommandParameter="{Binding ProjectId}" ></TapGestureRecognizer>
                                     </HorizontalStackLayout.GestureRecognizers>
                                     <Label Text="Nombre:" 
-                                           TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                           TextColor="{AppThemeBinding Light=black, Dark=White}" />
                                     <Label Text="{Binding Name}"  
                                            TextColor="{AppThemeBinding Light=black, Dark=white}"/>
                                     <Label Text="Cliente:" 

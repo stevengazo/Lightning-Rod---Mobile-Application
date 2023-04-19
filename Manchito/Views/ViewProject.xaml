@@ -24,7 +24,7 @@
             <RowDefinition Height="0.25*"  />
         </Grid.RowDefinitions>
         <!-- HEADER -->
-        <Frame Grid.Row="0" Padding="5" BorderColor="White" >
+        <Frame Grid.Row="0" Padding="5" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
@@ -35,19 +35,19 @@
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="8*" />
                 </Grid.ColumnDefinitions>
-                <Frame Grid.Column="0" Grid.Row="0" BorderColor="White" Padding="1" Margin="0" >
+                <Frame Grid.Column="0" Grid.Row="0"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" Padding="1" Margin="0" >
                     <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0" Text="Nombre" />
                 </Frame>
-                <Frame Grid.Column="1" Grid.Row="0" BorderColor="White" Padding="1" Margin="10,0,0,0" >
+                <Frame Grid.Column="1" Grid.Row="0"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" Padding="1" Margin="10,0,0,0" >
                     <Label FontSize="Caption" VerticalOptions="Center" Text="{Binding Project.Name, Mode=TwoWay}" />
                 </Frame>
-                <Frame Grid.Column="0" Grid.Row="1" BorderColor="White" Padding="1" >
+                <Frame Grid.Column="0" Grid.Row="1"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" Padding="1" >
                     <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0" Text="Cliente" />
                 </Frame>
-                <Frame Grid.Column="1" Grid.Row="1" BorderColor="White" Padding="1" Margin="10,0,0,0">
+                <Frame Grid.Column="1" Grid.Row="1" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" Padding="1" Margin="10,0,0,0">
                     <Label VerticalOptions="Center" Text="{Binding Project.CustomerName,Mode= TwoWay}" />
                 </Frame>
-                <Frame Grid.Row="2" Grid.ColumnSpan="2"  Padding="0" BorderColor="White" >
+                <Frame Grid.Row="2" Grid.ColumnSpan="2"  Padding="0"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" >
                     <HorizontalStackLayout HorizontalOptions="Center" Margin="0" Spacing="10" Padding="0">
                         <Button Text="Modificar"                                
                                 BackgroundColor="Green"
@@ -71,14 +71,14 @@
                 </Frame>
             </Grid>
         </Frame>
-        <!-- LIST OF MAINTENANCES -->        
-        <Frame Grid.Row="1" BackgroundColor="LightGray" Margin="2" Padding="2">
+        <!-- LIST OF MAINTENANCES -->
+        <Frame Grid.Row="1" BackgroundColor="{AppThemeBinding Light=White, Dark=Gray}" Margin="2" Padding="2">
             <ScrollView>
                 <VerticalStackLayout Spacing="5" Padding="1">
                     <CollectionView SelectionMode="Single" ItemsSource="{Binding Maintenances,Mode=OneWay}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame Padding="0" Margin="0,2,0,2">
+                                <Frame Padding="0" Margin="0,2,0,2" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=black}" BorderColor="{AppThemeBinding Light=whitesmoke, Dark=darkblue}">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding BindingContext.ViewMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  CommandParameter="{Binding MaintenanceId}"  />
                                     </Frame.GestureRecognizers>
@@ -99,12 +99,13 @@
             </ScrollView>
         </Frame>
        <!-- BUTTON TO ADD MAINTENANCE -->
-        <Frame Grid.Row="2" Padding="3" BorderColor="White">
+        <Frame Grid.Row="2" Padding="3" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
 
             <HorizontalStackLayout Padding="1" Margin="2" HorizontalOptions="Center">
                 <Button 
                         Command="{Binding AddMaintenanceCommand}"
                         CornerRadius="15"
+                        BorderColor="{AppThemeBinding Light=white, Dark=white}"
                         WidthRequest="240"
                         HeightRequest="50"
                         BackgroundColor="Green"  

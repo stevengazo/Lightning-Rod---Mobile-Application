@@ -28,16 +28,17 @@
                         <Label FontSize="Title" HorizontalOptions="Center" Text="Fotografias" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                         <Label FontSize="Caption" HorizontalTextAlignment="Center" Text="Verifique que haya tomado todas las fotos reelevantes para esta area." TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </VerticalStackLayout>
-                    <Frame Grid.Row="1" Margin="0" BackgroundColor="AntiqueWhite">
+                    <Frame Grid.Row="1" Margin="0" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=white}" BorderColor="{AppThemeBinding Light=white, Dark=darkgray}">
                         <VerticalStackLayout>
                             <ScrollView >
                                 <!--Carrousell-->
                                 <CarouselView ItemsSource="{Binding Photos}">
                                     <CarouselView.ItemTemplate>
                                         <DataTemplate>
-                                            <StackLayout>
+                                            <StackLayout >
                                                 <Frame  HasShadow="True"
                                                         BorderColor="DarkGray"
+                                                        BackgroundColor="{AppThemeBinding Light=white, Dark=darkgray}"
                                                         CornerRadius="5"
                                                         Margin="5"
                                                         HeightRequest="450"
@@ -123,11 +124,11 @@
                     <Label FontSize="Title" HorizontalOptions="Center" Text="Notas de Voz" TextColor="{AppThemeBinding Light=black, Dark=white}"/>
                     <Label FontSize="Caption" HorizontalTextAlignment="Center"  Text="Ingrese las notas de Voz requeridas"  TextColor="{AppThemeBinding Light=black, Dark=white}"/>
                 </VerticalStackLayout>
-                <Frame Grid.Row="1"  BackgroundColor="AntiqueWhite">
+                <Frame Grid.Row="1"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
                     <VerticalStackLayout>
                         <ScrollView>
                             <!--list-->
-                            <Frame>
+                            <Frame BackgroundColor="{AppThemeBinding Light=white, Dark=gray}" BorderColor="WhiteSmoke">
                                 <HorizontalStackLayout Spacing="10" HorizontalOptions="CenterAndExpand" Padding="1" VerticalOptions="Center" HeightRequest="30" >
                                     <Label Text="Gab1"  VerticalOptions="Center" Padding="0" Margin="0"/>
                                     <Label Text="Duración" VerticalOptions="Center" Padding="0" Margin="0"/>
