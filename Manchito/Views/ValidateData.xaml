@@ -2,43 +2,51 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:VM="clr-namespace:Manchito.ViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Manchito.Views.ValidateData"           
-             Title="Información">
+             Title="{Binding Title}">
     <ContentPage.BindingContext>
         <VM:ValidateDataViewModel />
     </ContentPage.BindingContext>
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior 
+               EventName="Appearing"
+               Command="{Binding AppearingCommand}"
+            />
+    </ContentPage.Behaviors>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
-            <RowDefinition Height="2.5*" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="30" />
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0"  HorizontalOptions="Center" Text="Elementos Clave" FontSize="Title" />
-        <Frame Grid.Row="1" BorderColor="White">
-            <VerticalStackLayout>
+
+        <Label Grid.Row="0"  HorizontalOptions="Center" Text="Elementos Clave" FontSize="Title"  />
+        <Frame Grid.Row="1" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" >
+            <VerticalStackLayout >
                 <Label HorizontalOptions="Center" FontSize="Body">Recuerde seleccionar todos los elementos del mantenimiento</Label>
-                <Label Padding="5" FontSize="Caption">
+                <Label Padding="5" FontSize="Caption" TextColor="{AppThemeBinding Light=black, Dark=white}">
                     Pararrayos: Revision de la ubicación, altura y estado del pararrayos
                 </Label>
                 <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
-                <Label Padding="5"  FontSize="Caption">
+                <Label Padding="5"  FontSize="Caption"  TextColor="{AppThemeBinding Light=black, Dark=white}">
                     Bajante: Revision del estado, recorrido, protecciones. contador de eventos y rotulacion.
                 </Label>
                 <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
-                <Label Padding="5" FontSize="Caption">
+                <Label Padding="5" FontSize="Caption" TextColor="{AppThemeBinding Light=black, Dark=white}">
                     Sistema de Puesta a Tierra: revision de ubicacion, electrodos, cableado, registro principal, mediciones.
                 </Label>
                 <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
-                <Label Padding="5" FontSize="Caption">
+                <Label Padding="5" FontSize="Caption" TextColor="{AppThemeBinding Light=black, Dark=white}">
                     Montaje: altura y estado del montaje usado para el pararrayos.
                 </Label>
                 <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
-                <Label Padding="5" FontSize="Caption">
+                <Label Padding="5" FontSize="Caption" TextColor="{AppThemeBinding Light=black, Dark=white}">
                     Unificaciones: comprobacion de la unificacion de la malla
                 </Label>
                 <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
-                <Label Padding="5" FontSize="Caption">
+                <Label Padding="5" FontSize="Caption" TextColor="{AppThemeBinding Light=black, Dark=white}">
                     Supresores: tableros y equipos sin proteccion.
                 </Label>
             </VerticalStackLayout>
@@ -46,78 +54,44 @@
         <Label Grid.Row="2" FontSize="Subtitle" HorizontalOptions="Center" Margin="0">
             Elementos Agregados del Mantenimiento
         </Label>
-        <Frame Grid.Row="3" Margin="0" BorderColor="White">
-            <ScrollView>
-                <VerticalStackLayout BackgroundColor="gray" >
-                    <!-- Item -->
-                    <Frame Padding="2" Margin="5">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer  />
-                        </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="10" Padding="2">
-                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
-                                <Label Text="Tipo" />
-                                <Label Text="ejemplo"  Margin="0,0,10,0"/>
-                                <Label Text="Alias:" />
-                                <Label Text="ejempo"/>
-                                <Label Text="Alias:" />
-                                <Label Text="ejempo"/>
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Frame>
+        <VerticalStackLayout Grid.Row="3">
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Button                
+                    WidthRequest="120"
+                    HeightRequest="40"                                            
+                    Command="{Binding ShareMaintenanceCommand}"  
+                    BorderWidth="2"
+                    TextColor="White"
+                    BackgroundColor="blue"
+                    Padding="4.5"
+                    Text="Exportar Información"
+                    CornerRadius="25"
+                />
+            </HorizontalStackLayout>
+            <Frame HeightRequest="350"  Margin="0" BorderColor="WhiteSmoke" BackgroundColor="{AppThemeBinding Light=white, Dark=gray}">
+                <ScrollView>
+                    <VerticalStackLayout BackgroundColor="gray" >
+                        <!-- Item -->
+                        <Frame Padding="2" Margin="5" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=black}">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer  />
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout Spacing="10" Padding="2">
+                                <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center" BackgroundColor="{AppThemeBinding Light=white, Dark=black}">
+                                    <Label Text="Tipo" TextColor="{AppThemeBinding Light=black, Dark=white}"  />
+                                    <Label Text="ejemplo"  Margin="0,0,10,0" TextColor="{AppThemeBinding Light=black, Dark=white}"  />
+                                    <Label Text="Alias:" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                    <Label Text="ejempo" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                    <Label Text="Alias:" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                    <Label Text="ejempo" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
 
-
-                    <!-- Item -->
-                    <Frame Padding="2" Margin="5">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer  />
-                        </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="10" Padding="2">
-                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
-                                <Label Text="Tipo" />
-                                <Label Text="ejemplo"  Margin="0,0,10,0"/>
-                                <Label Text="Alias:" />
-                                <Label Text="ejempo"/>
-                                <Label Text="Alias:" />
-                                <Label Text="ejempo"/>
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Frame>
-                    <!-- Item -->
-                    <Frame Padding="2" Margin="5">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer  />
-                        </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="10" Padding="2">
-                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
-                                <Label Text="Tipo" />
-                                <Label Text="ejemplo"  Margin="0,0,10,0"/>
-                                <Label Text="Alias:" />
-                                <Label Text="ejempo"/>
-                                <Label Text="Alias:" />
-                                <Label Text="ejempo"/>
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Frame>
-                    <!-- Item -->
-                    <Frame Padding="2" Margin="5">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer  />
-                        </Frame.GestureRecognizers>
-                        <VerticalStackLayout Spacing="10" Padding="2">
-                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
-                                <Label Text="Tipo" />
-                                <Label Text="ejemplo"  Margin="0,0,10,0"/>
-                                <Label Text="Alias:" />
-                                <Label Text="ejempo"/>
-                                <Label Text="Alias:" />
-                                <Label Text="ejempo"/>
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Frame>
-
-                </VerticalStackLayout>
-            </ScrollView>
-        </Frame>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Frame>
+        </VerticalStackLayout>
+        
     </Grid>
 </ContentPage>

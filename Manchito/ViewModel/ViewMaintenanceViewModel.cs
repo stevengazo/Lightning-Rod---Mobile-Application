@@ -3,9 +3,11 @@ using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
 using Manchito.Views;
+using Newtonsoft;
 using Microsoft.EntityFrameworkCore;
 using System.IO.Compression;
 using System.Windows.Input;
+using Newtonsoft.Json;
 
 namespace Manchito.ViewModel
 {
@@ -42,43 +44,18 @@ namespace Manchito.ViewModel
 		public ICommand ViewCategoryCommand { get; private set; }
 		public ICommand ValidateDataCommand { get; private set; }
 		public ICommand AddCategoryCommand { get; private set; }
-		public ICommand ShareMaintenanceCommand { get; private set; }
 		public ViewMaintenance ViewMaintenance { get; set; }
 		#endregion
-
 		#region Methods
 		public ViewMaintenanceViewModel()
 		{
-			ShareMaintenanceCommand = new Command(async () => ShareMaintenance());
+			
 			AppearingCommand = new Command(async () => await LoadManteinance());
-			ValidateDataCommand = new Command(async () => await ValidateDataPage());
+			ValidateDataCommand = new Command(async (o) => await ValidateDataPage(o));
 			AddCategoryCommand = new Command(async () => await AddCategory());
 			ViewCategoryCommand = new Command(async (O) => await ViewCategory(O));
 		}
-		private void ShareMaintenance()
-		{
-			string startPath = Path.Combine(
-									PathDirectoryFilesAndroid,
-									$"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
-									$"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}");
-			string zipPath = Path.Combine(
-									FileSystem.CacheDirectory,
-									$"P-{Maintenance.Project.Name}-{Maintenance.Alias}.zip");
-			if (File.Exists(zipPath))
-			{
-				// create new zip file
-				File.Delete(zipPath);
-			}
-			ZipFile.CreateFromDirectory(startPath, zipPath,CompressionLevel.Optimal,true);
-			if (File.Exists(zipPath))
-			{
-				Share.Default.RequestAsync(new ShareFileRequest
-				{
-					Title = "Compartir Archivo",
-					File = new ShareFile(zipPath)
-				});
-			}
-		}
+	
 		private async Task ViewCategory(Object id)
 		{
 			try
@@ -93,9 +70,20 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error ViewCategory", $"Error interno {ex.Message}", "Ok");
 			}
 		}
-		private async Task ValidateDataPage()
+		private async Task ValidateDataPage(object o)
 		{
 			await Application.Current.MainPage.Navigation.PushAsync(new ValidateData());
+			try
+			{
+				int number = int.Parse(o.ToString());
+				await Application.Current.MainPage.Navigation.PushAsync(new ValidateData(), true);
+				WeakReferenceMessenger.Default.Cleanup();
+				WeakReferenceMessenger.Default.Send(new NameItemViewMessage(number));
+			}
+			catch (Exception ex)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error ValidateDataPage", $"Error interno {ex.Message}", "Ok");
+			}
 		}
 		private static Project GetProject(int id)
 		{

@@ -8,21 +8,20 @@ using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Input;
 using Plugin.AudioRecorder;
+using AndroidX.Core.Content;
 
 namespace Manchito.ViewModel
 {
 	public class ViewCategoryViewModel : INotifyPropertyChangedAbst
 	{
 
-		private  readonly AudioRecorderService _recorderService = new();
+		private  readonly AudioRecorderService _recorderService = new() { StopRecordingAfterTimeout= false, StopRecordingOnSilence= false};
 		private AudioPlayer _audioPlayer = new();
-
 		private bool IsRecording = false;
 		private Category _Category;
 		private string _Title;
 		private List<Photography> _Photos;
 		private Color _ColorButtonRecorder;
-
 		public Color ColorButtonRecorder
 		{
 			get { return _ColorButtonRecorder; }
@@ -33,7 +32,6 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
 		private string _urlIconRecorder;
 		public string urlIconRecorder
 		{
@@ -102,6 +100,7 @@ namespace Manchito.ViewModel
 			AddItemCommand = new AsyncRelayCommand( async()=> await AddPhotoFromGalleryAsync());
 			RecordAudioItem = new AsyncRelayCommand(async ()=> await RecordAudioAsync());
 			DeleteAudioCommand = new AsyncRelayCommand(async (o)=> await DeleteAudioAsync(o));
+			
 		}
 		private async Task DeleteAudioAsync(object Object)
 		{		
@@ -115,12 +114,10 @@ namespace Manchito.ViewModel
 				{
 					ColorButtonRecorder = Colors.Red;
 					urlIconRecorder = "stop.svg";
-					await _recorderService.StartRecording();
-				 _audioPlayer.Play(_recorderService.GetAudioFilePath());
+					var result = await _recorderService.StartRecording() ;
 				}
 				else
 				{
-
 					ColorButtonRecorder = Colors.Green;
 					urlIconRecorder = "record.svg";
 					await _recorderService.StartRecording();
