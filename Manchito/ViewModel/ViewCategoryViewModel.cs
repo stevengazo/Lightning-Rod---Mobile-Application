@@ -14,6 +14,9 @@ namespace Manchito.ViewModel
 	public class ViewCategoryViewModel : INotifyPropertyChangedAbst
 	{
 
+		private  readonly AudioRecorderService _recorderService = new();
+		private AudioPlayer _audioPlayer = new();
+
 		private bool IsRecording = false;
 		private Category _Category;
 		private string _Title;
@@ -85,6 +88,7 @@ namespace Manchito.ViewModel
 		public ICommand AddItemCommand { get; private set; }
 		public ICommand RecordAudioItem { get; private set; }
 		public ICommand DeleteAudioCommand { get; private set; }
+		public ICommand PlayAudioCommand { get; private set; }
 		public ViewCategoryViewModel()
 		{
 			urlIconRecorder = "record.svg";
@@ -106,18 +110,20 @@ namespace Manchito.ViewModel
 		private async Task RecordAudioAsync()
 		{
 			try
-			{
-				if (IsRecording)
+			{				
+				if (!_recorderService.IsRecording)
 				{
 					ColorButtonRecorder = Colors.Red;
 					urlIconRecorder = "stop.svg";
-					IsRecording = !IsRecording;
+					await _recorderService.StartRecording();
+				 _audioPlayer.Play(_recorderService.GetAudioFilePath());
 				}
 				else
 				{
+
 					ColorButtonRecorder = Colors.Green;
 					urlIconRecorder = "record.svg";
-					IsRecording = !IsRecording;
+					await _recorderService.StartRecording();
 				}
 			}catch(Exception f)
 			{
@@ -296,7 +302,6 @@ namespace Manchito.ViewModel
 						Directory.CreateDirectory(categoryPath);
 						return true;
 					}
-					return false;
 				}
 				else
 				{
@@ -358,5 +363,6 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error TakePhotoAndroid ", $"Error: {ex.Message}", "ok");
 			}
 		}
+		
 	}
 }
