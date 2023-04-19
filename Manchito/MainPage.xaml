@@ -26,11 +26,13 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <HorizontalStackLayout Grid.Row="0"  HorizontalOptions="Center" Padding="5" VerticalOptions="Center" BackgroundColor="White">
-            <Label FontSize="Title">
+            <Label FontSize="Title" TextColor="{AppThemeBinding Light=black, Dark=white}">
                 Lista de Proyectos
             </Label>
         </HorizontalStackLayout>
-        <ScrollView Grid.Row="1" BackgroundColor="WhiteSmoke" Padding="10,10,10,10">
+        <ScrollView Grid.Row="1" 
+                    BackgroundColor="{AppThemeBinding Light=black, Dark=gray}"
+                    Padding="10,10,10,10">
             <VerticalStackLayout x:Name="containerlist" Spacing="5">
                 <CollectionView SelectionMode="Single" ItemsSource="{Binding Projects,Mode=OneWay}">
                     <CollectionView.ItemTemplate>
@@ -40,8 +42,8 @@
                                     Margin="2" 
                                     VerticalOptions="Center"
                                     HeightRequest="80"
-                                    BackgroundColor="White"    
-                                    BorderColor="Gray"
+                                    BackgroundColor="{AppThemeBinding Light=black, Dark=white}"
+                                    BorderColor="Gray"                                                                    
                                     >
                                 <Frame.Behaviors>
                                     <toolkit:AnimationBehavior>
@@ -54,10 +56,14 @@
                                     <HorizontalStackLayout.GestureRecognizers>
                                         <TapGestureRecognizer  Command="{Binding BindingContext.ViewProjectCommand, Source={x:Reference MyMainPage}}"  CommandParameter="{Binding ProjectId}" ></TapGestureRecognizer>
                                     </HorizontalStackLayout.GestureRecognizers>
-                                    <Label Text="Nombre:" />
-                                    <Label Text="{Binding Name}" />
-                                    <Label Text="Cliente:" />
-                                    <Label Text="{Binding CustomerName}"  />
+                                    <Label Text="Nombre:" 
+                                           TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                    <Label Text="{Binding Name}"  
+                                           TextColor="{AppThemeBinding Light=black, Dark=white}"/>
+                                    <Label Text="Cliente:" 
+                                           TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                    <Label Text="{Binding CustomerName}" 
+                                           TextColor="{AppThemeBinding Light=black, Dark=white}"  />
                                 </HorizontalStackLayout>
                             </Frame>
                         </DataTemplate>

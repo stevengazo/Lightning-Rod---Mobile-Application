@@ -16,7 +16,7 @@
                Command="{Binding AppearingCommand}"
             />
     </ContentPage.Behaviors>
-    <Grid BackgroundColor="White">
+    <Grid BackgroundColor="{AppThemeBinding Light=black, Dark=white}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1.1*"/>
                 <RowDefinition Height="3*"/>
@@ -38,19 +38,19 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.ColumnSpan="2" FontSize="Title" Text="Información del Mantenimiento" HorizontalOptions="Center" />
                     <Frame Grid.Row="1" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,5,0,0">
-                        <Label Text="Alias de Mantenimiento" />
+                    <Label Text="Alias de Mantenimiento" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
                     <Frame Grid.Row="1" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                        <Label Text="{Binding Maintenance.Alias, Mode=TwoWay}" />
+                            <Label Text="{Binding Maintenance.Alias, Mode=TwoWay}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
                     <Frame Grid.Row="2" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                        <Label Text="Fecha de Trabajo" />
+                    <Label Text="Fecha de Trabajo" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
                     <Frame Grid.Row="2" Grid.Column="1" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                    <Label Text="{Binding Maintenance.DateOfMaintenance.Date, StringFormat='{0:MMMM dd, yyyy}', Mode=TwoWay}" />
+                    <Label Text="{Binding Maintenance.DateOfMaintenance.Date, StringFormat='{0:MMMM dd, yyyy}', Mode=TwoWay}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
                     <Frame Grid.Row="3" Grid.Column="0" BorderColor="White" Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
-                        <Label Text="Estado del Proyecto" />
+                    <Label Text="Estado del Proyecto" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
                     <Frame Grid.Row="3" Grid.Column="1" BorderColor="White"  Padding="2" HorizontalOptions="Start" VerticalOptions="Center">
                         <Label Text="{Binding Maintenance.Status}" />
@@ -66,7 +66,6 @@
                             Padding="5"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"/>
-
                         <ImageButton                
                             WidthRequest="45"
                             HeightRequest="45"                                            
@@ -97,10 +96,10 @@
                                         </Frame.GestureRecognizers>
                                         <VerticalStackLayout Spacing="10" Padding="2">
                                             <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
-                                                <Label Text="Tipo" />
-                                                <Label Text="{Binding ItemType.Name}"  Margin="0,0,10,0"/>
-                                                <Label Text="Alias:" />
-                                                <Label Text="{Binding Alias}"/>
+                                            <Label Text="Tipo" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                            <Label Text="{Binding ItemType.Name}"  Margin="0,0,10,0" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                            <Label Text="Alias:" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                            <Label Text="{Binding Alias}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                                             </HorizontalStackLayout>
                                             <StackLayout BackgroundColor="LightGray">
                                                 <CollectionView SelectionMode="None" ItemsSource="{Binding Photographies,Mode=OneWay}" HorizontalOptions="Center" ItemsLayout="HorizontalList" >

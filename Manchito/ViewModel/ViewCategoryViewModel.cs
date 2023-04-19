@@ -1,21 +1,49 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using Android;
+using Android.Content.PM;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Input;
+using Plugin.AudioRecorder;
 
 namespace Manchito.ViewModel
 {
 	public class ViewCategoryViewModel : INotifyPropertyChangedAbst
 	{
+
+		private bool IsRecording = false;
 		private Category _Category;
-
 		private string _Title;
-
 		private List<Photography> _Photos;
+		private Color _ColorButtonRecorder;
 
+		public Color ColorButtonRecorder
+		{
+			get { return _ColorButtonRecorder; }
+			set { _ColorButtonRecorder = value;
+			if(ColorButtonRecorder != null)
+				{
+					OnPropertyChanged(nameof(ColorButtonRecorder));
+				}
+			}
+		}
+
+		private string _urlIconRecorder;
+		public string urlIconRecorder
+		{
+			get { return _urlIconRecorder; }
+			set
+			{
+				_urlIconRecorder = value;
+				if (urlIconRecorder != null)
+				{
+					OnPropertyChanged(nameof(urlIconRecorder));
+				}
+			}
+		}
 		public List<Photography> Photos
 		{
 			get { return _Photos; }
@@ -28,7 +56,6 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
 		public string Title
 		{
 			get { return _Title; }
@@ -38,7 +65,6 @@ namespace Manchito.ViewModel
 				if (Title != null) { OnPropertyChanged(nameof(Title)); }
 			}
 		}
-
 		public Category CategoryItem
 		{
 			get { return _Category; }
@@ -51,22 +77,56 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
-
 		public ICommand TakePhotoCommand { get; private set; }
 		public ICommand TakeVideoCommand { get; private set; }
 		public ICommand AppearingCommand { get; private set; }
 		public ICommand ShareItemCommand { get; private set; }
 		public ICommand DeleteItemCommand { get; private set; }
-
-
+		public ICommand AddItemCommand { get; private set; }
+		public ICommand RecordAudioItem { get; private set; }
+		public ICommand DeleteAudioCommand { get; private set; }
 		public ViewCategoryViewModel()
 		{
+			urlIconRecorder = "record.svg";
+			ColorButtonRecorder = Colors.Green;
 			Title = "";
 			TakePhotoCommand = new AsyncRelayCommand(TakePhotoAndroid);
 			TakeVideoCommand = new AsyncRelayCommand(TakeVideoAndroid);
 			AppearingCommand = new AsyncRelayCommand(LoadCategory);
 			ShareItemCommand = new Command((O) => SharePhoto(O));
 			DeleteItemCommand = new Command((O) => DeletePhoto(O));
+			AddItemCommand = new AsyncRelayCommand( async()=> await AddPhotoFromGalleryAsync());
+			RecordAudioItem = new AsyncRelayCommand(async ()=> await RecordAudioAsync());
+			DeleteAudioCommand = new AsyncRelayCommand(async (o)=> await DeleteAudioAsync(o));
+		}
+		private async Task DeleteAudioAsync(object Object)
+		{		
+			throw new NotImplementedException();
+		}
+		private async Task RecordAudioAsync()
+		{
+			try
+			{
+				if (IsRecording)
+				{
+					ColorButtonRecorder = Colors.Red;
+					urlIconRecorder = "stop.svg";
+					IsRecording = !IsRecording;
+				}
+				else
+				{
+					ColorButtonRecorder = Colors.Green;
+					urlIconRecorder = "record.svg";
+					IsRecording = !IsRecording;
+				}
+			}catch(Exception f)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error RecordAudioAsync", f.Message, "OK");
+			}			
+		}
+		private async Task AddPhotoFromGalleryAsync()
+		{
+			throw new NotImplementedException();
 		}
 		private async Task DeletePhoto(object o)
 		{
@@ -118,7 +178,6 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error TakePhotoAndroid ", $"Error: {ex.Message}", "ok");
 			}
 		}
-
 		/// <summary>
 		/// Catch the value and load the category in memory
 		/// </summary>
