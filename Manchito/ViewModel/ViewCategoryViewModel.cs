@@ -17,7 +17,7 @@ namespace Manchito.ViewModel
 
 		private  readonly AudioRecorderService _recorderService = new() { StopRecordingAfterTimeout= false, StopRecordingOnSilence= false};
 		private AudioPlayer _audioPlayer = new();
-		private bool IsRecording = false;
+		private string recording = "";
 		private Category _Category;
 		private string _Title;
 		private List<Photography> _Photos;
@@ -110,17 +110,21 @@ namespace Manchito.ViewModel
 		{
 			try
 			{				
-				if (!_recorderService.IsRecording)
+				if (_recorderService.IsRecording)
 				{
-					ColorButtonRecorder = Colors.Red;
-					urlIconRecorder = "stop.svg";
-					var result = await _recorderService.StartRecording() ;
+					await _recorderService.StopRecording();					
+					if (File.Exists(_recorderService.GetAudioFilePath()))
+					{
+						_audioPlayer.Play(_recorderService.GetAudioFilePath());
+					}
+					ColorButtonRecorder = Colors.Green;
+					urlIconRecorder = "record.svg";					
 				}
 				else
-				{
-					ColorButtonRecorder = Colors.Green;
-					urlIconRecorder = "record.svg";
-					await _recorderService.StartRecording();
+				{				
+					ColorButtonRecorder = Colors.Red;
+					urlIconRecorder = "stop.svg";
+					var result = await _recorderService.StartRecording();					
 				}
 			}catch(Exception f)
 			{
@@ -135,6 +139,28 @@ namespace Manchito.ViewModel
 		{
 			var Response = Application.Current.MainPage.DisplayAlert("Alerta", "Deseas borrar este dato", "Yes", "No");
 		}
+
+	
+
+		private async Task<int> GetLastIdAudio()
+		{
+			try
+			{
+				using (DBLocalContext db = new())
+				{
+					return await (from a in db.AudioNote
+							orderby a.AudioNoteId descending
+							select a.AudioNoteId).FirstOrDefaultAsync();
+				}
+
+
+			}catch(Exception f)
+			{
+				await Application.Current.MainPage.DisplayAlert("Error SharePhoto ", $"Error: {f.Message}", "ok");
+				return -1;
+			}
+		}
+
 		private async Task SharePhoto(object o)
 		{
 			try
@@ -235,6 +261,11 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
 			}
 		}
+
+		/// <summary>
+		/// return the path of the category in android
+		/// </summary>
+		/// <returns></returns>
 		private async Task<string> FolderPathAndroid()
 		{
 			try
