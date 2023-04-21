@@ -47,12 +47,23 @@ namespace Manchito.ViewModel
 		#region Methods
 		public MainPageViewModel()
 		{
+			CheckForStoragePermission();
+
+			if (!Path.Exists(PathDirectoryFilesAndroid))
+			{
+				Directory.CreateDirectory(PathDirectoryFilesAndroid, UnixFileMode.UserWrite);
+			}
+
+
 			// binding the icommand property with the async method
 			ViewProjectCommand = new Command(async (t) => ViewProject(t));
 			// binding the icommand property with the async method
 			AddProjectCommand = new Command(async () => await AddProject());
 			LoadProjectsCommand = new Command(async () => await LoadProjects());
 		}
+
+		
+
 		public async Task AddProject()
 		{
 			try
@@ -70,7 +81,7 @@ namespace Manchito.ViewModel
 		{
 			try
 			{
-				await CheckForStoragePermission();
+				
 				// load the projects in the db
 				using DBLocalContext db = new DBLocalContext();
 				Projects = db.Project.Include(P => P.Maintenances).ToList();
@@ -98,20 +109,38 @@ namespace Manchito.ViewModel
 		{
 
 			var statusStorageRead = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
-			var statusStorageWrite = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-			var statusCamera = await Permissions.CheckStatusAsync<Permissions.Camera>();
 			if (statusStorageRead != PermissionStatus.Granted)
 			{
 				await Permissions.RequestAsync<Permissions.StorageRead>();
 			}
+			var statusStorageWrite = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
 			if (statusStorageWrite != PermissionStatus.Granted)
 			{
 				await Permissions.RequestAsync<Permissions.StorageWrite>();
 			}
+			var statusStoragePhotos = await Permissions.CheckStatusAsync<Permissions.Photos>();
+			if (statusStoragePhotos != PermissionStatus.Granted)
+			{
+				await Permissions.RequestAsync<Permissions.Photos>();
+			}
+			var statusCamera = await Permissions.CheckStatusAsync<Permissions.Camera>();
 			if (statusCamera != PermissionStatus.Granted)
 			{
 				await Permissions.RequestAsync<Permissions.Camera>();
 			}
+			var statusMedia = await Permissions.CheckStatusAsync<Permissions.Media>();
+			if (statusMedia != PermissionStatus.Granted)
+			{
+				await Permissions.RequestAsync<Permissions.Media>();
+			}
+			var statusMicrophone = await Permissions.CheckStatusAsync<Permissions.Microphone>();
+			if (statusMicrophone != PermissionStatus.Granted)
+			{
+				await Permissions.RequestAsync<Permissions.Microphone>();
+			}
+
+
+
 
 		}
 		#endregion

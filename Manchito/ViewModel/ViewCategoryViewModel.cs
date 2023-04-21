@@ -9,14 +9,19 @@ using Microsoft.EntityFrameworkCore;
 using System.Windows.Input;
 using Plugin.AudioRecorder;
 using AndroidX.Core.Content;
+using System.IO;
+using static Java.Util.Jar.Attributes;
+using Microsoft.Maui.Platform;
 
 namespace Manchito.ViewModel
 {
 	public class ViewCategoryViewModel : INotifyPropertyChangedAbst
 	{
+		#region properties
 
-		private  readonly AudioRecorderService _recorderService = new() { StopRecordingAfterTimeout= false, StopRecordingOnSilence= false};
+		private readonly AudioRecorderService _recorderService = new() { StopRecordingAfterTimeout= false, StopRecordingOnSilence= false};
 		private AudioPlayer _audioPlayer = new();
+		private string recordTask;
 		private string recording = "";
 		private Category _Category;
 		private string _Title;
@@ -87,8 +92,10 @@ namespace Manchito.ViewModel
 		public ICommand RecordAudioItem { get; private set; }
 		public ICommand DeleteAudioCommand { get; private set; }
 		public ICommand PlayAudioCommand { get; private set; }
+		#endregion
 		public ViewCategoryViewModel()
 		{
+			
 			urlIconRecorder = "record.svg";
 			ColorButtonRecorder = Colors.Green;
 			Title = "";
@@ -99,8 +106,7 @@ namespace Manchito.ViewModel
 			DeleteItemCommand = new Command((O) => DeletePhoto(O));
 			AddItemCommand = new AsyncRelayCommand( async()=> await AddPhotoFromGalleryAsync());
 			RecordAudioItem = new AsyncRelayCommand(async ()=> await RecordAudioAsync());
-			DeleteAudioCommand = new AsyncRelayCommand(async (o)=> await DeleteAudioAsync(o));
-			
+			DeleteAudioCommand = new AsyncRelayCommand(async (o)=> await DeleteAudioAsync(o));			
 		}
 		private async Task DeleteAudioAsync(object Object)
 		{		
@@ -112,10 +118,16 @@ namespace Manchito.ViewModel
 			{				
 				if (_recorderService.IsRecording)
 				{
-					await _recorderService.StopRecording();					
-					if (File.Exists(_recorderService.GetAudioFilePath()))
+					await _recorderService.StopRecording();
+					string AudioPath = _recorderService.FilePath;
+					if ( _recorderService.GetAudioFileStream().Length>0 )
 					{
-						_audioPlayer.Play(_recorderService.GetAudioFilePath());
+						_audioPlayer.Play(AudioPath);
+						/*var fileName = Path.Combine(await FolderPathAndroid(), $"Audio {DateTime.Now.ToString("HH_mm_ss_")} .wav");																	
+						// save the file into local storage
+						using Stream sourceStream = _recorderService.Ge
+						using FileStream localFileStream = File.OpenWrite(fileName);
+						await sourceStream.CopyToAsync(localFileStream);*/
 					}
 					ColorButtonRecorder = Colors.Green;
 					urlIconRecorder = "record.svg";					
@@ -123,8 +135,8 @@ namespace Manchito.ViewModel
 				else
 				{				
 					ColorButtonRecorder = Colors.Red;
-					urlIconRecorder = "stop.svg";
-					var result = await _recorderService.StartRecording();					
+					urlIconRecorder = "stop.svg";					
+					recordTask = await _recorderService.StartRecording().Result;
 				}
 			}catch(Exception f)
 			{
