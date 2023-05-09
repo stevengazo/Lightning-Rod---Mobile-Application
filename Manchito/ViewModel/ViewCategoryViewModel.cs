@@ -21,7 +21,7 @@ namespace Manchito.ViewModel
 
 		private readonly AudioRecorderService _recorderService = new() { StopRecordingAfterTimeout= false, StopRecordingOnSilence= false};
 		private AudioPlayer _audioPlayer = new();
-		private string recordTask;
+		private Task recordTask;
 		private string recording = "";
 		private Category _Category;
 		private string _Title;
@@ -50,6 +50,9 @@ namespace Manchito.ViewModel
 				}
 			}
 		}
+
+		private Task<string> _recordTask;
+
 		public List<Photography> Photos
 		{
 			get { return _Photos; }
@@ -115,33 +118,43 @@ namespace Manchito.ViewModel
 		private async Task RecordAudioAsync()
 		{
 			try
-			{				
-				if (_recorderService.IsRecording)
+			{
+				var StatusAudio = await Permissions.CheckStatusAsync<Permissions.Microphone>();
+				if (StatusAudio == PermissionStatus.Granted)
 				{
-					await _recorderService.StopRecording();
-					string AudioPath = _recorderService.FilePath;
-					if ( _recorderService.GetAudioFileStream().Length>0 )
+					if (_recorderService.IsRecording)
 					{
-						_audioPlayer.Play(AudioPath);
-						/*var fileName = Path.Combine(await FolderPathAndroid(), $"Audio {DateTime.Now.ToString("HH_mm_ss_")} .wav");																	
-						// save the file into local storage
-						using Stream sourceStream = _recorderService.Ge
-						using FileStream localFileStream = File.OpenWrite(fileName);
-						await sourceStream.CopyToAsync(localFileStream);*/
+						ColorButtonRecorder = Colors.Green;
+						urlIconRecorder = "record.svg";
+						await _recorderService.StopRecording();
+						if (_recorderService.GetAudioFileStream().Length > 0)
+						{
+							Stream streamAudio = _recorderService.GetAudioFileStream();
+							string tempPath = await FolderPathAndroid();
+							string NewFilePath = Path.Combine(tempPath, $"1.wav");
+							using (var fileStream = new FileStream(NewFilePath, FileMode.Create, FileAccess.ReadWrite,FileShare.ReadWrite))
+							{
+								streamAudio.CopyTo(fileStream);
+							}
+							_audioPlayer.Play(NewFilePath);
+						}
 					}
-					ColorButtonRecorder = Colors.Green;
-					urlIconRecorder = "record.svg";					
+					else
+					{
+						ColorButtonRecorder = Colors.Red;
+						urlIconRecorder = "stop.svg";
+						_recordTask = await _recorderService.StartRecording();
+					}
 				}
 				else
-				{				
-					ColorButtonRecorder = Colors.Red;
-					urlIconRecorder = "stop.svg";					
-					recordTask = await _recorderService.StartRecording().Result;
+				{
+					await Application.Current.MainPage.DisplayAlert("Error RecordAudioAsync", "La aplicaci[on no tiene permisos para grabar audio", "OK");
 				}
-			}catch(Exception f)
+			}
+			catch (Exception f)
 			{
 				await Application.Current.MainPage.DisplayAlert("Error RecordAudioAsync", f.Message, "OK");
-			}			
+			}
 		}
 		private async Task AddPhotoFromGalleryAsync()
 		{

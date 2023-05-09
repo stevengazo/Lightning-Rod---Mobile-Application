@@ -57,18 +57,17 @@
         <VerticalStackLayout Grid.Row="3">
             <HorizontalStackLayout HorizontalOptions="Center">
                 <Button                
-                    WidthRequest="120"
-                    HeightRequest="40"                                            
+                    WidthRequest="240"
+                    HeightRequest="60"                                            
                     Command="{Binding ShareMaintenanceCommand}"  
                     BorderWidth="2"
-                    TextColor="White"
                     BackgroundColor="blue"
                     Padding="4.5"
                     Text="Exportar Información"
                     CornerRadius="25"
                 />
             </HorizontalStackLayout>
-            <Frame HeightRequest="350"  Margin="0" BorderColor="WhiteSmoke" BackgroundColor="{AppThemeBinding Light=white, Dark=gray}">
+            <Frame  IsVisible="False" HeightRequest="350"  Margin="0" BorderColor="WhiteSmoke" BackgroundColor="{AppThemeBinding Light=white, Dark=gray}">
                 <ScrollView>
                     <VerticalStackLayout BackgroundColor="gray" >
                         <!-- Item -->

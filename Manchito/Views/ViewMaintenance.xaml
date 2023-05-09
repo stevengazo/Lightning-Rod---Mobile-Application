@@ -74,6 +74,9 @@
             </Frame>
         <Frame Grid.Row="1"  Margin="5" Padding="2" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
                 <ScrollView>
+                <ScrollView.GestureRecognizers>
+                    <SwipeGestureRecognizer Command="{Binding UpdateOnSwapCommand}" Direction="Up" />
+                </ScrollView.GestureRecognizers>
                     <VerticalStackLayout>
                         <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}">
                             <CollectionView.ItemTemplate>

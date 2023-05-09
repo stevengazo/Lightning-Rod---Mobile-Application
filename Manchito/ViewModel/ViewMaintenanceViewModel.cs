@@ -44,12 +44,13 @@ namespace Manchito.ViewModel
 		public ICommand ViewCategoryCommand { get; private set; }
 		public ICommand ValidateDataCommand { get; private set; }
 		public ICommand AddCategoryCommand { get; private set; }
+		public ICommand UpdateOnSwapCommand { get; private set; }
 		public ViewMaintenance ViewMaintenance { get; set; }
 		#endregion
 		#region Methods
 		public ViewMaintenanceViewModel()
 		{
-			
+			UpdateOnSwapCommand = new Command(async async => await LoadCategories());
 			AppearingCommand = new Command(async () => await LoadManteinance());
 			ValidateDataCommand = new Command(async (o) => await ValidateDataPage(o));
 			AddCategoryCommand = new Command(async () => await AddCategory());

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gazoos.manchito" android:versionCode="3" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gazoos.manchito" android:versionCode="4" android:installLocation="auto">
 	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true" android:requestLegacyExternalStorage="true" android:label="Manchito"></application>
 	<!-- Required only if your app targets Android 13. -->
 	<!-- Declare one or more the following permissions only if your app needs to access data that's protected by them. -->
@@ -10,13 +10,12 @@
 	<!-- Required to maintain app compatibility  -->
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<!-- Required to access to internet  -->	
+	<!-- Required to access to internet  -->
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<!-- Required to access to Audio  -->
 	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 	<uses-permission android:name="android.permission.RECORD_AUDIO" />
-
 	<queries>
 		<intent>
 			<action android:name="android.media.action.IMAGE_CAPTURE" />
