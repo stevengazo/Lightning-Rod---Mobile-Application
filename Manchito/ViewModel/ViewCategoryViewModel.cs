@@ -109,9 +109,9 @@ namespace Manchito.ViewModel
 		public ICommand TakeVideoCommand { get; private set; }
 		public ICommand AppearingCommand { get; private set; }
 		public ICommand ShareItemCommand { get; private set; }
-		public ICommand DeleteItemCommand { get; private set; }
+		public ICommand DeletePhotoCommand { get; private set; }
 		public ICommand AddItemCommand { get; private set; }
-		public ICommand RecordAudioItem { get; private set; }
+		public ICommand RecordAudioItem { get; private set; }                                                                    
 		public ICommand DeleteAudioCommand { get; private set; }
 		public ICommand PlayItemCommand { get; private set; }
 		#endregion
@@ -125,12 +125,12 @@ namespace Manchito.ViewModel
 			TakeVideoCommand = new AsyncRelayCommand(TakeVideoAndroid);
 			AppearingCommand = new AsyncRelayCommand(LoadCategory);
 			ShareItemCommand = new Command((O) => SharePhoto(O));
-			DeleteItemCommand = new Command((O) => DeletePhoto(O));
+            DeletePhotoCommand = new Command((O) => DeletePhoto(O));
             PlayItemCommand = new Command((O) => PlayAudio(O));
             AddItemCommand = new AsyncRelayCommand( async()=> await AddPhotoFromGalleryAsync());
 			RecordAudioItem = new AsyncRelayCommand(async ()=> await RecordAudioAsync());
-			DeleteAudioCommand = new AsyncRelayCommand(async (o)=> await DeleteAudioAsync(o));			
-		}
+			DeleteAudioCommand = new Command((O) => DeleteAudioAsync(O));
+        }
 
         private async void PlayAudio(object o)
         {
@@ -143,10 +143,29 @@ namespace Manchito.ViewModel
         }
 
         private async Task DeleteAudioAsync(object Object)
-		{		
-			throw new NotImplementedException();
-		}
-		private async Task RecordAudioAsync()
+		{					
+			int id = int.Parse(Object.ToString());
+            var Response = await Application.Current.MainPage.DisplayAlert("Alerta", "Deseas borrar este Audio?", "Sí", "No");
+			if (Response.Equals(true))
+			{
+				using (var db = new DBLocalContext())
+				{
+					var audio = db.AudioNote.Where(P => P.AudioNoteId == id).FirstOrDefault();
+					if (audio != null)
+					{
+						db.AudioNote.Remove(audio);
+						db.SaveChanges();
+						File.Delete(audio.PathFile);
+						CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+						var toast = Toast.Make("Audio borrado", ToastDuration.Long, 14);
+						await toast.Show(cancellationTokenSource.Token);
+						await LoadAudio();
+					}
+
+				}
+			}
+            }
+            private async Task RecordAudioAsync()
 		{
 			try
 			{
@@ -209,9 +228,28 @@ namespace Manchito.ViewModel
 		}
 		private async Task DeletePhoto(object o)
 		{
-			var Response = Application.Current.MainPage.DisplayAlert("Alerta", "Deseas borrar este dato", "Yes", "No");
+			int id = int.Parse(o.ToString());	
+			var Response = await Application.Current.MainPage.DisplayAlert("Alerta", "Deseas borrar este dato", "Yes", "No");
+			if(Response.Equals(true))
+			{
+				using (var db = new DBLocalContext())
+				{
+					var photo = db.Photography.Where(P =>P.PhotographyId == id).FirstOrDefault();
+					if(photo != null)
+					{
+						db.Photography.Remove(photo);
+						db.SaveChanges();
+                        File.Delete(photo.FilePath);
+                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                        var toast = Toast.Make("Foto borrada", ToastDuration.Long, 14);
+                        await toast.Show(cancellationTokenSource.Token);
+                        string path = o.ToString();
+						await loadImages();
+                    }
+					
+				}
+			}
 		}
-
 		private async Task<int> GetLastIdAudio()
 		{
 			try
@@ -230,7 +268,6 @@ namespace Manchito.ViewModel
 				return -1;
 			}
 		}
-
 		private async Task SharePhoto(object o)
 		{
 			try
@@ -332,8 +369,6 @@ namespace Manchito.ViewModel
 				await Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
 			}
 		}
-
-
 		private async Task LoadAudio()
 		{
 			try
@@ -350,7 +385,6 @@ namespace Manchito.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Error LoadAudio", f.Message, "OK");
             }
 		}
-
 		/// <summary>
 		/// return the path of the category in android
 		/// </summary>
