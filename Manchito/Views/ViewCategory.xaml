@@ -15,44 +15,49 @@
                Command="{Binding AppearingCommand}"
             />
     </ContentPage.Behaviors>
-    <ScrollView VerticalOptions="Start">
-        <VerticalStackLayout  Spacing="50">
-            <StackLayout  Padding="5" >
-                <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="110" />
-                        <RowDefinition Height="7*" />
-                        <RowDefinition Height="50" />
-                    </Grid.RowDefinitions>
-                    <VerticalStackLayout  Grid.Row="0" VerticalOptions="Center">
-                        <Label FontSize="Title" HorizontalOptions="Center" Text="Fotografias" TextColor="{AppThemeBinding Light=black, Dark=white}" />
-                        <Label FontSize="Caption" HorizontalTextAlignment="Center" Text="Verifique que haya tomado todas las fotos reelevantes para esta area." TextColor="{AppThemeBinding Light=black, Dark=white}" />
-                    </VerticalStackLayout>
-                    <Frame Grid.Row="1" Margin="0" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=white}" BorderColor="{AppThemeBinding Light=white, Dark=darkgray}">
-                        <VerticalStackLayout>
-                            <ScrollView >
-                                <!--Carrousell-->
-                                <CarouselView ItemsSource="{Binding Photos}">
-                                    <CarouselView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackLayout >
-                                                <Frame  HasShadow="True"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="120"/>
+        </Grid.RowDefinitions>
+        <ScrollView VerticalOptions="Start" Grid.Row="0">
+            <VerticalStackLayout  Spacing="30">
+                <StackLayout  Padding="0.0" >
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="105" />
+                            <RowDefinition Height="10*" />
+                        </Grid.RowDefinitions>
+                        <VerticalStackLayout  Grid.Row="0" VerticalOptions="Center">
+                            <Label FontSize="Title" HorizontalOptions="Center" Text="Fotografias" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                            <Label FontSize="Caption" HorizontalTextAlignment="Center" Text="Verifique que haya tomado todas las fotos reelevantes para esta area." TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                        </VerticalStackLayout>
+                        <Frame Grid.Row="1" Margin="0" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=white}" BorderColor="{AppThemeBinding Light=white, Dark=darkgray}">
+                            <VerticalStackLayout>
+                                <ScrollView >
+                                    <!--Carrousell-->
+                                    <CarouselView ItemsSource="{Binding Photos}">
+                                        <CarouselView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackLayout >
+                                                    <Frame  HasShadow="True"
                                                         BorderColor="DarkGray"
                                                         BackgroundColor="{AppThemeBinding Light=white, Dark=darkgray}"
-                                                        CornerRadius="5"
+                                                        CornerRadius="5"                                                    
                                                         Margin="5"
+                                                        Padding="1"
                                                         HeightRequest="450"
                                                         HorizontalOptions="Center"
                                                         VerticalOptions="CenterAndExpand" >
-                                                    <VerticalStackLayout  Margin="0" Padding="0">
-                                                        <Image Source="{Binding FilePath,Mode= TwoWay}" 
+                                                        <VerticalStackLayout  Margin="0" Padding="0">
+                                                            <Image Source="{Binding FilePath,Mode= TwoWay}" 
                                                                ZIndex="1"
-                                                               Aspect="AspectFill"
-                                                               HeightRequest="350"                                                
+                                                               Aspect="AspectFit"
+                                                               HeightRequest="380"                                                
                                                                WidthRequest="450"
                                                                HorizontalOptions="Center" />
-                                                        <HorizontalStackLayout Margin="0,0,0,0" HorizontalOptions="End" ZIndex="2">
-                                                            <ImageButton    WidthRequest="55"
+                                                            <HorizontalStackLayout Margin="0,0,0,0" HorizontalOptions="End" ZIndex="2">
+                                                                <ImageButton    WidthRequest="55"
                                                                             HeightRequest="55"                                            
                                                                             Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ViewCategoryPage}}"  
                                                                             CommandParameter="{Binding PhotographyId}"                                                                                        
@@ -63,7 +68,7 @@
                                                                             Source="delete.svg"
                                                                             CornerRadius="20"
                                                                         />
-                                                            <ImageButton                
+                                                                <ImageButton                
                                                     WidthRequest="55"
                                                     HeightRequest="55"                                            
                                                     Command="{Binding BindingContext.ShareItemCommand, Source={x:Reference ViewCategoryPage}}"  
@@ -76,20 +81,75 @@
                                                     Source="share.svg"
                                                     CornerRadius="20"
                                                 />
-                                                        </HorizontalStackLayout>
-                                                    </VerticalStackLayout>
-                                                </Frame>
-                                            </StackLayout>
-                                        </DataTemplate>
-                                    </CarouselView.ItemTemplate>
-                                </CarouselView>
-                            </ScrollView>
+                                                            </HorizontalStackLayout>
+
+                                                        </VerticalStackLayout>
+                                                    </Frame>
+                                                </StackLayout>
+                                            </DataTemplate>
+                                        </CarouselView.ItemTemplate>
+                                    </CarouselView>
+                                </ScrollView>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+                </StackLayout>
+                <Grid  Margin="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="5*" />
+                    </Grid.RowDefinitions>
+                    <VerticalStackLayout   Margin="0" Grid.Row="0" VerticalOptions="Center">
+                        <Label FontSize="Title" HorizontalOptions="Center" Text="Notas de Voz" TextColor="{AppThemeBinding Light=black, Dark=white}"/>
+                        <Label FontSize="Caption" HorizontalTextAlignment="Center"  Text="Ingrese las notas de Voz requeridas"  TextColor="{AppThemeBinding Light=black, Dark=white}"/>
+                    </VerticalStackLayout>
+                    <Frame Grid.Row="1"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=gray, Dark=black}">
+                        <VerticalStackLayout>
+                            <CollectionView SelectionMode="Single" ItemsSource="{Binding AudioNotes, Mode=OneWay}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ScrollView>
+                                            <Frame BackgroundColor="{AppThemeBinding Light=white, Dark=gray}" BorderColor="WhiteSmoke">
+                                                <HorizontalStackLayout Spacing="45" HorizontalOptions="Center" Padding="0" VerticalOptions="Center" HeightRequest="40" >
+                                                    <Label Text="{Binding AudioNoteId}" TextColor="Black" VerticalOptions="Center" Padding="0" Margin="0"/>
+                                                    <Label Text="Duración" VerticalOptions="Center" Padding="0" Margin="0"/>
+                                                    <HorizontalStackLayout HorizontalOptions="End" Spacing="25" Margin="0" Padding="0">
+                                                        <ImageButton                
+                                                        WidthRequest="70"
+                                                        HeightRequest="40"
+                                                        Command="{Binding BindingContext.PlayItemCommand, Source={x:Reference ViewCategoryPage}}"  
+                                                        CommandParameter="{Binding PathFile}" 
+                                                        BackgroundColor="Green"
+                                                        Padding="2"           
+                                                        Aspect="AspectFit"
+                                                        Source="play.svg"
+                                                        CornerRadius="15"
+                                                        />
+                                                        <ImageButton                
+                                                        WidthRequest="40"
+                                                        HeightRequest="40"
+                                                        BackgroundColor="red"
+                                                        Padding="2"           
+                                                        Aspect="AspectFit"
+                                                        Source="delete.svg"
+                                                        CornerRadius="5"
+                                                        />
+                                                    </HorizontalStackLayout>
+                                                </HorizontalStackLayout>
+                                            </Frame>
+                                        </ScrollView>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
                         </VerticalStackLayout>
                     </Frame>
-                    <HorizontalStackLayout HorizontalOptions="Center" Padding="0,50,0,6" Margin="06" Grid.Row="2">
-                        <ImageButton                
-                                WidthRequest="90"
-                                HeightRequest="50"
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+        <HorizontalStackLayout Grid.Row="1" HorizontalOptions="Center">
+            <ImageButton                
+                                WidthRequest="120"
+                                HeightRequest="60"
                                 Margin="0,0,2,0"
                                 Command="{Binding TakePhotoCommand}"
                                 BorderColor="DarkGreen" 
@@ -97,11 +157,11 @@
                                 Padding="6"
                                 Aspect="AspectFit"
                                 Source="photo.svg"
-                                CornerRadius="20"
+                                CornerRadius="5"
                                 />
-                        <ImageButton                
-                                WidthRequest="90"
-                                HeightRequest="50"
+            <ImageButton                
+                                WidthRequest="100"
+                                HeightRequest="60"
                                 Margin="0,0,0,0"
                                 Command="{Binding TakeVideoCommand}"
                                 BorderColor="blue" 
@@ -109,56 +169,9 @@
                                 Padding="6"           
                                 Aspect="AspectFit"
                                 Source="video.svg"
-                                CornerRadius="20"
+                                CornerRadius="5"
                                 />
-                    </HorizontalStackLayout>
-                </Grid>
-            </StackLayout>
-            <Grid  Margin="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="80" />
-                    <RowDefinition Height="250" />
-                    <RowDefinition Height="60" />
-                </Grid.RowDefinitions>
-                <VerticalStackLayout  IsVisible="False" Margin="0" Grid.Row="0" VerticalOptions="Center">
-                    <Label FontSize="Title" HorizontalOptions="Center" Text="Notas de Voz" TextColor="{AppThemeBinding Light=black, Dark=white}"/>
-                    <Label FontSize="Caption" HorizontalTextAlignment="Center"  Text="Ingrese las notas de Voz requeridas"  TextColor="{AppThemeBinding Light=black, Dark=white}"/>
-                </VerticalStackLayout>
-                <Frame  IsVisible="False" Grid.Row="1"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
-                    <VerticalStackLayout>
-                        <ScrollView>
-                            <!--list-->
-                            <Frame BackgroundColor="{AppThemeBinding Light=white, Dark=gray}" BorderColor="WhiteSmoke">
-                                <HorizontalStackLayout Spacing="10" HorizontalOptions="CenterAndExpand" Padding="1" VerticalOptions="Center" HeightRequest="30" >
-                                    <Label Text="Gab1"  VerticalOptions="Center" Padding="0" Margin="0"/>
-                                    <Label Text="Duración" VerticalOptions="Center" Padding="0" Margin="0"/>
-                                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="1" Margin="0" Padding="0">
-                                        <ImageButton                
-                                        WidthRequest="70"
-                                        HeightRequest="40"
-                                        BackgroundColor="Green"
-                                        Padding="2"           
-                                        Aspect="AspectFit"
-                                        Source="play.svg"
-                                        CornerRadius="5"
-                                        />
-                                        <ImageButton                
-                                        WidthRequest="70"
-                                        HeightRequest="40"
-                                        BackgroundColor="red"
-                                        Padding="2"           
-                                        Aspect="AspectFit"
-                                        Source="delete.svg"
-                                        CornerRadius="5"
-                                        />
-                                    </HorizontalStackLayout>
-                                </HorizontalStackLayout>
-                            </Frame>
-                        </ScrollView>
-                    </VerticalStackLayout>
-                </Frame>
-                <HorizontalStackLayout   Grid.Row="2" HorizontalOptions="Center" Padding="0" Margin="0">
-                    <ImageButton                
+            <ImageButton                
                                 WidthRequest="130"
                                 Command="{Binding RecordAudioItem}"
                                 HeightRequest="60"                                
@@ -168,8 +181,7 @@
                                 Source="{Binding urlIconRecorder,Mode=TwoWay}"
                                 CornerRadius="20"
                                 />
-                </HorizontalStackLayout>
-            </Grid>
-        </VerticalStackLayout>
-    </ScrollView>
+        </HorizontalStackLayout>
+    </Grid>
+    
 </ContentPage>

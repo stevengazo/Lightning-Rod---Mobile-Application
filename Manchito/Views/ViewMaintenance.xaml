@@ -78,46 +78,46 @@
                     <SwipeGestureRecognizer Command="{Binding UpdateOnSwapCommand}" Direction="Up" />
                 </ScrollView.GestureRecognizers>
                     <VerticalStackLayout>
-                        <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Frame Padding="2" Margin="0,2,0,2" >
-                                        <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
-                                        </Frame.GestureRecognizers>
+                    <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="2" Margin="0,2,0,2" >
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
+                                    </Frame.GestureRecognizers>
                                     <VerticalStackLayout Spacing="10" Padding="2" BackgroundColor="{AppThemeBinding Light=white, Dark=gray}" >
-                                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                        <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
                                             <Label Text="Tipo" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                                             <Label Text="{Binding ItemType.Name}"  Margin="0,0,10,0" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                                             <Label Text="Alias:" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                                             <Label Text="{Binding Alias}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
-                                            </HorizontalStackLayout>
+                                        </HorizontalStackLayout>
                                         <StackLayout BackgroundColor="{AppThemeBinding Light=white, Dark=gray}">
-                                                <CollectionView SelectionMode="None" ItemsSource="{Binding Photographies,Mode=OneWay}" HorizontalOptions="Center" ItemsLayout="HorizontalList" >
-                                                    <CollectionView.ItemTemplate >
-                                                        <DataTemplate >
-                                                            <Image  Source="{Binding FilePath,Mode= TwoWay}"
-                                                                        Aspect="AspectFill"                                                                                                                                        
+                                            <CollectionView SelectionMode="None" ItemsSource="{Binding Photographies,Mode=OneWay}" HorizontalOptions="Center" ItemsLayout="HorizontalList" >
+                                                <CollectionView.ItemTemplate >
+                                                    <DataTemplate >
+                                                        <Image  Source="{Binding FilePath,Mode= TwoWay}"
+                                                                        Aspect="AspectFill"  
+                                                                    
                                                                         HeightRequest="100"
-                                                                        Rotation="90"
+                                                                        Rotation="0"
                                                                         Margin="2"
                                                                         WidthRequest="100"
                                                                         HorizontalOptions="Center" >
-                                                                <Image.GestureRecognizers>
-                                                                    <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
-                                                                </Image.GestureRecognizers>
-                                                            </Image>
-                                                        </DataTemplate>
-                                                    </CollectionView.ItemTemplate>
-                                                </CollectionView>
-                                            </StackLayout>
-                                        </VerticalStackLayout>
-                                    </Frame>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-
-                    </VerticalStackLayout>
+                                                            <Image.GestureRecognizers>
+                                                                <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
+                                                            </Image.GestureRecognizers>
+                                                        </Image>
+                                                    </DataTemplate>
+                                                </CollectionView.ItemTemplate>
+                                            </CollectionView>
+                                        </StackLayout>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
                 </ScrollView>
             </Frame>
         <Frame Grid.Row="2" BackgroundColor="{AppThemeBinding Light=White, Dark=black}" HorizontalOptions="Center" Padding="0" BorderColor="{AppThemeBinding Light=White, Dark=black}">
