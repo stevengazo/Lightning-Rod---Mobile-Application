@@ -27,6 +27,21 @@ namespace Manchito.ViewModel
 		private Category _Category;
 		private string _Title;
 		private List<Photography> _Photos;
+
+		private List<AudioNote> _AudioNotes;
+
+		public List<AudioNote> AudioNotes
+		{
+			get { return _AudioNotes; }
+			set { _AudioNotes = value;
+				if (AudioNotes != null)
+				{
+					OnPropertyChanged(nameof(AudioNotes));	
+				}
+			}
+		}
+
+
 		private Color _ColorButtonRecorder;
 		public Color ColorButtonRecorder
 		{
@@ -139,6 +154,15 @@ namespace Manchito.ViewModel
 						{
 							string file =  _recorderService.GetAudioFilePath();
 							File.Copy(file,pathAudio,true);
+							// Save the audio file in db
+							using (var db = new DBLocalContext())
+							{
+								AudioNote audioNote = new AudioNote();
+								audioNote.AudioNoteId = db.AudioNote.Select(A => A.AudioNoteId).FirstOrDefault() + 1;
+								audioNote.PathFile = pathAudio;
+								audioNote.CategoryId = CategoryItem.CategoryId;
+								db.AudioNote.Add(audioNote);
+							}
                         }
 						else
 						{
@@ -172,7 +196,6 @@ namespace Manchito.ViewModel
 			var Response = Application.Current.MainPage.DisplayAlert("Alerta", "Deseas borrar este dato", "Yes", "No");
 		}
 
-	
 
 		private async Task<int> GetLastIdAudio()
 		{
@@ -265,6 +288,7 @@ namespace Manchito.ViewModel
 							Title = $"{CategoryItem.ItemType.Name} - {CategoryItem.Alias}";
 						}
 						await loadImages();
+						await LoadAudio();
 					});
 				}
 				else
@@ -292,6 +316,24 @@ namespace Manchito.ViewModel
 			{
 				await Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
 			}
+		}
+
+
+		private async Task LoadAudio()
+		{
+			try
+			{
+                using (DBLocalContext db = new())
+                {
+                    AudioNotes = (from a in db.AudioNote
+                                  where a.CategoryId == CategoryItem.CategoryId
+                                  select a).ToList();
+                }
+            }
+			catch(Exception f)
+			{
+                await Application.Current.MainPage.DisplayAlert("Error LoadAudio", f.Message, "OK");
+            }
 		}
 
 		/// <summary>
