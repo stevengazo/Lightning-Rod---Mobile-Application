@@ -127,15 +127,18 @@ namespace Manchito.ViewModel
 					{
                         ColorButtonRecorder = Colors.Green;
 						urlIconRecorder = "record.svg";
-						await _recorderService.StopRecording();
+                        string pathAudio = Path.Combine(PathDirectoryFilesAndroid,
+											$"P-{CategoryItem.Maintenance.Project.ProjectId.ToString()}_{CategoryItem.Maintenance.Project.Name}",
+											$"M-{CategoryItem.Maintenance.MaintenanceId}_{CategoryItem.Maintenance.Alias}",
+											$"C-{CategoryItem.CategoryId}_{CategoryItem.ItemType.Name}_{CategoryItem.Alias}",
+											$"Audio-{DateTime.Now.ToString("HH_mm_ss")}.wav"
+											);
+                        await _recorderService.StopRecording();
 						var storagePermission = await Permissions.CheckStatusAsync< Permissions.StorageWrite>();
 						if(storagePermission == PermissionStatus.Granted)
 						{
-							string pathtext = Path.Combine(PathDirectoryFilesAndroid, "Información.txt");
-							File.Create(pathtext);
-                            string pathAudio = Path.Combine(PathDirectoryFilesAndroid, "sample.wav");
-							File.Copy(_recorderService.GetAudioFilePath(),pathAudio);
-
+							string file =  _recorderService.GetAudioFilePath();
+							File.Copy(file,pathAudio,true);
                         }
 						else
 						{
