@@ -3,8 +3,8 @@
 namespace Manchito.Messages;
 public class ProjectViewMessage : ValueChangedMessage<int>
 {
-	public ProjectViewMessage(int value) : base(value)
-	{
-	}
+    public ProjectViewMessage(int value) : base(value)
+    {
+    }
 }
 

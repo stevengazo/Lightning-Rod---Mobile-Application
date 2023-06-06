@@ -1,7 +1,7 @@
 ﻿namespace Manchito.ViewModel
 {
-	public class AddItemViewModel : INotifyPropertyChangedAbst
-	{
+    public class AddItemViewModel : INotifyPropertyChangedAbst
+    {
 
-	}
+    }
 }

@@ -43,8 +43,8 @@
                                     VerticalOptions="Center"
                                     HeightRequest="80"
                                     CornerRadius="10"
-                                    BackgroundColor="{AppThemeBinding Light=LightGray, Dark=Gray}"
-                                    BorderColor= "{AppThemeBinding Light=Gray, Dark=White}"                      
+                                    BackgroundColor="{AppThemeBinding Light=white, Dark=Gray}"
+                                    BorderColor= "{AppThemeBinding Light=whitesmoke, Dark=White}"                      
                                     >
                                 <Frame.Behaviors>
                                     <toolkit:AnimationBehavior>

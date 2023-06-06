@@ -78,19 +78,34 @@
                     <CollectionView SelectionMode="Single" ItemsSource="{Binding Maintenances,Mode=OneWay}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame Padding="0" Margin="0,2,0,2" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=black}" BorderColor="{AppThemeBinding Light=whitesmoke, Dark=darkblue}">
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding BindingContext.ViewMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  CommandParameter="{Binding MaintenanceId}"  />
-                                    </Frame.GestureRecognizers>
-                                    <VerticalStackLayout Spacing="10" Padding="0,0,0,10" >
-                                        <HorizontalStackLayout Spacing="10" Margin="0,10" HorizontalOptions="CenterAndExpand">
-                                            <Label Text="Sitio" />
-                                            <Label Text="{Binding Alias,Mode=OneWay}" />
-                                            <Label Text="Estado" />
-                                            <Label Text="{Binding Status,Mode=OneTime}" />
-                                        </HorizontalStackLayout>
-                                    </VerticalStackLayout>
-                                </Frame>
+                                <SwipeView HeightRequest="70">
+                                    <SwipeView.LeftItems>
+                                        <SwipeItem BackgroundColor="Red"
+                                                   Command="{Binding BindingContext.DeleteMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  
+                                                   CommandParameter="{Binding MaintenanceId}"
+                                                   IconImageSource="delete.svg"
+                                                 />
+                                    </SwipeView.LeftItems>
+                                    <SwipeView.RightItems>
+                                        <SwipeItem BackgroundColor="green"                                                   
+                                                   IconImageSource="edit.svg"
+                                                 />
+                                    </SwipeView.RightItems>
+                                    <Frame Padding="0" Margin="0,2,0,2" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=black}" BorderColor="{AppThemeBinding Light=whitesmoke, Dark=darkblue}">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.ViewMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  CommandParameter="{Binding MaintenanceId}"  />
+                                        </Frame.GestureRecognizers>
+                                        <VerticalStackLayout Spacing="10" Padding="0,0,0,10" >
+                                            <HorizontalStackLayout Spacing="10" Margin="0,10" HorizontalOptions="CenterAndExpand">
+                                                <Label Text="Sitio" />
+                                                <Label Text="{Binding Alias,Mode=OneWay}" />
+                                                <Label Text="Estado" />
+                                                <Label Text="{Binding Status,Mode=OneTime}" />
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </SwipeView>
+                                
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
