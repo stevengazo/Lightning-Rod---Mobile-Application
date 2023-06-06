@@ -1,4 +1,6 @@
-﻿using Manchito.DataBaseContext;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using Manchito.DataBaseContext;
 using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Input;
@@ -176,7 +178,10 @@ namespace Manchito.ViewModel
 						dbLocal.Project.Add(tmpProject);
 						dbLocal.SaveChanges();
 						AddDirectoryAndroid(tmpProject.Name, tmpProject.ProjectId);
-						await Application.Current.MainPage.DisplayAlert("Información", $"Proyecto Agregado con éxito\nProjecto {tmpProject.ProjectId}\nCliente {tmpProject.Name}", "Ok");
+
+                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                        var toast = Toast.Make($"Proyecto Agregado con éxito\nProjecto {tmpProject.ProjectId}\nCliente {tmpProject.Name}", ToastDuration.Long, 14);
+                        await toast.Show(cancellationTokenSource.Token);
 						ClosedPage();
 					}
 				}

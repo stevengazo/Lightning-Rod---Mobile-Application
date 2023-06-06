@@ -31,7 +31,7 @@
             </Label>
         </HorizontalStackLayout>
         <ScrollView Grid.Row="1" 
-                    BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=gray}"
+                    BackgroundColor="{AppThemeBinding Light=white, Dark=gray}"
                     Padding="10,10,10,10">
             <VerticalStackLayout x:Name="containerlist" Spacing="5">
                 <CollectionView SelectionMode="Single" ItemsSource="{Binding Projects,Mode=OneWay}">

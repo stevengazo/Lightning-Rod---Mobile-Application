@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
@@ -81,7 +83,11 @@ namespace Manchito.ViewModel
 						dbLocal.Add(tmp);
 						dbLocal.SaveChanges();
 						await LoadMaintenances();
-						await Application.Current.MainPage.DisplayAlert("Informacion", "Mantenimiento Agregado", "OK");
+
+                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                        var toast = Toast.Make("Mantenimiento agregado al proyecto", ToastDuration.Long, 14);
+                        await toast.Show(cancellationTokenSource.Token);
+
 						//Create Directory // Project/Mantenance
 						var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Project.ProjectId}_{Project.Name}", $"M-{tmp.MaintenanceId}_{tmp.Alias}");
 						Directory.CreateDirectory(DirectoryPath);
