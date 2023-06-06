@@ -12,6 +12,7 @@ using AndroidX.Core.Content;
 using System.IO;
 using static Java.Util.Jar.Attributes;
 using Microsoft.Maui.Platform;
+using static Android.Renderscripts.ScriptGroup;
 
 namespace Manchito.ViewModel
 {
@@ -124,19 +125,22 @@ namespace Manchito.ViewModel
 				{
 					if (_recorderService.IsRecording)
 					{
-						ColorButtonRecorder = Colors.Green;
+                        ColorButtonRecorder = Colors.Green;
 						urlIconRecorder = "record.svg";
 						await _recorderService.StopRecording();
-						if (_recorderService.GetAudioFileStream().Length > 0)
+						var storagePermission = await Permissions.CheckStatusAsync< Permissions.StorageWrite>();
+						if(storagePermission == PermissionStatus.Granted)
 						{
-							Stream streamAudio = _recorderService.GetAudioFileStream();
-							string tempPath = await FolderPathAndroid();
-							string NewFilePath = Path.Combine(tempPath, $"1.wav");
-							using (var fileStream = new FileStream(NewFilePath, FileMode.Create, FileAccess.ReadWrite,FileShare.ReadWrite))
-							{
-								streamAudio.CopyTo(fileStream);
-							}
-							_audioPlayer.Play(NewFilePath);
+							string pathtext = Path.Combine(PathDirectoryFilesAndroid, "Información.txt");
+							File.Create(pathtext);
+                            string pathAudio = Path.Combine(PathDirectoryFilesAndroid, "sample.wav");
+							File.Copy(_recorderService.GetAudioFilePath(),pathAudio);
+
+                        }
+						else
+						{
+						var wirtes=	await Permissions.RequestAsync<Permissions.StorageWrite>();
+						var re =	await Permissions.RequestAsync<Permissions.StorageRead>();
 						}
 					}
 					else
@@ -148,8 +152,8 @@ namespace Manchito.ViewModel
 				}
 				else
 				{
-					await Application.Current.MainPage.DisplayAlert("Error RecordAudioAsync", "La aplicaci[on no tiene permisos para grabar audio", "OK");
-				}
+                    await Permissions.RequestAsync<Permissions.Microphone> ();
+                }
 			}
 			catch (Exception f)
 			{

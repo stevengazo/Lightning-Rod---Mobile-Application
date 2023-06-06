@@ -145,4 +145,6 @@
 	  <MauiImage Include="Resources\Icons\stop.svg" />
 	</ItemGroup>
 
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionManchitoHideInfoBar="True" /></VisualStudio></ProjectExtensions>
+
 </Project>
