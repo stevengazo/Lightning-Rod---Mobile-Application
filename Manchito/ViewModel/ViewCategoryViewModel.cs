@@ -136,25 +136,20 @@ namespace Manchito.ViewModel
 			try
 			{
 				var StatusAudio = await Permissions.CheckStatusAsync<Permissions.Microphone>();
-				if (StatusAudio == PermissionStatus.Granted)
+                var storagePermission = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+                if (StatusAudio == PermissionStatus.Granted && storagePermission == PermissionStatus.Granted)
 				{
 					if (_recorderService.IsRecording)
 					{
                         ColorButtonRecorder = Colors.Green;
 						urlIconRecorder = "record.svg";
-                        string pathAudio = Path.Combine(PathDirectoryFilesAndroid,
-											$"P-{CategoryItem.Maintenance.Project.ProjectId.ToString()}_{CategoryItem.Maintenance.Project.Name}",
-											$"M-{CategoryItem.Maintenance.MaintenanceId}_{CategoryItem.Maintenance.Alias}",
-											$"C-{CategoryItem.CategoryId}_{CategoryItem.ItemType.Name}_{CategoryItem.Alias}",
-											$"Audio-{DateTime.Now.ToString("HH_mm_ss")}.wav"
-											);
+                        string pathAudio = Path.Combine(PathDirectoryFilesAndroid,$"P-{CategoryItem.Maintenance.Project.ProjectId.ToString()}_{CategoryItem.Maintenance.Project.Name}",$"M-{CategoryItem.Maintenance.MaintenanceId}_{CategoryItem.Maintenance.Alias}",$"C-{CategoryItem.CategoryId}_{CategoryItem.ItemType.Name}_{CategoryItem.Alias}",	$"Audio-{DateTime.Now.ToString("HH_mm_ss")}.wav");                        
                         await _recorderService.StopRecording();
-						var storagePermission = await Permissions.CheckStatusAsync< Permissions.StorageWrite>();
-						if(storagePermission == PermissionStatus.Granted)
+                        string file = _recorderService.GetAudioFilePath();
+                        if ( !String.IsNullOrEmpty(file) && _recorderService.TotalAudioTimeout.Seconds >  1 )
 						{
-							string file =  _recorderService.GetAudioFilePath();
-							File.Copy(file,pathAudio,true);
-							// Save the audio file in db
+							
+							File.Copy(file,pathAudio,true);						
 							using (var db = new DBLocalContext())
 							{
 								AudioNote audioNote = new AudioNote();
@@ -165,10 +160,9 @@ namespace Manchito.ViewModel
 							}
                         }
 						else
-						{
-						var wirtes=	await Permissions.RequestAsync<Permissions.StorageWrite>();
-						var re =	await Permissions.RequestAsync<Permissions.StorageRead>();
-						}
+						{                                                      
+                            await Application.Current.MainPage.DisplayAlert("Error interno", "Error al guardar el audio", "OK");
+                        }
 					}
 					else
 					{
