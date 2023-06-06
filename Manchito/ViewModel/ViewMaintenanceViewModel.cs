@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
@@ -42,6 +44,7 @@ namespace Manchito.ViewModel
         public ICommand ValidateDataCommand { get; private set; }
         public ICommand AddCategoryCommand { get; private set; }
         public ICommand UpdateOnSwapCommand { get; private set; }
+        public ICommand DeleteItemOnSwapCommand { get; private set; }
         public ViewMaintenance ViewMaintenance { get; set; }
         #endregion
         #region Methods
@@ -52,6 +55,37 @@ namespace Manchito.ViewModel
             ValidateDataCommand = new Command(async (o) => await ValidateDataPage(o));
             AddCategoryCommand = new Command(async () => await AddCategory());
             ViewCategoryCommand = new Command(async (O) => await ViewCategory(O));
+            DeleteItemOnSwapCommand = new Command(async (o) => await DeleteCategory(o)); ;
+        }
+
+        private async Task DeleteCategory(object o)
+        {
+            try
+            {
+                int CategoryId = int.Parse(o.ToString());
+                var Response = await Application.Current.MainPage.DisplayAlert("Pregunta", "¿Deseas borrar esta categoria", "Sí", "No");
+                if (Response.Equals(true))
+                {
+                    using (var db = new DBLocalContext())
+                    {
+                        var Category = db.Category.FirstOrDefault(M => M.CategoryId == CategoryId);
+                        if (Category != null)
+                        {
+                            db.Category.Remove(Category);
+                            db.SaveChanges();
+                            await LoadCategories();
+                            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                            var toast = Toast.Make("Categoria eliminada", ToastDuration.Long, 14);
+                            await toast.Show(cancellationTokenSource.Token);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
+                await LoadCategories();
+            }
         }
 
         private async Task ViewCategory(Object id)

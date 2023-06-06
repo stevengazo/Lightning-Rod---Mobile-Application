@@ -81,22 +81,35 @@
                     <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame Padding="2" Margin="0,2,0,2" >
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
-                                    </Frame.GestureRecognizers>
-                                    <VerticalStackLayout Spacing="10" Padding="2" BackgroundColor="{AppThemeBinding Light=white, Dark=gray}" >
-                                        <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
-                                            <Label Text="Tipo" TextColor="{AppThemeBinding Light=black, Dark=white}" />
-                                            <Label Text="{Binding ItemType.Name}"  Margin="0,0,10,0" TextColor="{AppThemeBinding Light=black, Dark=white}" />
-                                            <Label Text="Alias:" TextColor="{AppThemeBinding Light=black, Dark=white}" />
-                                            <Label Text="{Binding Alias}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
-                                        </HorizontalStackLayout>
-                                        <StackLayout BackgroundColor="{AppThemeBinding Light=white, Dark=gray}">
-                                            <CollectionView SelectionMode="None" ItemsSource="{Binding Photographies,Mode=OneWay}" HorizontalOptions="Center" ItemsLayout="HorizontalList" >
-                                                <CollectionView.ItemTemplate >
-                                                    <DataTemplate >
-                                                        <Image  Source="{Binding FilePath,Mode= TwoWay}"
+                                <SwipeView>
+                                    <SwipeView.LeftItems>
+                                        <SwipeItem BackgroundColor="Red"
+                                                   IconImageSource="delete.svg"
+                                                   Command="{Binding BindingContext.DeleteItemOnSwapCommand, Source={x:Reference ViewMaintenancePage}}"  
+                                                   CommandParameter="{Binding CategoryId}"
+                                                 />
+                                    </SwipeView.LeftItems>
+                                    <SwipeView.RightItems>
+                                        <SwipeItem BackgroundColor="green"                                                   
+                                                   IconImageSource="edit.svg"
+                                                 />
+                                    </SwipeView.RightItems>
+                                    <Frame Padding="2" Margin="0,2,0,2" >
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
+                                        </Frame.GestureRecognizers>
+                                        <VerticalStackLayout Spacing="10" Padding="2" BackgroundColor="{AppThemeBinding Light=white, Dark=gray}" >
+                                            <HorizontalStackLayout Spacing="10" Padding="0" Margin="0,2" HorizontalOptions="Center">
+                                                <Label Text="Tipo" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                                <Label Text="{Binding ItemType.Name}"  Margin="0,0,10,0" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                                <Label Text="Alias:" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                                <Label Text="{Binding Alias}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                            </HorizontalStackLayout>
+                                            <StackLayout BackgroundColor="{AppThemeBinding Light=white, Dark=gray}">
+                                                <CollectionView SelectionMode="None" ItemsSource="{Binding Photographies,Mode=OneWay}" HorizontalOptions="Center" ItemsLayout="HorizontalList" >
+                                                    <CollectionView.ItemTemplate >
+                                                        <DataTemplate >
+                                                            <Image  Source="{Binding FilePath,Mode= TwoWay}"
                                                                         Aspect="AspectFill"  
                                                                     
                                                                         HeightRequest="100"
@@ -104,16 +117,17 @@
                                                                         Margin="2"
                                                                         WidthRequest="100"
                                                                         HorizontalOptions="Center" >
-                                                            <Image.GestureRecognizers>
-                                                                <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
-                                                            </Image.GestureRecognizers>
-                                                        </Image>
-                                                    </DataTemplate>
-                                                </CollectionView.ItemTemplate>
-                                            </CollectionView>
-                                        </StackLayout>
-                                    </VerticalStackLayout>
-                                </Frame>
+                                                                <Image.GestureRecognizers>
+                                                                    <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
+                                                                </Image.GestureRecognizers>
+                                                            </Image>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+                                            </StackLayout>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </SwipeView>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
