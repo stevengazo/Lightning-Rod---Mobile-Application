@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
+using Microsoft.Maui.Graphics.Platform;
 using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
 using Plugin.AudioRecorder;
@@ -22,6 +23,39 @@ namespace Manchito.ViewModel
         private Category _Category;
         private string _Title;
         private List<Photography> _Photos;
+
+
+
+        private bool _LoadingPhotosVisible;
+
+        public bool LoadingPhotosVisible
+        {
+            get { return _LoadingPhotosVisible; }
+            set
+            {
+                _LoadingPhotosVisible = value;
+                if (_LoadingPhotosVisible != null)
+                {
+                    OnPropertyChanged(nameof(LoadingPhotosVisible));
+                }
+            }
+        }
+
+
+        private bool _LoadingAnimationVisible;
+
+        public bool LoadingAnimationVisible
+        {
+            get { return _LoadingAnimationVisible; }
+            set { _LoadingAnimationVisible = value;
+                if (_LoadingAnimationVisible!=null)
+                {
+                    OnPropertyChanged(nameof(LoadingAnimationVisible));
+                }
+            }
+        }
+
+
 
         private List<AudioNote> _AudioNotes;
 
@@ -102,6 +136,7 @@ namespace Manchito.ViewModel
             }
         }
         public ICommand TakePhotoCommand { get; private set; }
+        public ICommand AddPhotoCommand { get; private set; }
         public ICommand TakeVideoCommand { get; private set; }
         public ICommand AppearingCommand { get; private set; }
         public ICommand ShareItemCommand { get; private set; }
@@ -113,12 +148,15 @@ namespace Manchito.ViewModel
         #endregion
         public ViewCategoryViewModel()
         {
+            LoadingAnimationVisible = true;
+            LoadingPhotosVisible = false;
 
             urlIconRecorder = "record.svg";
             ColorButtonRecorder = Colors.Green;
             Title = "";
             TakePhotoCommand = new AsyncRelayCommand(TakePhotoAndroid);
             TakeVideoCommand = new AsyncRelayCommand(TakeVideoAndroid);
+            AddPhotoCommand = new AsyncRelayCommand(AddPhotoFromGalleryAsync);
             AppearingCommand = new AsyncRelayCommand(LoadCategory);
             ShareItemCommand = new Command((O) => SharePhoto(O));
             DeletePhotoCommand = new Command((O) => DeletePhoto(O));
@@ -224,7 +262,36 @@ namespace Manchito.ViewModel
         }
         private async Task AddPhotoFromGalleryAsync()
         {
-            throw new NotImplementedException();
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                var files = await FilePicker.PickMultipleAsync();
+                foreach (var item in files)
+                {
+                    var extension =Path.GetExtension(item.FileName);
+                    if(extension == ".jpg" || extension == ".png" || extension == ".jpeg")
+                    {
+                        item.FileName = $"IMG D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")} .jpg";
+                        string tempPath = await FolderPathAndroid();
+                        string localFilePath = Path.Combine(tempPath, item.FileName);
+                        using Stream sourceStream = await item.OpenReadAsync();
+                        using FileStream localFileStream = File.OpenWrite(localFilePath);
+                        await sourceStream.CopyToAsync(localFileStream);
+                        await RegisterPhoto(localFilePath);
+                    }
+                    else
+                    {
+                        CancellationTokenSource cancellationTokenSour = new CancellationTokenSource();
+                        var ltoast = Toast.Make("Elemento no valido...", ToastDuration.Short, 12);
+                        await ltoast.Show(cancellationTokenSour.Token);
+                    }
+                    await loadImages();
+                }
+             
+
+                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                var toast = Toast.Make("Elementos cargados", ToastDuration.Short, 16);
+                await toast.Show(cancellationTokenSource.Token);
+            }
         }
         private async Task DeletePhoto(object o)
         {
@@ -367,6 +434,8 @@ namespace Manchito.ViewModel
                         photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I => I.CategoryId).ToList();
                     }
                     Photos = photos;
+                    LoadingAnimationVisible = false;
+                    LoadingPhotosVisible = true;
                 }
             }
             catch (Exception f)

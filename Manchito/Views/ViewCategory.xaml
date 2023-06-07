@@ -34,29 +34,31 @@
                         </VerticalStackLayout>
                         <Frame Grid.Row="1" Margin="0" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=white}" BorderColor="{AppThemeBinding Light=white, Dark=darkgray}">
                             <VerticalStackLayout>
-                                <ScrollView >
+                                <ActivityIndicator WidthRequest="150" HeightRequest="150"  IsRunning="true" IsVisible="{Binding LoadingAnimationVisible, Mode=TwoWay}" Color="Orange" />
+                                <ScrollView  IsVisible="{Binding LoadingPhotosVisible, Mode=TwoWay}" >
                                     <!--Carrousell-->
                                     <CarouselView ItemsSource="{Binding Photos}">
                                         <CarouselView.ItemTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate >
                                                 <StackLayout >
                                                     <Frame  HasShadow="True"
-                                                        BorderColor="DarkGray"
+                                                        BorderColor="lightblue"
                                                         BackgroundColor="{AppThemeBinding Light=white, Dark=darkgray}"
                                                         CornerRadius="5"                                                    
                                                         Margin="5"
-                                                        Padding="1"
+                                                        Padding="5"
                                                         HeightRequest="450"
                                                         HorizontalOptions="Center"
                                                         VerticalOptions="CenterAndExpand" >
                                                         <VerticalStackLayout  Margin="0" Padding="0">
                                                             <Image Source="{Binding FilePath,Mode= TwoWay}" 
                                                                ZIndex="1"
+                                                                   Margin="5,5,5,5"
                                                                Aspect="AspectFit"
                                                                HeightRequest="380"                                                
                                                                WidthRequest="450"
                                                                HorizontalOptions="Center" />
-                                                            <HorizontalStackLayout Margin="0,0,0,0" HorizontalOptions="End" ZIndex="2">
+                                                            <HorizontalStackLayout Margin="0,-30,0,0" HorizontalOptions="End" ZIndex="2">
                                                                 <ImageButton    WidthRequest="55"
                                                                             HeightRequest="55"                                            
                                                                             Command="{Binding BindingContext.DeletePhotoCommand, Source={x:Reference ViewCategoryPage}}"  
@@ -72,8 +74,7 @@
                                                     WidthRequest="55"
                                                     HeightRequest="55"                                            
                                                     Command="{Binding BindingContext.ShareItemCommand, Source={x:Reference ViewCategoryPage}}"  
-                                                    CommandParameter="{Binding PhotographyId}"
-                                                    BorderColor="White"                                            
+                                                    CommandParameter="{Binding PhotographyId}"                                                                                                
                                                     BorderWidth="2"
                                                     BackgroundColor="blue"
                                                     Padding="4.5"
@@ -115,8 +116,8 @@
                                                     <Label Text="Duración" VerticalOptions="Center" Padding="0" Margin="0"/>
                                                     <HorizontalStackLayout HorizontalOptions="End" Spacing="25" Margin="0" Padding="0">
                                                         <ImageButton                
-                                                        WidthRequest="70"
-                                                        HeightRequest="40"
+                                                        WidthRequest="75"
+                                                        HeightRequest="45"
                                                         Command="{Binding BindingContext.PlayItemCommand, Source={x:Reference ViewCategoryPage}}"  
                                                         CommandParameter="{Binding PathFile}" 
                                                         BackgroundColor="Green"
@@ -126,7 +127,7 @@
                                                         CornerRadius="15"
                                                         />
                                                         <ImageButton                
-                                                        WidthRequest="40"
+                                                        WidthRequest="70"
                                                         HeightRequest="40"
                                                         BackgroundColor="red"
                                                         Command="{Binding BindingContext.DeleteAudioCommand, Source={x:Reference ViewCategoryPage}}"  
@@ -134,7 +135,7 @@
                                                         Padding="2"           
                                                         Aspect="AspectFit"
                                                         Source="delete.svg"
-                                                        CornerRadius="5"
+                                                        CornerRadius="15"
                                                         />
                                                     </HorizontalStackLayout>
                                                 </HorizontalStackLayout>
@@ -150,7 +151,19 @@
         </ScrollView>
         <HorizontalStackLayout Grid.Row="1" HorizontalOptions="Center">
             <ImageButton                
-                                WidthRequest="120"
+                                WidthRequest="100"
+                                HeightRequest="60"
+                                Margin="0,0,2,0"
+                                BorderColor="Purple" 
+                                Command="{Binding AddPhotoCommand}"
+                                BackgroundColor="MediumPurple"
+                                Padding="6"
+                                Aspect="AspectFit"
+                                Source="addphoto.svg"
+                                CornerRadius="5"
+                                />
+            <ImageButton                
+                                WidthRequest="100"
                                 HeightRequest="60"
                                 Margin="0,0,2,0"
                                 Command="{Binding TakePhotoCommand}"

@@ -34,6 +34,7 @@
                     BackgroundColor="{AppThemeBinding Light=white, Dark=gray}"
                     Padding="10,10,10,10">
             <VerticalStackLayout x:Name="containerlist" Spacing="5">
+                <ActivityIndicator IsRunning="true" IsVisible="{Binding LoadingAnimationVisible, Mode=TwoWay}" Color="Orange" />
                 <CollectionView SelectionMode="Single" ItemsSource="{Binding Projects,Mode=OneWay}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate >
@@ -43,8 +44,8 @@
                                     VerticalOptions="Center"
                                     HeightRequest="80"
                                     CornerRadius="10"
-                                    BackgroundColor="{AppThemeBinding Light=white, Dark=Gray}"
-                                    BorderColor= "{AppThemeBinding Light=whitesmoke, Dark=White}"                      
+                                    BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=Gray}"
+                                    BorderColor= "{AppThemeBinding Light=lightblue, Dark=White}"                      
                                     >
                                 <Frame.Behaviors>
                                     <toolkit:AnimationBehavior>

@@ -25,6 +25,7 @@
         </Grid.RowDefinitions>
         <!-- HEADER -->
         <Frame Grid.Row="0" Padding="5" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" >
+            
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
@@ -35,6 +36,7 @@
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="8*" />
                 </Grid.ColumnDefinitions>
+                <ActivityIndicator Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3"  WidthRequest="150" HeightRequest="150"  IsRunning="true" IsVisible="{Binding LoadingAnimationVisible, Mode=TwoWay}" Color="Orange" />
                 <Frame Grid.Column="0" Grid.Row="0"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" Padding="1" Margin="0" >
                     <Label HorizontalOptions="Start" VerticalOptions="Center" Margin="10,0,0,0" Text="Nombre" />
                 </Frame>
@@ -80,13 +82,13 @@
             </Grid>
         </Frame>
         <!-- LIST OF MAINTENANCES -->
-        <Frame Grid.Row="1" BackgroundColor="{AppThemeBinding Light=White, Dark=Gray}" Margin="2" Padding="2">
+        <Frame Grid.Row="1" BackgroundColor="{AppThemeBinding Light=White, Dark=Gray}"   BorderColor="{AppThemeBinding Light=white, Dark=Gray}" Margin="2" Padding="2">
             <ScrollView>
                 <VerticalStackLayout Spacing="5" Padding="1">
                     <CollectionView SelectionMode="Single" ItemsSource="{Binding Maintenances,Mode=OneWay}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <SwipeView HeightRequest="70">
+                                <SwipeView HeightRequest="70" BackgroundColor="White">
                                     <SwipeView.LeftItems>
                                         <SwipeItem BackgroundColor="Red"
                                                    Command="{Binding BindingContext.DeleteMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  
@@ -99,7 +101,7 @@
                                                    IconImageSource="edit.svg"
                                                  />
                                     </SwipeView.RightItems>
-                                    <Frame Padding="0" Margin="0,2,0,2" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=black}" BorderColor="{AppThemeBinding Light=whitesmoke, Dark=darkblue}">
+                                    <Frame Padding="0" Margin="0,2,0,2" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=black}" BorderColor="{AppThemeBinding Light=lightblue, Dark=darkblue}">
                                         <Frame.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding BindingContext.ViewMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  CommandParameter="{Binding MaintenanceId}"  />
                                         </Frame.GestureRecognizers>

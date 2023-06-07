@@ -17,6 +17,20 @@ namespace Manchito.ViewModel
         public ICommand ViewProjectCommand { get; private set; }
         private List<Project> _Projects;
         private string _ErrorMessage;
+
+        private bool _LoadingAnimationVisible;
+
+        public bool LoadingAnimationVisible
+        {
+            get { return _LoadingAnimationVisible; }
+            set { _LoadingAnimationVisible = value;
+                if (_LoadingAnimationVisible!=null)
+                {
+                    OnPropertyChanged(nameof(LoadingAnimationVisible));
+                }
+            }
+        }
+
         public string ErrorMessage
         {
             get { return _ErrorMessage; }
@@ -81,10 +95,11 @@ namespace Manchito.ViewModel
         {
             try
             {
-
+                LoadingAnimationVisible = true;
                 // load the projects in the db
                 using DBLocalContext db = new DBLocalContext();
                 Projects = db.Project.Include(P => P.Maintenances).ToList();
+                LoadingAnimationVisible = false;
             }
             catch (Exception ex)
             {

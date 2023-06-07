@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿using AndroidX.Interpolator.View.Animation;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Mvvm.Messaging;
@@ -18,6 +19,22 @@ namespace Manchito.ViewModel
         #region Properties
         private Maintenance _Maintenance;
         private List<Category> _Categories;
+
+        private bool _LoadingAnimationVisible;
+
+        public bool LoadingAnimationVisible
+        {
+            get { return _LoadingAnimationVisible; }
+            set
+            {
+                _LoadingAnimationVisible = value;
+                if (_LoadingAnimationVisible != null)
+                {
+                    OnPropertyChanged(nameof(LoadingAnimationVisible));
+                }
+            }
+        }
+
         public List<Category> Categories
         {
             get { return _Categories; }
@@ -54,6 +71,7 @@ namespace Manchito.ViewModel
         #region Methods
         public ViewMaintenanceViewModel()
         {
+            LoadingAnimationVisible = true;
             UpdateOnSwapCommand = new Command(async async => await LoadCategories());
             AppearingCommand = new Command(async () => await LoadManteinance());
             ValidateDataCommand = new Command(async (o) => await ValidateDataPage(o));
@@ -243,11 +261,10 @@ namespace Manchito.ViewModel
             try
             {
                 using var db = new DBLocalContext();
-
                 Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId)
                                         .Include(C => C.ItemType)
                                         .Include(M => M.Photographies.Take(3)).ToList();
-
+                LoadingAnimationVisible = false;
             }
             catch (Exception f)
             {

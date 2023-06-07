@@ -18,6 +18,22 @@ namespace Manchito.ViewModel
         public ICommand DeleteProjectCommand { get; private set; }
         public ICommand UpdateProjectCommand { get; private set; }
 
+        private bool _LoadingAnimationVisible;
+
+        public bool LoadingAnimationVisible
+        {
+            get { return _LoadingAnimationVisible; }
+            set
+            {
+                _LoadingAnimationVisible = value;
+                if (_LoadingAnimationVisible != null)
+                {
+                    OnPropertyChanged(nameof(LoadingAnimationVisible));
+                }
+            }
+        }
+
+
         public ICommand AppearingCommand { get; private set; }
         public int ProjectIdEXternal { get; set; }
         private List<Maintenance> _Maintenances;
@@ -58,6 +74,7 @@ namespace Manchito.ViewModel
         /// <param name="_viewProject">View how implement the view</param>
         public ViewProjectViewModel()
         {
+            LoadingAnimationVisible = true;
             // binding commands to the Property
             AddMaintenanceCommand = new Command(async () => { await AddMaintenanceAsync(); });
             DeleteProjectCommand = new Command(async () => { await DeleteProjectAsync(); });
@@ -249,6 +266,7 @@ namespace Manchito.ViewModel
                     {
                         Maintenances = tmp;
                     }
+                    LoadingAnimationVisible = false;
                 }
             }
             catch (Exception ex)

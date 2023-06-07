@@ -73,15 +73,16 @@
             </Grid>
             </Frame>
         <Frame Grid.Row="1"  Margin="5" Padding="2" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
-                <ScrollView>
+            <ScrollView>
                 <ScrollView.GestureRecognizers>
                     <SwipeGestureRecognizer Command="{Binding UpdateOnSwapCommand}" Direction="Up" />
                 </ScrollView.GestureRecognizers>
                     <VerticalStackLayout>
-                    <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}">
+                    <ActivityIndicator WidthRequest="150" HeightRequest="150"  IsRunning="true" IsVisible="{Binding LoadingAnimationVisible, Mode=TwoWay}" Color="Orange" />
+                    <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}" HorizontalOptions="Center">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <SwipeView>
+                                <SwipeView BackgroundColor="White">
                                     <SwipeView.LeftItems>
                                         <SwipeItem BackgroundColor="Red"
                                                    IconImageSource="delete.svg"
@@ -96,7 +97,7 @@
                                                    CommandParameter="{Binding CategoryId}"
                                                  />
                                     </SwipeView.RightItems>
-                                    <Frame Padding="2" Margin="0,2,0,2" >
+                                    <Frame Padding="2" Margin="2,4,2,4" BorderColor="LightBlue">
                                         <Frame.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding BindingContext.ViewCategoryCommand, Source={x:Reference ViewMaintenancePage}}"  CommandParameter="{Binding CategoryId}"  />
                                         </Frame.GestureRecognizers>
