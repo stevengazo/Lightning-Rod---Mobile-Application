@@ -92,7 +92,7 @@
                                     <SwipeView.RightItems>
                                         <SwipeItem BackgroundColor="green"                                                   
                                                    IconImageSource="edit.svg"
-                                                   Command="{Binding BindingContext.UpdateOnSwapCommand, Source={x:Reference ViewMaintenancePage}}"  
+                                                   Command="{Binding BindingContext.UpdateItemOnSwapCommand, Source={x:Reference ViewMaintenancePage}}"  
                                                    CommandParameter="{Binding CategoryId}"
                                                  />
                                     </SwipeView.RightItems>

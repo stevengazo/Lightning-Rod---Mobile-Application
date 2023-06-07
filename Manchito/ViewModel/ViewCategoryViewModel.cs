@@ -351,19 +351,23 @@ namespace Manchito.ViewModel
             }
             catch (Exception f)
             {
-                await Application.Current.MainPage.DisplayAlert("Error ViewCategory", f.Message, "OK");
+                WeakReferenceMessenger.Default.UnregisterAll(this);
+                await Application.Current.MainPage.DisplayAlert("Error Load Category", f.Message, "OK");
             }
         }
         private async Task loadImages()
         {
             try
             {
-                List<Photography> photos = new();
-                using (DBLocalContext db = new())
+                if (CategoryItem != null)
                 {
-                    photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I => I.CategoryId).ToList();
+                    List<Photography> photos = new();
+                    using (DBLocalContext db = new())
+                    {
+                        photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I => I.CategoryId).ToList();
+                    }
+                    Photos = photos;
                 }
-                Photos = photos;
             }
             catch (Exception f)
             {
@@ -374,12 +378,16 @@ namespace Manchito.ViewModel
         {
             try
             {
-                using (DBLocalContext db = new())
+                if (CategoryItem != null)
                 {
-                    AudioNotes = (from a in db.AudioNote
-                                  where a.CategoryId == CategoryItem.CategoryId
-                                  select a).ToList();
+                    using (DBLocalContext db = new())
+                    {
+                        AudioNotes = (from a in db.AudioNote
+                                      where a.CategoryId == CategoryItem.CategoryId
+                                      select a).ToList();
+                    }
                 }
+
             }
             catch (Exception f)
             {

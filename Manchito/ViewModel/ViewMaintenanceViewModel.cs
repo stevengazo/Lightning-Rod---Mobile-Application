@@ -47,6 +47,7 @@ namespace Manchito.ViewModel
         public ICommand ValidateDataCommand { get; private set; }
         public ICommand AddCategoryCommand { get; private set; }
         public ICommand UpdateOnSwapCommand { get; private set; }
+        public ICommand UpdateItemOnSwapCommand { get; private set; }   
         public ICommand DeleteItemOnSwapCommand { get; private set; }
         public ViewMaintenance ViewMaintenance { get; set; }
         #endregion
@@ -59,7 +60,7 @@ namespace Manchito.ViewModel
             AddCategoryCommand = new Command(async () => await AddCategory());
             ViewCategoryCommand = new Command(async (O) => await ViewCategory(O));
             DeleteItemOnSwapCommand = new Command(async (o) => await DeleteCategory(o)); ;
-            UpdateOnSwapCommand = new Command(async (o) => await UpdateCategory(o)); ;
+            UpdateItemOnSwapCommand = new Command(async (o) => await UpdateCategory(o)); ;
         }
 
         private async Task UpdateCategory(object o)
@@ -101,28 +102,24 @@ namespace Manchito.ViewModel
                                             await Task.Run(() => File.Move(Path.Combine(OldPath, item1), Path.Combine(NewPath, item1)));
                                         }
                                         db.Category.Update(category);
-                                        db.SaveChanges();
-                                        await Task.Run(() => { LoadCategories(); });
-
+                                        db.SaveChanges();                                        
                                         if(Directory.GetFiles(OldPath).Length == 0) {
                                             Directory.Delete(OldPath);
-                                        }
-                                        
+                                        }                                        
                                         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                                         var toast = Toast.Make("Categoria Actualizada", ToastDuration.Long, 16);
                                         await toast.Show(cancellationTokenSource.Token);
-                                    }
+                                    }                                    
                                 }
-
                             }
-
+                            LoadCategories();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Error Update Category", $"Error interno {ex.Message}", "Ok");
                 await LoadCategories();
             }
         }
@@ -141,17 +138,17 @@ namespace Manchito.ViewModel
                         {
                             db.Category.Remove(Category);
                             db.SaveChanges();
-                            await LoadCategories();
                             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                             var toast = Toast.Make("Categoria eliminada", ToastDuration.Long, 14);
                             await toast.Show(cancellationTokenSource.Token);
+                            LoadCategories();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Error DeleteCategory", $"Error interno {ex.Message}", "Ok");
                 await LoadCategories();
             }
         }
