@@ -92,6 +92,8 @@
                                     <SwipeView.RightItems>
                                         <SwipeItem BackgroundColor="green"                                                   
                                                    IconImageSource="edit.svg"
+                                                   Command="{Binding BindingContext.UpdateOnSwapCommand, Source={x:Reference ViewMaintenancePage}}"  
+                                                   CommandParameter="{Binding CategoryId}"
                                                  />
                                     </SwipeView.RightItems>
                                     <Frame Padding="2" Margin="0,2,0,2" >

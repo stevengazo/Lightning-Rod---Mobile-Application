@@ -1,11 +1,14 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Mvvm.Messaging;
+using Java.Nio.FileNio;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
 using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 using System.Windows.Input;
 
 namespace Manchito.ViewModel
@@ -56,8 +59,73 @@ namespace Manchito.ViewModel
             AddCategoryCommand = new Command(async () => await AddCategory());
             ViewCategoryCommand = new Command(async (O) => await ViewCategory(O));
             DeleteItemOnSwapCommand = new Command(async (o) => await DeleteCategory(o)); ;
+            UpdateOnSwapCommand = new Command(async (o) => await UpdateCategory(o)); ;
         }
 
+        private async Task UpdateCategory(object o)
+        {
+            try
+            {
+                int CategoryId = int.Parse(o.ToString());
+                var ArrayName = await GetItemTypeName();
+                string action = await Application.Current.MainPage.DisplayActionSheet("Selecciona el nuevo tipo", "Cancelar", null, ArrayName);
+                if (action != null)
+                {
+                    if (!action.Equals("Cancelar"))
+                    {
+                        string result = await Application.Current.MainPage.DisplayPromptAsync("Alias", "Digite el nuevo nombre");
+                        var ItemType = await GetItemType(action);
+                        if (result != null && ItemType != null)
+                        {
+                            using (var db = new DBLocalContext())
+                            {
+                                Category category = await db.Category.Where(C => C.CategoryId == CategoryId).Include(C => C.ItemType).FirstOrDefaultAsync();
+                                ItemType item = await db.ItemTypes.Where(I => I.Name == action).FirstOrDefaultAsync();
+                                if (category != null)
+                                {
+                                    var OldPath = Path.Combine(PathDirectoryFilesAndroid,
+                                    $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
+                                    $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}",
+                                    $"C-{category.CategoryId}_{category.ItemType.Name}_{category.Alias}");
+                                    if (Directory.Exists(OldPath))
+                                    {
+                                        category.Alias = result;
+                                        category.ItemTypeId = item.ItemTypeId;
+                                        category.ItemType = item;
+                                        string NewPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}", $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}", $"C-{category.CategoryId}_{action}_{category.Alias}");
+                                                                               
+                                        Directory.CreateDirectory(NewPath);
+                                        var files = Directory.GetFiles(OldPath);
+                                        foreach (var item1 in files)
+                                        {
+                                            await Task.Run(() => File.Move(Path.Combine(OldPath, item1), Path.Combine(NewPath, item1)));
+                                        }
+                                        db.Category.Update(category);
+                                        db.SaveChanges();
+                                        await Task.Run(() => { LoadCategories(); });
+
+                                        if(Directory.GetFiles(OldPath).Length == 0) {
+                                            Directory.Delete(OldPath);
+                                        }
+                                        
+                                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                                        var toast = Toast.Make("Categoria Actualizada", ToastDuration.Long, 16);
+                                        await toast.Show(cancellationTokenSource.Token);
+                                    }
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
+                await LoadCategories();
+            }
+        }
         private async Task DeleteCategory(object o)
         {
             try
@@ -150,20 +218,20 @@ namespace Manchito.ViewModel
                             }
                             if (Maintenance != null)
                             {
-                                await LoadCategories();
+                                await Task.Run(LoadCategories);
                             }
                         });
                     }
                     else
                     {
-                        LoadCategories();
+                        await Task.Run(LoadCategories);
                     }
                 }
                 else
                 {
                     if (Maintenance != null)
                     {
-                        LoadCategories();
+                        await Task.Run(LoadCategories);
                     }
                     WeakReferenceMessenger.Default.Unregister<NameItemViewMessage>(this);
                 }
@@ -288,6 +356,10 @@ namespace Manchito.ViewModel
                                     $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}",
                                     $"C-{categoryTmp.CategoryId}_{action}_{categoryTmp.Alias}");
                                 Directory.CreateDirectory(DirectoryPathtmp);
+
+                                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                                var toast = Toast.Make("Categoria Agregada", ToastDuration.Long, 16);
+                                await toast.Show(cancellationTokenSource.Token);
                             }
                         }
                     }

@@ -49,6 +49,14 @@
                 </Frame>
                 <Frame Grid.Row="2" Grid.ColumnSpan="2"  Padding="0"  BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" >
                     <HorizontalStackLayout HorizontalOptions="Center" Margin="0" Spacing="10" Padding="0">
+                        <Button Text="Respaldar"                                
+                                BackgroundColor="Blue"
+                                TextColor="White"
+                                Padding="1"
+                                BorderColor="WhiteSmoke"
+                                BorderWidth="1"
+                                WidthRequest="120"
+                                HeightRequest="35"/>
                         <Button Text="Modificar"                                
                                 BackgroundColor="Green"
                                 TextColor="White"

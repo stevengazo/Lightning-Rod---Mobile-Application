@@ -59,15 +59,18 @@ namespace Manchito.ViewModel
         public ViewProjectViewModel()
         {
             // binding commands to the Property
-            AddMaintenanceCommand = new Command(() => { AddMaintenance(); });
-            DeleteProjectCommand = new Command(() => { DeleteProject(); });
-            ViewMaintenanceCommand = new Command((t) => { ViewMaintenance(t); });
-            UpdateProjectCommand = new Command(() => UpdateProject());
-            AppearingCommand = new Command(() => { LoadProjectCommand(); });
-            DeleteMaintenanceCommand = new Command((t) => { DeleteMaintenance(t); });
+            AddMaintenanceCommand = new Command(async () => { await AddMaintenanceAsync(); });
+            DeleteProjectCommand = new Command(async () => { await DeleteProjectAsync(); });
+            ViewMaintenanceCommand = new Command(async (t) => { await ViewMaintenanceAsync(t); });
+            UpdateProjectCommand = new Command(async () => await UpdateProjectAsync());
+            AppearingCommand = new Command(async () => { await LoadProjectCommandAsync(); });
+            DeleteMaintenanceCommand = new Command(async (t) => { await DeleteMaintenanceAsync(t); });
         }
 
-        private async void DeleteMaintenance(object t)
+
+
+
+        private async Task DeleteMaintenanceAsync(object t)
         {
             try
             {
@@ -82,7 +85,7 @@ namespace Manchito.ViewModel
                         {
                             db.Remove(maintenance);
                             db.SaveChanges();
-                            await LoadMaintenances();
+                            await LoadMaintenancesAsync();
                             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                             var toast = Toast.Make("Mantenimiento Eliminado", ToastDuration.Long, 14);
                             await toast.Show(cancellationTokenSource.Token);
@@ -92,12 +95,12 @@ namespace Manchito.ViewModel
             }catch  (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
-                await LoadMaintenances();
+                await LoadMaintenancesAsync();
             }
 
         }
 
-        private async Task AddMaintenance()
+        private async Task AddMaintenanceAsync()
         {
             try
             {
@@ -115,7 +118,7 @@ namespace Manchito.ViewModel
                     {
                         dbLocal.Add(tmp);
                         dbLocal.SaveChanges();
-                        await LoadMaintenances();
+                        await LoadMaintenancesAsync();
 
                         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                         var toast = Toast.Make("Mantenimiento agregado al proyecto", ToastDuration.Long, 14);
@@ -133,7 +136,7 @@ namespace Manchito.ViewModel
                             {
                                 Category Cat = new Category()
                                 {
-                                    CategoryId = await lastCategoryId() + 1,
+                                    CategoryId = await lastCategoryIdAsync() + 1,
                                     Alias = "No Asignado",
                                     ItemTypeId = item.ItemTypeId,
                                     MaintenanceId = tmp.MaintenanceId
@@ -155,15 +158,15 @@ namespace Manchito.ViewModel
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
-                await ClosePage();
+                await ClosePageAsync();
             }
         }
-        private async Task ClosePage()
+        private async Task ClosePageAsync()
         {
             var page = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
             Application.Current.MainPage.Navigation.RemovePage(page);
         }
-        private async Task DeleteProject()
+        private async Task DeleteProjectAsync()
         {
             try
             {
@@ -179,13 +182,13 @@ namespace Manchito.ViewModel
                         dbLocal.SaveChanges();
                     }
                     await Application.Current.MainPage.DisplayAlert("Información", $"Proyecto eliminado", "Ok");
-                    await ClosePage();
+                    await ClosePageAsync();
                 }
             }
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
-                await ClosePage();
+                await ClosePageAsync();
             }
         }
         private int GetLastMaintenanceId()
@@ -198,7 +201,7 @@ namespace Manchito.ViewModel
                 return id;
             }
         }
-        private async Task<int> lastCategoryId()
+        private async Task<int> lastCategoryIdAsync()
         {
             using (var db = new DBLocalContext())
             {
@@ -208,7 +211,7 @@ namespace Manchito.ViewModel
                 return id;
             }
         }
-        private async Task LoadProjectCommand()
+        private async Task LoadProjectCommandAsync()
         {
             try
             {
@@ -221,10 +224,10 @@ namespace Manchito.ViewModel
                             using (var db = new DBLocalContext())
                             {
                                 Project = db.Project.Where(P => P.ProjectId == m.Value).FirstOrDefault();
-                            }
-                            if (Project != null)
-                            {
-                                LoadMaintenances();
+                                if (Project != null)
+                                {
+                                    await Task.Run(LoadMaintenancesAsync);   
+                                }
                             }
                         }
                     });
@@ -235,7 +238,7 @@ namespace Manchito.ViewModel
                 Application.Current.MainPage.DisplayAlert("error", $"Eror {ex.Message}", "OK");
             }
         }
-        private async Task LoadMaintenances()
+        private async Task LoadMaintenancesAsync()
         {
             try
             {
@@ -253,7 +256,7 @@ namespace Manchito.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
             }
         }
-        private async Task UpdateProject()
+        private async Task UpdateProjectAsync()
         {
             try
             {
@@ -266,7 +269,7 @@ namespace Manchito.ViewModel
             }
 
         }
-        private async Task ViewMaintenance(object idNumber)
+        private async Task ViewMaintenanceAsync(object idNumber)
         {
             try
             {
@@ -278,7 +281,7 @@ namespace Manchito.ViewModel
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
-                await ClosePage();
+                await ClosePageAsync();
             }
         }
         #endregion

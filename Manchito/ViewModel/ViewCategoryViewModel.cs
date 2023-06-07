@@ -156,7 +156,6 @@ namespace Manchito.ViewModel
                         await toast.Show(cancellationTokenSource.Token);
                         await LoadAudio();
                     }
-
                 }
             }
         }
@@ -165,8 +164,11 @@ namespace Manchito.ViewModel
             try
             {
                 var StatusAudio = await Permissions.CheckStatusAsync<Permissions.Microphone>();
-                var storagePermission = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-                if (StatusAudio == PermissionStatus.Granted && storagePermission == PermissionStatus.Granted)
+                if (OperatingSystem.IsAndroidVersionAtLeast(30))
+                {
+                    var storagePermission = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+                }                
+                if (StatusAudio == PermissionStatus.Granted )
                 {
                     if (_recorderService.IsRecording)
                     {
@@ -209,6 +211,9 @@ namespace Manchito.ViewModel
                 }
                 else
                 {
+                    CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                    var toast = Toast.Make("Error en permisos", ToastDuration.Long, 16);
+                    await toast.Show(cancellationTokenSource.Token);
                     await Permissions.RequestAsync<Permissions.Microphone>();
                 }
             }
