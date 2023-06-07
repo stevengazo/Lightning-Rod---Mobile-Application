@@ -277,20 +277,19 @@ namespace Manchito.ViewModel
                         using FileStream localFileStream = File.OpenWrite(localFilePath);
                         await sourceStream.CopyToAsync(localFileStream);
                         await RegisterPhoto(localFilePath);
+                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                        var toast = Toast.Make("Elementos cargados", ToastDuration.Short, 16);
+                        await toast.Show(cancellationTokenSource.Token);
                     }
                     else
                     {
                         CancellationTokenSource cancellationTokenSour = new CancellationTokenSource();
-                        var ltoast = Toast.Make("Elemento no valido...", ToastDuration.Short, 12);
+                        var ltoast = Toast.Make($"Elemento no valido: {item.FileName}", ToastDuration.Short, 12);
                         await ltoast.Show(cancellationTokenSour.Token);
                     }
                     await loadImages();
                 }
-             
-
-                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                var toast = Toast.Make("Elementos cargados", ToastDuration.Short, 16);
-                await toast.Show(cancellationTokenSource.Token);
+                
             }
         }
         private async Task DeletePhoto(object o)

@@ -151,13 +151,15 @@ namespace Manchito.ViewModel
                 {
                     using (var db = new DBLocalContext())
                     {
-                        var Category = db.Category.FirstOrDefault(M => M.CategoryId == CategoryId);
+                        var Category = db.Category.Include(C=>C.ItemType).FirstOrDefault(M => M.CategoryId == CategoryId);
                         if (Category != null)
                         {
                             db.Category.Remove(Category);
                             db.SaveChanges();
                             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                             var toast = Toast.Make("Categoria eliminada", ToastDuration.Long, 14);
+                            string PathToDelete = Path.Combine(PathDirectoryFilesAndroid, $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}", $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}", $"C-{Category.CategoryId}_{Category.ItemType.Name}_{Category.Alias}");
+                            Directory.Delete(PathToDelete, true);
                             await toast.Show(cancellationTokenSource.Token);
                             LoadCategories();
                         }

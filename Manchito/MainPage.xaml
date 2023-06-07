@@ -6,7 +6,7 @@
              xmlns:models="clr-namespace:Manchito.Model"
              x:Class="Manchito.MainPage"
              x:Name="MyMainPage"
-             Title="Lista de Proyectos"                         
+             Title="Manchito"                         
              >
     <!-- Binding  Context-->
     <ContentPage.BindingContext>

@@ -88,7 +88,7 @@
                     <CollectionView SelectionMode="Single" ItemsSource="{Binding Maintenances,Mode=OneWay}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <SwipeView HeightRequest="70" BackgroundColor="White">
+                                <SwipeView HeightRequest="70" BackgroundColor="{AppThemeBinding Light=white, Dark=Gray}">
                                     <SwipeView.LeftItems>
                                         <SwipeItem BackgroundColor="Red"
                                                    Command="{Binding BindingContext.DeleteMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  
@@ -101,7 +101,7 @@
                                                    IconImageSource="edit.svg"
                                                  />
                                     </SwipeView.RightItems>
-                                    <Frame Padding="0" Margin="0,2,0,2" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=black}" BorderColor="{AppThemeBinding Light=lightblue, Dark=darkblue}">
+                                    <Frame Padding="0" Margin="0,2,0,2" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=gray}" BorderColor="{AppThemeBinding Light=lightblue, Dark=lightblue}">
                                         <Frame.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding BindingContext.ViewMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  CommandParameter="{Binding MaintenanceId}"  />
                                         </Frame.GestureRecognizers>

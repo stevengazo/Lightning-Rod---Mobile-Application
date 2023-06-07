@@ -82,7 +82,7 @@
                     <CollectionView SelectionMode="Single" ItemsSource="{Binding Categories,Mode=OneWay}" HorizontalOptions="Center">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <SwipeView BackgroundColor="White">
+                                <SwipeView BackgroundColor="{AppThemeBinding Light=white, Dark=Gray}">
                                     <SwipeView.LeftItems>
                                         <SwipeItem BackgroundColor="Red"
                                                    IconImageSource="delete.svg"
