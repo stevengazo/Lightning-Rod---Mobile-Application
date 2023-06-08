@@ -35,7 +35,7 @@ namespace Manchito.DataBaseContext
                 new()
                 {
                     ItemTypeId= 1,
-                    Name="Pararrayos"
+                    Name="Zona Cobertura"
                 },
                 new()
                 {
@@ -45,26 +45,31 @@ namespace Manchito.DataBaseContext
                 new()
                 {
                     ItemTypeId= 3,
-                    Name="Bajante"
+                    Name="Pararrayos"
                 },
                 new()
                 {
                     ItemTypeId= 4,
-                    Name="Sistema Puesta a Tierra"
+                    Name="Bajante"
                 },
                 new()
                 {
                     ItemTypeId= 5,
-                    Name="Unificaciones"
+                    Name="Sistema Puesta a Tierra"
                 },
                 new()
                 {
                     ItemTypeId= 6,
-                    Name="Supresores"
+                    Name="Unificaciones"
                 },
                 new()
                 {
                     ItemTypeId= 7,
+                    Name="Supresores"
+                },
+                new()
+                {
+                    ItemTypeId= 8,
                     Name="Otros"
                 },
             };

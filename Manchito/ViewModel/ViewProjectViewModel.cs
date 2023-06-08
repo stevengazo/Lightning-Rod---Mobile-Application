@@ -85,6 +85,13 @@ namespace Manchito.ViewModel
         }
 
 
+        private async Task MessageToastAsync(string Message, bool IsLong)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            var duration = (IsLong) ? ToastDuration.Long : ToastDuration.Short;
+            var toast = Toast.Make(Message, duration, 14);
+            await toast.Show(cancellationTokenSource.Token);
+        }
 
 
         private async Task DeleteMaintenanceAsync(object t)
@@ -102,16 +109,16 @@ namespace Manchito.ViewModel
                         {
                             db.Remove(maintenance);
                             db.SaveChanges();
-                            await LoadMaintenancesAsync();
-                            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                            var toast = Toast.Make("Mantenimiento Eliminado", ToastDuration.Long, 14);
-                            await toast.Show(cancellationTokenSource.Token);
+                            await MessageToastAsync("Mantenimiento Eliminado", false);
                         }
                     }
                 }
             }catch  (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", $"Error interno {ex.Message}", "Ok");
+            }
+            finally
+            {
                 await LoadMaintenancesAsync();
             }
 
@@ -136,11 +143,7 @@ namespace Manchito.ViewModel
                         dbLocal.Add(tmp);
                         dbLocal.SaveChanges();
                         await LoadMaintenancesAsync();
-
-                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                        var toast = Toast.Make("Mantenimiento agregado al proyecto", ToastDuration.Long, 14);
-                        await toast.Show(cancellationTokenSource.Token);
-
+                        await MessageToastAsync("Mantenimiento Agregado Al Proyecto", false);
                         //Create Directory // Project/Mantenance
                         var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Project.ProjectId}_{Project.Name}", $"M-{tmp.MaintenanceId}_{tmp.Alias}");
                         Directory.CreateDirectory(DirectoryPath);
@@ -261,11 +264,7 @@ namespace Manchito.ViewModel
             {
                 using (var dbLocal = new DBLocalContext())
                 {
-                    var tmp = dbLocal.Maintenance.Where(M => M.ProjectId == Project.ProjectId).ToList();
-                    if ((tmp.Count > 0))
-                    {
-                        Maintenances = tmp;
-                    }
+                    Maintenances = dbLocal.Maintenance.Where(M => M.ProjectId == Project.ProjectId).ToList();
                     LoadingAnimationVisible = false;
                 }
             }

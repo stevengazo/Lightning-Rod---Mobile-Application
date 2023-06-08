@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Plugin.AudioRecorder;
 using System.Windows.Input;
 
+
 namespace Manchito.ViewModel
 {
     public class ViewCategoryViewModel : INotifyPropertyChangedAbst
@@ -168,11 +169,8 @@ namespace Manchito.ViewModel
 
         private async void PlayAudio(object o)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            var toast = Toast.Make("Reproduciendo audio", ToastDuration.Long, 14);
-            await toast.Show(cancellationTokenSource.Token);
+             await MessageToastAsync("Reproduciendo audio", false);            
             _audioPlayer.Play(o.ToString());
-
         }
 
         private async Task DeleteAudioAsync(object Object)
@@ -189,9 +187,7 @@ namespace Manchito.ViewModel
                         db.AudioNote.Remove(audio);
                         db.SaveChanges();
                         File.Delete(audio.PathFile);
-                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                        var toast = Toast.Make("Audio borrado", ToastDuration.Long, 14);
-                        await toast.Show(cancellationTokenSource.Token);
+                        await MessageToastAsync("Audio Borrado", true);
                         await LoadAudio();
                     }
                 }
@@ -229,15 +225,11 @@ namespace Manchito.ViewModel
                                 db.SaveChanges();
                             }
                             await LoadAudio();
-                            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                            var toast = Toast.Make("Audio Guardado", ToastDuration.Long, 14);
-                            await toast.Show(cancellationTokenSource.Token);
+                            await MessageToastAsync("Audio Guardado", true);
                         }
                         else
                         {
-                            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                            var toast = Toast.Make("Error al guardar el audio", ToastDuration.Long, 16);
-                            await toast.Show(cancellationTokenSource.Token);
+                            await MessageToastAsync("Error al guardar el audio", true);
                         }
                     }
                     else
@@ -249,9 +241,8 @@ namespace Manchito.ViewModel
                 }
                 else
                 {
-                    CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                    var toast = Toast.Make("Error en permisos", ToastDuration.Long, 16);
-                    await toast.Show(cancellationTokenSource.Token);
+
+                    await MessageToastAsync("Error en Permisos", false);
                     await Permissions.RequestAsync<Permissions.Microphone>();
                 }
             }
@@ -262,34 +253,36 @@ namespace Manchito.ViewModel
         }
         private async Task AddPhotoFromGalleryAsync()
         {
-            if (MediaPicker.Default.IsCaptureSupported)
+            try
             {
-                var files = await FilePicker.PickMultipleAsync();
-                foreach (var item in files)
+                if (MediaPicker.Default.IsCaptureSupported)
                 {
-                    var extension =Path.GetExtension(item.FileName);
-                    if(extension == ".jpg" || extension == ".png" || extension == ".jpeg")
+                    var files = await FilePicker.PickMultipleAsync();
+                    foreach (var item in files)
                     {
-                        item.FileName = $"IMG D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")} .jpg";
-                        string tempPath = await FolderPathAndroid();
-                        string localFilePath = Path.Combine(tempPath, item.FileName);
-                        using Stream sourceStream = await item.OpenReadAsync();
-                        using FileStream localFileStream = File.OpenWrite(localFilePath);
-                        await sourceStream.CopyToAsync(localFileStream);
-                        await RegisterPhoto(localFilePath);
-                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                        var toast = Toast.Make("Elementos cargados", ToastDuration.Short, 16);
-                        await toast.Show(cancellationTokenSource.Token);
+                        var extension = Path.GetExtension(item.FileName);
+                        if (extension == ".jpg" || extension == ".png" || extension == ".jpeg")
+                        {
+                            item.FileName = $"IMG D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")}.jpeg";
+                            string localFilePath = Path.Combine(await FolderPathAndroid(), item.FileName);
+                            File.Copy(item.FullPath, localFilePath);
+                            await RegisterPhoto(localFilePath);
+                            await MessageToastAsync("Elementos Cargados", false);
+                        }
+                        else
+                        {
+                            await MessageToastAsync($"Elemento no valido: {item.FileName}", false);
+                        }
                     }
-                    else
-                    {
-                        CancellationTokenSource cancellationTokenSour = new CancellationTokenSource();
-                        var ltoast = Toast.Make($"Elemento no valido: {item.FileName}", ToastDuration.Short, 12);
-                        await ltoast.Show(cancellationTokenSour.Token);
-                    }
-                    await loadImages();
                 }
-                
+            }
+            catch (Exception f)
+            {
+                await MessageToastAsync($"No seleccionó un elemento", true);
+            }
+            finally
+            {
+                await loadImages();
             }
         }
         private async Task DeletePhoto(object o)
@@ -306,35 +299,38 @@ namespace Manchito.ViewModel
                         db.Photography.Remove(photo);
                         db.SaveChanges();
                         File.Delete(photo.FilePath);
-                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                        var toast = Toast.Make("Foto borrada", ToastDuration.Long, 14);
-                        await toast.Show(cancellationTokenSource.Token);
+                        await MessageToastAsync("Foto Borrada", false);
                         string path = o.ToString();
                         await loadImages();
                     }
-
                 }
             }
         }
-        private async Task<int> GetLastIdAudio()
+
+
+
+        private async Task ShareAudio(object o)
         {
             try
             {
-                using (DBLocalContext db = new())
+                int number = int.Parse(o.ToString());
+                AudioNote audio = new();
+                using (var db = new DBLocalContext())
                 {
-                    return await (from a in db.AudioNote
-                                  orderby a.AudioNoteId descending
-                                  select a.AudioNoteId).FirstOrDefaultAsync();
+                    audio = db.AudioNote.Where(P => P.AudioNoteId == number).FirstOrDefault();
                 }
-
-
+                if (audio != null)
+                {
+                    await Share.Default.RequestAsync(new ShareFileRequest { Title = "Compartir Nota Voz", File = new ShareFile(audio.PathFile) });
+                }
             }
             catch (Exception f)
             {
-                await Application.Current.MainPage.DisplayAlert("Error SharePhoto ", $"Error: {f.Message}", "ok");
-                return -1;
+                await MessageToastAsync($"Error: {f.Message}", true);
             }
         }
+
+
         private async Task SharePhoto(object o)
         {
             try
@@ -362,17 +358,15 @@ namespace Manchito.ViewModel
             {
                 if (MediaPicker.Default.IsCaptureSupported)
                 {
-                    FileResult photo = await MediaPicker.Default.CaptureVideoAsync();
-                    if (photo != null)
+                    FileResult video = await MediaPicker.Default.CaptureVideoAsync();
+                    if (video != null)
                     {
-                        photo.FileName = $"VID D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")}.mp4";
-                        // save the file into local storage
-                        string tempPath = await FolderPathAndroid();
-                        string localFilePath = Path.Combine(tempPath, photo.FileName);
-                        using Stream sourceStream = await photo.OpenReadAsync();
-                        using FileStream localFileStream = File.OpenWrite(localFilePath);
-                        await sourceStream.CopyToAsync(localFileStream);
+                        video.FileName = $"VID D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")}.mp4";
+                        // save the file into local storage                       
+                        string localFilePath = Path.Combine(await FolderPathAndroid(), video.FileName);
+                        File.Move(video.FullPath, localFilePath);                       
                         await loadImages();
+                        await MessageToastAsync("Video Guardado", true);
                     }
                 }
             }
@@ -575,28 +569,28 @@ namespace Manchito.ViewModel
                     photo.FileName = $"IMG D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")} .jpg";
                     if (photo != null)
                     {
-                        // save the file into local storage
                         string tempPath = await FolderPathAndroid();
                         string localFilePath = Path.Combine(tempPath, photo.FileName);
-                        using Stream sourceStream = await photo.OpenReadAsync();
-                        using FileStream localFileStream = File.OpenWrite(localFilePath);
-                        await sourceStream.CopyToAsync(localFileStream);
+                        File.Move(photo.FullPath, localFilePath);
                         await RegisterPhoto(localFilePath);
                         await loadImages();
-
-                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                        var toast = Toast.Make("Foto Guardada", ToastDuration.Long, 14);
-                        await toast.Show(cancellationTokenSource.Token);
-
+                        await MessageToastAsync("Foto Guardada", true);                      
                     }
                 }
             }
             catch (Exception ex)
             {
-                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                var toast = Toast.Make("La foto no fue tomada", ToastDuration.Long, 14);
-                await toast.Show(cancellationTokenSource.Token);
+                await MessageToastAsync("La Foto no fue tomada", true);
             }
+        }
+
+
+        private async Task MessageToastAsync(string Message, bool IsLong)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            var duration = (IsLong) ? ToastDuration.Long : ToastDuration.Short; 
+            var toast = Toast.Make(Message, duration, 14);
+            await toast.Show(cancellationTokenSource.Token);
         }
 
     }
