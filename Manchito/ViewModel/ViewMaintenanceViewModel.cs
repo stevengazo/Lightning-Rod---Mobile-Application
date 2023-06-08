@@ -257,16 +257,29 @@ namespace Manchito.ViewModel
             {
                 await Application.Current.MainPage.DisplayAlert("Error LoadMaintenance", $"Error {f.Message}", "OK");
             }
+            finally
+            {
+                await LoadCategories();
+            }
         }
         private async Task LoadCategories()
         {
             try
             {
-                using var db = new DBLocalContext();
-                Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId)
-                                        .Include(C => C.ItemType)
-                                        .Include(M => M.Photographies.Take(3)).ToList();
-                LoadingAnimationVisible = false;
+                if(Maintenance  != null)
+                {
+                    using var db = new DBLocalContext();
+                    Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId)
+                                            .Include(C => C.ItemType)
+                                            .Include(M => M.Photographies.Take(3)).ToList();
+                    if(Categories.Count== 0)
+                    {
+                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                        var toast = Toast.Make("No hay datos", ToastDuration.Long, 16);
+                        await toast.Show(cancellationTokenSource.Token);
+                    }
+                    LoadingAnimationVisible = false;
+                }
             }
             catch (Exception f)
             {

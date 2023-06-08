@@ -545,9 +545,11 @@ namespace Manchito.ViewModel
                 {
                     DateTaked = DateTime.Now,
                     CategoryId = CategoryItem.CategoryId,
+                    Name = Path.GetFileName(pathFile),
                     FilePath = pathFile,
                     PhotographyId = (await GetLastPhotographyId() + 1)
                 };
+                photography.DateTaked = DateTime.Now;
                 using (DBLocalContext db = new())
                 {
                     db.Add(photography);

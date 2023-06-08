@@ -10,6 +10,10 @@
         /// </summary>
         public int PhotographyId { get; set; }
         /// <summary>
+        /// 
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
         /// path of the file
         /// </summary>
         public string FilePath { get; set; }

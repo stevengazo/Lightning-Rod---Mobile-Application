@@ -24,7 +24,7 @@
             <RowDefinition Height="0.25*"  />
         </Grid.RowDefinitions>
         <!-- HEADER -->
-        <Frame Grid.Row="0" Padding="5" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" >
+        <Frame Grid.Row="0" Margin="2" CornerRadius="5" Padding="5" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" >
             
             <Grid>
                 <Grid.RowDefinitions>
@@ -57,11 +57,13 @@
                                 Padding="1"
                                 BorderColor="WhiteSmoke"
                                 BorderWidth="1"
+                                IsVisible="false"
                                 WidthRequest="120"
                                 HeightRequest="35"/>
                         <Button Text="Modificar"                                
                                 BackgroundColor="Green"
                                 TextColor="White"
+                                IsVisible="false"
                                 Padding="1"
                                 Command="{Binding UpdateProjectCommand}"
                                 BorderColor="WhiteSmoke"
@@ -83,45 +85,51 @@
         </Frame>
         <!-- LIST OF MAINTENANCES -->
         <Frame Grid.Row="1" BackgroundColor="{AppThemeBinding Light=White, Dark=Gray}"   BorderColor="{AppThemeBinding Light=white, Dark=Gray}" Margin="2" Padding="2">
-            <ScrollView>
-                <VerticalStackLayout Spacing="5" Padding="1">
-                    <CollectionView SelectionMode="Single" ItemsSource="{Binding Maintenances,Mode=OneWay}">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <SwipeView HeightRequest="70" BackgroundColor="{AppThemeBinding Light=white, Dark=Gray}">
-                                    <SwipeView.LeftItems>
-                                        <SwipeItem BackgroundColor="Red"
+            <VerticalStackLayout>
+                <Label FontSize="Title" HorizontalOptions="Center">Lista de Sitios</Label>
+                <ScrollView>
+                    <VerticalStackLayout Spacing="5" Padding="1">
+
+                        <CollectionView SelectionMode="Single" ItemsSource="{Binding Maintenances,Mode=OneWay}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <SwipeView HeightRequest="70" BackgroundColor="{AppThemeBinding Light=white, Dark=Gray}">
+                                        <SwipeView.LeftItems>
+                                            <SwipeItem BackgroundColor="Red"
                                                    Command="{Binding BindingContext.DeleteMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  
                                                    CommandParameter="{Binding MaintenanceId}"
                                                    IconImageSource="delete.svg"
                                                  />
-                                    </SwipeView.LeftItems>
-                                    <SwipeView.RightItems>
-                                        <SwipeItem BackgroundColor="green"                                                   
+                                        </SwipeView.LeftItems>
+                                        <SwipeView.RightItems>
+                                            <SwipeItem 
+                                            IsVisible="False"
+                                            BackgroundColor="green"                                                   
                                                    IconImageSource="edit.svg"
                                                  />
-                                    </SwipeView.RightItems>
-                                    <Frame Padding="0" Margin="0,2,0,2" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=gray}" BorderColor="{AppThemeBinding Light=lightblue, Dark=lightblue}">
-                                        <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding BindingContext.ViewMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  CommandParameter="{Binding MaintenanceId}"  />
-                                        </Frame.GestureRecognizers>
-                                        <VerticalStackLayout Spacing="10" Padding="0,0,0,10" >
-                                            <HorizontalStackLayout Spacing="10" Margin="0,10" HorizontalOptions="CenterAndExpand">
-                                                <Label Text="Sitio" />
-                                                <Label Text="{Binding Alias,Mode=OneWay}" />
-                                                <Label Text="Estado" />
-                                                <Label Text="{Binding Status,Mode=OneTime}" />
-                                            </HorizontalStackLayout>
-                                        </VerticalStackLayout>
-                                    </Frame>
-                                </SwipeView>
-                                
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                    <!-- Item -->                   
-                </VerticalStackLayout>
-            </ScrollView>
+                                        </SwipeView.RightItems>
+                                        <Frame Padding="0" Margin="0,2,0,2" BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=gray}" BorderColor="{AppThemeBinding Light=lightblue, Dark=lightblue}">
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.ViewMaintenanceCommand, Source={x:Reference ViewProjectPage}}"  CommandParameter="{Binding MaintenanceId}"  />
+                                            </Frame.GestureRecognizers>
+                                            <VerticalStackLayout Spacing="10" Padding="0,0,0,10" >
+                                                <HorizontalStackLayout Spacing="10" Margin="0,10" HorizontalOptions="CenterAndExpand">
+                                                    <Label Text="Sitio" />
+                                                    <Label Text="{Binding Alias,Mode=OneWay}" />
+                                                    <Label Text="Estado" />
+                                                    <Label Text="{Binding Status,Mode=OneTime}" />
+                                                </HorizontalStackLayout>
+                                            </VerticalStackLayout>
+                                        </Frame>
+                                    </SwipeView>
+
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <!-- Item -->
+                    </VerticalStackLayout>
+                </ScrollView>
+            </VerticalStackLayout>
         </Frame>
        <!-- BUTTON TO ADD MAINTENANCE -->
         <Frame Grid.Row="2" Padding="3" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Manchito.Views.UpdateProject"
              xmlns:local="clr-namespace:Manchito.ViewModel"
+             x:Name="UpdateProjectPage"
              Title="Actualizar Proyecto">
     <Grid Margin="0">
         <Grid.RowDefinitions>
@@ -83,6 +84,8 @@
                     BackgroundColor="Green"
                     BorderColor="LightGreen"
                     BorderWidth="1"
+                    Command="{Binding BindingContext. UpdateProjectCommand, Source={x:Reference UpdateProjectPage}}"  
+                    CommandParameter="{Binding Project.ProjectId}"                                                                                              
                     CornerRadius="10"
                     TextColor="White"
                     WidthRequest="120"

@@ -31,7 +31,7 @@ namespace Manchito.ViewModel
 
             this._UpdateProject = view;
             // Commands
-            UpdateProjectCommand = new Command(UpdateProject);
+            UpdateProjectCommand = new Command(async (o) => await UpdateProject(o));
             CancelCommand = new Command(Cancel);
             // validation of the logic
             if (_UpdateProject.ProjectId >= 0)
@@ -69,12 +69,14 @@ namespace Manchito.ViewModel
                 return null;
             }
         }
-        private async void UpdateProject()
+        private async Task UpdateProject(object o)
         {
+            int projectId = (int)o;
             try
             {
                 using (var db = new DBLocalContext())
                 {
+
                     db.Project.Update(Project);
                     db.SaveChanges();
                     await _UpdateProject.DisplayAlert("Información", "Información del proyecto actualizada", "Ok");
