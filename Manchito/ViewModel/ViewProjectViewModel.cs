@@ -195,11 +195,16 @@ namespace Manchito.ViewModel
                 {
                     using (var dbLocal = new DBLocalContext())
                     {
-                        var query = (from maint in dbLocal.Maintenance where maint.ProjectId == Project.ProjectId select maint).ToList();
-                        dbLocal.RemoveRange(query);
+                        var Maintenances = (from maint in dbLocal.Maintenance where maint.ProjectId == Project.ProjectId select maint).ToList();
+                        dbLocal.RemoveRange(Maintenances);
                         dbLocal.SaveChanges();
                         dbLocal.Project.Remove(Project);
                         dbLocal.SaveChanges();
+                        var DirectoryPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Project.ProjectId.ToString()}_{Project.Name}");
+                        if (Directory.Exists(DirectoryPath))
+                        {
+                            Directory.Delete(DirectoryPath, true );
+                        }
                     }
                     await Application.Current.MainPage.DisplayAlert("Información", $"Proyecto eliminado", "Ok");
                     await ClosePageAsync();

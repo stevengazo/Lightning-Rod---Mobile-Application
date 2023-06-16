@@ -78,7 +78,7 @@ namespace Manchito.ViewModel
                 }
             }
         }
-        public ICommand AddProjectCommand { get; private set; }
+        public ICommand AddProjectCommand { get { return new Command(async () => await AddProject()); } private set { } }
         private string _ErrorMessage;
         public string ErrorMessage
         {
@@ -100,8 +100,7 @@ namespace Manchito.ViewModel
             // Actual date
             DateProject = DateTime.Today;
 
-            // Command to add new projects
-            AddProjectCommand = new Command(async () => await AddProject());
+            
 
         }
 

@@ -5,7 +5,7 @@
              x:Class="Manchito.Views.ViewMaintenance"
              xmlns:VM="clr-namespace:Manchito.ViewModel"
              x:Name="ViewMaintenancePage"
-             Title="Mantenimiento">
+             Title="Sitio">
     <!-- ContentPage Binding Context-->
     <ContentPage.BindingContext>
         <VM:ViewMaintenanceViewModel/>
@@ -36,9 +36,9 @@
                         <ColumnDefinition Width="5*"/>
                         <ColumnDefinition Width="5*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Row="0" Grid.ColumnSpan="2" FontSize="Title" Text="Información del Mantenimiento" HorizontalOptions="Center" />
+                    <Label Grid.Row="0" Grid.ColumnSpan="2" FontSize="Title" Text="Información del Sitio" HorizontalOptions="Center" />
                 <Frame Grid.Row="1" Grid.Column="0" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,5,0,0" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
-                    <Label Text="Alias de Mantenimiento" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                    <Label Text="Alias del Sitio" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
                 <Frame Grid.Row="1" Grid.Column="1"  Padding="2" HorizontalOptions="Start" VerticalOptions="Center" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
                             <Label Text="{Binding Maintenance.Alias, Mode=TwoWay}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
@@ -50,7 +50,7 @@
                     <Label Text="{Binding Maintenance.DateOfMaintenance.Date, StringFormat='{0:MMMM dd, yyyy}', Mode=TwoWay}" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
                 <Frame Grid.Row="3" Grid.Column="0" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
-                    <Label Text="Estado del Proyecto" TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                    <Label Text="Estado del Sitio" TextColor="{AppThemeBinding Light=black, Dark=white}" />
                     </Frame>
                 <Frame Grid.Row="3" Grid.Column="1" Padding="2" HorizontalOptions="Start" VerticalOptions="Center" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
                         <Label Text="{Binding Maintenance.Status}" />
