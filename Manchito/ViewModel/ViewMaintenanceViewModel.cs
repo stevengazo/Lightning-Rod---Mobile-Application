@@ -10,6 +10,7 @@ using Manchito.Model;
 using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design.Internal;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace Manchito.ViewModel
@@ -78,6 +79,14 @@ namespace Manchito.ViewModel
         {
             LoadingAnimationVisible = true;
         }
+        private async Task MessageToastAsync(string Message, bool IsLong)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            var duration = (IsLong) ? ToastDuration.Long : ToastDuration.Short;
+            var toast = Toast.Make(Message, duration, 14);
+            await toast.Show(cancellationTokenSource.Token);
+        }
+
 
         private async Task UpdateCategory(object o)
         {
@@ -140,8 +149,11 @@ namespace Manchito.ViewModel
                 LoadCategories();
             }
         }
+
+     
         private async Task DeleteCategory(object o)
         {
+
             try
             {
                 int CategoryId = int.Parse(o.ToString());
@@ -150,28 +162,33 @@ namespace Manchito.ViewModel
                 {
                     using (var db = new DBLocalContext())
                     {
-                        var Category = db.Category.Include(C => C.ItemType).FirstOrDefault(M => M.CategoryId == CategoryId);
+                        var Category = db.Category.FirstOrDefault(M => M.CategoryId == CategoryId);
+                        var itemtype = db.ItemTypes.FirstOrDefaultAsync(M => M.ItemTypeId == Category.ItemTypeId);
                         if (Category != null)
                         {
                             db.Category.Remove(Category);
                             db.SaveChanges();
-                            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                            var toast = Toast.Make("Categoria eliminada", ToastDuration.Long, 14);
-                            string PathToDelete = Path.Combine(PathDirectoryFilesAndroid, $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}", $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}", $"C-{Category.CategoryId}_{Category.ItemType.Name}_{Category.Alias}");
-                            Directory.Delete(PathToDelete, true);
-                            await toast.Show(cancellationTokenSource.Token);
-                            LoadCategories();
+                            MessageToastAsync("Categoria Eliminada", true);
+                            string PathToDelete = Path.Combine(
+                                    PathDirectoryFilesAndroid,
+                                    $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
+                                    $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}",
+                                    $"C-{Category.CategoryId}_{Category.ItemType.Name}_{Category.Alias}");
+                            Thread DeleteFiles = new Thread(new ThreadStart(() => { Directory.Delete(PathToDelete, true); }));
+                            DeleteFiles.Start();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error DeleteCategory", $"Error interno {ex.Message}", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Error DeleteCategory", $"Error interno {ex.Message}", "Ok");                
+            }
+            finally
+            {
                 LoadCategories();
             }
         }
-
 
         /// <summary>
         /// View Category Page
@@ -182,10 +199,8 @@ namespace Manchito.ViewModel
         {
             try
             {
-                int number = int.Parse(id.ToString());
+                TempData.IdCategory = int.Parse(id.ToString());
                 await Application.Current.MainPage.Navigation.PushAsync(new ViewCategory(), true);
-                WeakReferenceMessenger.Default.Cleanup();
-                WeakReferenceMessenger.Default.Send(new NameItemViewMessage(number));
             }
             catch (Exception ex)
             {
@@ -232,35 +247,15 @@ namespace Manchito.ViewModel
         {
             try
             {
-                var d = WeakReferenceMessenger.Default.IsRegistered<NameItemViewMessage>(this);
-                if (!d)
+                if(Maintenance == null)
                 {
-                    if (Maintenance == null)
-                    {
-                        WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) =>
-                        {
-                            using (var db = new DBLocalContext())
-                            {
-                                Maintenance = await db.Maintenance.Where(M => M.MaintenanceId == m.Value).Include(M => M.Project).SingleOrDefaultAsync();
-                            }
-                            if (Maintenance != null)
-                            {
-                                await Task.Run(LoadCategories);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        await Task.Run(LoadCategories);
-                    }
-                }
-                else
-                {
+                    var tempIdMaintenance = TempData.IdMaintenance;
+                    using var db = new DBLocalContext();
+                    Maintenance = db.Maintenance.Where(M => M.MaintenanceId == tempIdMaintenance).Include(M => M.Project).FirstOrDefault();
                     if (Maintenance != null)
                     {
                         await Task.Run(LoadCategories);
                     }
-                    WeakReferenceMessenger.Default.Unregister<NameItemViewMessage>(this);
                 }
             }
             catch (Exception f)
@@ -269,7 +264,11 @@ namespace Manchito.ViewModel
             }
             finally
             {
-                LoadCategories();
+                if (Maintenance != null)
+                {
+                    Thread thread = new Thread(new ThreadStart(LoadCategories));
+                    thread.Start();
+                }
             }
         }
         private async void LoadCategories()

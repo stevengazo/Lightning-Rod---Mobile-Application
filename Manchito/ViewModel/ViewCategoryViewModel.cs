@@ -220,18 +220,15 @@ namespace Manchito.ViewModel
         {
             LoadingAnimationVisible = true;
             LoadingPhotosVisible = false;
-            urlIconRecorder = "record.svg";            
+            urlIconRecorder = "record.svg";
             Title = "";
             ColorButtonRecorder = Colors.Green;
-
         }
-
         private async void PlayAudio(object o)
         {
             await MessageToastAsync("Reproduciendo audio", false);
             _audioPlayer.Play(o.ToString());
         }
-
         private async Task DeleteAudioAsync(object Object)
         {
             int id = int.Parse(Object.ToString());
@@ -247,7 +244,7 @@ namespace Manchito.ViewModel
                         db.SaveChanges();
                         File.Delete(audio.PathFile);
                         await MessageToastAsync("Audio Borrado", true);
-                        await LoadAudio();
+                        LoadAudio();
                     }
                 }
             }
@@ -272,7 +269,6 @@ namespace Manchito.ViewModel
                         string file = _recorderService.GetAudioFilePath();
                         if (!String.IsNullOrEmpty(file) && _recorderService.TotalAudioTimeout.Seconds > 1)
                         {
-
                             File.Copy(file, pathAudio, true);
                             using (var db = new DBLocalContext())
                             {
@@ -283,7 +279,7 @@ namespace Manchito.ViewModel
                                 db.AudioNote.Add(audioNote);
                                 db.SaveChanges();
                             }
-                            await LoadAudio();
+                            LoadAudio();
                             await MessageToastAsync("Audio Guardado", true);
                         }
                         else
@@ -300,7 +296,6 @@ namespace Manchito.ViewModel
                 }
                 else
                 {
-
                     await MessageToastAsync("Error en Permisos", false);
                     await Permissions.RequestAsync<Permissions.Microphone>();
                 }
@@ -365,9 +360,6 @@ namespace Manchito.ViewModel
                 }
             }
         }
-
-
-
         private async Task ShareAudio(object o)
         {
             try
@@ -388,8 +380,6 @@ namespace Manchito.ViewModel
                 await MessageToastAsync($"Error: {f.Message}", true);
             }
         }
-
-
         private async Task SharePhoto(object o)
         {
             try
@@ -409,7 +399,6 @@ namespace Manchito.ViewModel
             {
                 await Application.Current.MainPage.DisplayAlert("Error SharePhoto ", $"Error: {f.Message}", "ok");
             }
-
         }
         private async Task TakeVideoAndroid()
         {
@@ -442,27 +431,24 @@ namespace Manchito.ViewModel
         {
             try
             {
-                if (CategoryItem == null)
+                int IdTemp = TempData.IdCategory;
+                if (IdTemp != 0)
                 {
+                    using var db = new DBLocalContext();
 
-                    WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) =>
+                    CategoryItem = await db.Category.Where(M => M.CategoryId == IdTemp)
+                                                .Include(T => T.ItemType)
+                                                .Include(C => C.Maintenance)
+                                                .Include(C => C.Maintenance.Project)
+                                                .FirstOrDefaultAsync();
+                    if (CategoryItem != null)
                     {
-                        using (var db = new DBLocalContext())
-                        {
-                            CategoryItem = await db.Category.Where(M => M.CategoryId == m.Value)
-                                                        .Include(T => T.ItemType)
-                                                        .Include(C => C.Maintenance)
-                                                        .Include(C => C.Maintenance.Project)
-                                                        .FirstOrDefaultAsync();
-                        }
-                        if (CategoryItem != null)
-                        {
-                            Title = $"{CategoryItem.ItemType.Name} - {CategoryItem.Alias}";
-                        }
+                        Title = $"{CategoryItem.ItemType.Name} - {CategoryItem.Alias}";
                         Thread threadImages = new Thread(new ThreadStart(loadImages));
                         threadImages.Start();
-                        await LoadAudio();
-                    });
+                        Thread threadAudio = new Thread(new ThreadStart(LoadAudio));
+                        threadAudio.Start();
+                    }
                 }
                 else
                 {
@@ -479,24 +465,28 @@ namespace Manchito.ViewModel
         {
             try
             {
-                if (CategoryItem != null)
+                Thread threadLoadImages = new Thread(new ThreadStart(() =>
                 {
-                    List<Photography> photos = new();
-                    using (DBLocalContext db = new())
+                    if (CategoryItem != null)
                     {
-                        photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I => I.CategoryId).ToList();
+                        List<Photography> photos = new();
+                        using (DBLocalContext db = new())
+                        {
+                            photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I => I.CategoryId).ToList();
+                        }
+                        Photos = photos;
+                        LoadingAnimationVisible = false;
+                        LoadingPhotosVisible = true;
                     }
-                    Photos = photos;
-                    LoadingAnimationVisible = false;
-                    LoadingPhotosVisible = true;
-                }
+                }));
+                threadLoadImages.Start();
             }
             catch (Exception f)
             {
                 Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
             }
         }
-        private async Task LoadAudio()
+        private async void LoadAudio()
         {
             try
             {
@@ -509,7 +499,6 @@ namespace Manchito.ViewModel
                                       select a).ToList();
                     }
                 }
-
             }
             catch (Exception f)
             {
@@ -563,7 +552,6 @@ namespace Manchito.ViewModel
             {
                 return -20;
             }
-
         }
         private async Task<bool> CheckAndroidDirectory()
         {
@@ -589,7 +577,6 @@ namespace Manchito.ViewModel
                 {
                     return false;
                 }
-
             }
             catch (Exception e)
             {
@@ -635,8 +622,6 @@ namespace Manchito.ViewModel
                         string localFilePath = Path.Combine(tempPath, photo.FileName);
                         File.Move(photo.FullPath, localFilePath);
                         await RegisterPhoto(localFilePath);
-
-
                         loadImages();
                         await MessageToastAsync("Foto Guardada", true);
                     }
@@ -647,8 +632,6 @@ namespace Manchito.ViewModel
                 await MessageToastAsync("La Foto no fue tomada", true);
             }
         }
-
-
         private async Task MessageToastAsync(string Message, bool IsLong)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();

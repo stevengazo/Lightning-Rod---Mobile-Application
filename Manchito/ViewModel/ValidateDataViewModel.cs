@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
@@ -52,6 +54,10 @@ namespace Manchito.ViewModel
                 }
             }
         }
+
+        #endregion
+
+        #region Icommands 
         public ICommand ShareMaintenanceCommand
         {
             get
@@ -69,6 +75,7 @@ namespace Manchito.ViewModel
             private set { }
         }
         #endregion
+
         #region Methods
         public ValidateDataViewModel()
         {
@@ -132,10 +139,19 @@ namespace Manchito.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Error LoadMaintenance", $"Error {f.Message}", "OK");
             }
         }
+
+        private async Task MessageToastAsync(string Message, bool IsLong)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            var duration = (IsLong) ? ToastDuration.Long : ToastDuration.Short;
+            var toast = Toast.Make(Message, duration, 14);
+            await toast.Show(cancellationTokenSource.Token);
+        }
         private void ShareMaintenance()
         {
             try
             {
+                MessageToastAsync("Generando Archivo\nPor favor espere...", true);
                 string startPath = Path.Combine(
                                     PathDirectoryFilesAndroid,
                                     $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",

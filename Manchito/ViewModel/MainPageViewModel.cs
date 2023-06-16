@@ -10,11 +10,14 @@ namespace Manchito.ViewModel
 {
     public class MainPageViewModel : INotifyPropertyChangedAbst
     {
-        #region Properties
 
-        public ICommand LoadProjectsCommand { get; private set; }
-        public ICommand AddProjectCommand { get; private set; }
-        public ICommand ViewProjectCommand { get; private set; }
+        #region Icommands
+        public ICommand LoadProjectsCommand { get { return new Command(async () => await LoadProjects()); } private set { } }
+        public ICommand AddProjectCommand { get { return new Command(async () => await AddProject()); } private set { } }
+        public ICommand ViewProjectCommand { get { return new Command(async (t) => ViewProject(t)); } private set { } }
+        #endregion
+       
+        #region Properties
         private List<Project> _Projects;
         private string _ErrorMessage;
 
@@ -23,8 +26,10 @@ namespace Manchito.ViewModel
         public bool LoadingAnimationVisible
         {
             get { return _LoadingAnimationVisible; }
-            set { _LoadingAnimationVisible = value;
-                if (_LoadingAnimationVisible!=null)
+            set
+            {
+                _LoadingAnimationVisible = value;
+                if (_LoadingAnimationVisible != null)
                 {
                     OnPropertyChanged(nameof(LoadingAnimationVisible));
                 }
@@ -67,13 +72,6 @@ namespace Manchito.ViewModel
             {
                 Directory.CreateDirectory(PathDirectoryFilesAndroid, UnixFileMode.UserWrite);
             }
-
-
-            // binding the icommand property with the async method
-            ViewProjectCommand = new Command(async (t) => ViewProject(t));
-            // binding the icommand property with the async method
-            AddProjectCommand = new Command(async () => await AddProject());
-            LoadProjectsCommand = new Command(async () => await LoadProjects());
         }
 
 
@@ -111,9 +109,8 @@ namespace Manchito.ViewModel
         {
             try
             {
-                int id = int.Parse(t.ToString());
-                await Application.Current.MainPage.Navigation.PushAsync(new ViewProject());
-                WeakReferenceMessenger.Default.Send(new ProjectViewMessage(id));
+                TempData.IdProject = int.Parse(t.ToString());
+                await Application.Current.MainPage.Navigation.PushAsync(new ViewProject(), false);
             }
             catch (Exception ex)
             {

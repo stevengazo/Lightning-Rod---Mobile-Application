@@ -237,20 +237,13 @@ namespace Manchito.ViewModel
             {
                 if (Project == null)
                 {
-                    WeakReferenceMessenger.Default.Register<ProjectViewMessage>(this, async (r, m) =>
+                    int idProject = TempData.IdProject;
+                    using var db = new DBLocalContext();
+                    Project = db.Project.Where(P => P.ProjectId == idProject).FirstOrDefault();
+                    if (Project != null)
                     {
-                        if (m.Value != 0)
-                        {
-                            using (var db = new DBLocalContext())
-                            {
-                                Project = db.Project.Where(P => P.ProjectId == m.Value).FirstOrDefault();
-                                if (Project != null)
-                                {
-                                    await Task.Run(LoadMaintenancesAsync);   
-                                }
-                            }
-                        }
-                    });
+                        await Task.Run(LoadMaintenancesAsync);
+                    }
                 }
             }
             catch (Exception ex)
@@ -290,10 +283,9 @@ namespace Manchito.ViewModel
         {
             try
             {
-                int number = int.Parse(idNumber.ToString());
+                TempData.IdMaintenance = int.Parse(idNumber.ToString());
                 ViewMaintenance vMaintPage = new ViewMaintenance();
-                await Application.Current.MainPage.Navigation.PushAsync(vMaintPage, true);
-                WeakReferenceMessenger.Default.Send(new NameItemViewMessage(number));
+                await Application.Current.MainPage.Navigation.PushAsync(vMaintPage,false);
             }
             catch (Exception ex)
             {
