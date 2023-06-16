@@ -52,15 +52,27 @@ namespace Manchito.ViewModel
                 }
             }
         }
-        public ICommand ShareMaintenanceCommand { get; private set; }
-        public ICommand AppearingCommand { get; private set; }
+        public ICommand ShareMaintenanceCommand
+        {
+            get
+            {
+                return new Command(() => ShareMaintenance());
+            }
+            private set { }
+        }
+        public ICommand AppearingCommand
+        {
+            get
+            {
+                return new Command(async () => await LoadManteinance());
+            }
+            private set { }
+        }
         #endregion
         #region Methods
         public ValidateDataViewModel()
         {
             Title = "";
-            AppearingCommand = new Command(async () => await LoadManteinance());
-            ShareMaintenanceCommand = new Command(() => ShareMaintenance());
         }
         private async Task LoadCategories()
         {

@@ -59,26 +59,24 @@ namespace Manchito.ViewModel
                 }
             }
         }
-        public ICommand AppearingCommand { get; private set; }
-        public ICommand ViewCategoryCommand { get; private set; }
-        public ICommand ValidateDataCommand { get; private set; }
-        public ICommand AddCategoryCommand { get; private set; }
-        public ICommand UpdateOnSwapCommand { get; private set; }
-        public ICommand UpdateItemOnSwapCommand { get; private set; }   
-        public ICommand DeleteItemOnSwapCommand { get; private set; }
+
         public ViewMaintenance ViewMaintenance { get; set; }
         #endregion
+
+        #region Icommands
+        public ICommand AppearingCommand { get { return new Command(async () => await LoadManteinance()); } private set { } }
+        public ICommand ViewCategoryCommand { get { return new Command(async (O) => await ViewCategory(O)); } private set { } }
+        public ICommand ValidateDataCommand { get { return new Command(async (o) => await ValidateDataPage(o)); } private set { } }
+        public ICommand AddCategoryCommand { get { return new Command(async () => await AddCategory()); } private set { } }
+        public ICommand UpdateOnSwapCommand { get; private set; }
+        public ICommand UpdateItemOnSwapCommand { get { return new Command(async (o) => await UpdateCategory(o)); ; } private set { } }
+        public ICommand DeleteItemOnSwapCommand { get {return new Command(async (o) => await DeleteCategory(o)); ; } private set { } }
+        #endregion
+
         #region Methods
         public ViewMaintenanceViewModel()
         {
             LoadingAnimationVisible = true;
-            UpdateOnSwapCommand = new Command(async async => await LoadCategories());
-            AppearingCommand = new Command(async () => await LoadManteinance());
-            ValidateDataCommand = new Command(async (o) => await ValidateDataPage(o));
-            AddCategoryCommand = new Command(async () => await AddCategory());
-            ViewCategoryCommand = new Command(async (O) => await ViewCategory(O));
-            DeleteItemOnSwapCommand = new Command(async (o) => await DeleteCategory(o)); ;
-            UpdateItemOnSwapCommand = new Command(async (o) => await UpdateCategory(o)); ;
         }
 
         private async Task UpdateCategory(object o)
@@ -112,7 +110,7 @@ namespace Manchito.ViewModel
                                         category.ItemTypeId = item.ItemTypeId;
                                         category.ItemType = item;
                                         string NewPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}", $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}", $"C-{category.CategoryId}_{action}_{category.Alias}");
-                                                                               
+
                                         Directory.CreateDirectory(NewPath);
                                         var files = Directory.GetFiles(OldPath);
                                         foreach (var item1 in files)
@@ -120,14 +118,15 @@ namespace Manchito.ViewModel
                                             await Task.Run(() => File.Move(Path.Combine(OldPath, item1), Path.Combine(NewPath, item1)));
                                         }
                                         db.Category.Update(category);
-                                        db.SaveChanges();                                        
-                                        if(Directory.GetFiles(OldPath).Length == 0) {
+                                        db.SaveChanges();
+                                        if (Directory.GetFiles(OldPath).Length == 0)
+                                        {
                                             Directory.Delete(OldPath);
-                                        }                                        
+                                        }
                                         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                                         var toast = Toast.Make("Categoria Actualizada", ToastDuration.Long, 16);
                                         await toast.Show(cancellationTokenSource.Token);
-                                    }                                    
+                                    }
                                 }
                             }
                             LoadCategories();
@@ -138,7 +137,7 @@ namespace Manchito.ViewModel
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error Update Category", $"Error interno {ex.Message}", "Ok");
-                await LoadCategories();
+                LoadCategories();
             }
         }
         private async Task DeleteCategory(object o)
@@ -151,7 +150,7 @@ namespace Manchito.ViewModel
                 {
                     using (var db = new DBLocalContext())
                     {
-                        var Category = db.Category.Include(C=>C.ItemType).FirstOrDefault(M => M.CategoryId == CategoryId);
+                        var Category = db.Category.Include(C => C.ItemType).FirstOrDefault(M => M.CategoryId == CategoryId);
                         if (Category != null)
                         {
                             db.Category.Remove(Category);
@@ -169,10 +168,16 @@ namespace Manchito.ViewModel
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error DeleteCategory", $"Error interno {ex.Message}", "Ok");
-                await LoadCategories();
+                LoadCategories();
             }
         }
 
+
+        /// <summary>
+        /// View Category Page
+        /// </summary>
+        /// <param name="id">id of the item to see</param>
+        /// <returns></returns>
         private async Task ViewCategory(Object id)
         {
             try
@@ -187,9 +192,14 @@ namespace Manchito.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Error ViewCategory", $"Error interno {ex.Message}", "Ok");
             }
         }
+        /// <summary>
+        /// Open 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
         private async Task ValidateDataPage(object o)
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new ValidateData());
+            //await Application.Current.MainPage.Navigation.PushAsync(new ValidateData());
             try
             {
                 int number = int.Parse(o.ToString());
@@ -259,27 +269,32 @@ namespace Manchito.ViewModel
             }
             finally
             {
-                await LoadCategories();
+                LoadCategories();
             }
         }
-        private async Task LoadCategories()
+        private async void LoadCategories()
         {
             try
             {
-                if(Maintenance  != null)
+                Thread threadLoadCategories = new Thread(new ThreadStart(() =>
                 {
-                    using var db = new DBLocalContext();
-                    Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId)
-                                            .Include(C => C.ItemType)
-                                            .Include(M => M.Photographies.Take(3)).ToList();
-                    if(Categories.Count== 0)
+
+                    if (Maintenance != null)
                     {
-                        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                        var toast = Toast.Make("No hay datos", ToastDuration.Long, 16);
-                        await toast.Show(cancellationTokenSource.Token);
+                        using var db = new DBLocalContext();
+                        Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId)
+                                                .Include(C => C.ItemType)
+                                                .Include(M => M.Photographies.Take(3)).ToList();
+                        if (Categories.Count == 0)
+                        {
+                            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                            var toast = Toast.Make("No hay datos", ToastDuration.Long, 16);
+                            toast.Show(cancellationTokenSource.Token);
+                        }
+                        LoadingAnimationVisible = false;
                     }
-                    LoadingAnimationVisible = false;
-                }
+                }));
+                threadLoadCategories.Start();
             }
             catch (Exception f)
             {
@@ -375,7 +390,7 @@ namespace Manchito.ViewModel
                                 db.SaveChanges();
 
                                 // cargar datos de nuevo
-                                await LoadCategories();
+                                LoadCategories();
                                 var project = GetProject(Maintenance.ProjectId);
 
                                 //Create Directory // Project/Mantenance/Category

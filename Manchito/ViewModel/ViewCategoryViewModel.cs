@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
+using System.Threading;
 using Microsoft.Maui.Graphics.Platform;
 using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
@@ -24,11 +25,7 @@ namespace Manchito.ViewModel
         private Category _Category;
         private string _Title;
         private List<Photography> _Photos;
-
-
-
         private bool _LoadingPhotosVisible;
-
         public bool LoadingPhotosVisible
         {
             get { return _LoadingPhotosVisible; }
@@ -48,8 +45,10 @@ namespace Manchito.ViewModel
         public bool LoadingAnimationVisible
         {
             get { return _LoadingAnimationVisible; }
-            set { _LoadingAnimationVisible = value;
-                if (_LoadingAnimationVisible!=null)
+            set
+            {
+                _LoadingAnimationVisible = value;
+                if (_LoadingAnimationVisible != null)
                 {
                     OnPropertyChanged(nameof(LoadingAnimationVisible));
                 }
@@ -136,40 +135,100 @@ namespace Manchito.ViewModel
                 }
             }
         }
-        public ICommand TakePhotoCommand { get; private set; }
-        public ICommand AddPhotoCommand { get; private set; }
-        public ICommand TakeVideoCommand { get; private set; }
-        public ICommand AppearingCommand { get; private set; }
-        public ICommand ShareItemCommand { get; private set; }
-        public ICommand DeletePhotoCommand { get; private set; }
-        public ICommand AddItemCommand { get; private set; }
-        public ICommand RecordAudioItem { get; private set; }
-        public ICommand DeleteAudioCommand { get; private set; }
-        public ICommand PlayItemCommand { get; private set; }
+
+        #endregion
+
+        #region Icommands
+        public ICommand TakePhotoCommand
+        {
+            get
+            {
+                return new AsyncRelayCommand(TakePhotoAndroid);
+            }
+            private set { }
+        }
+        public ICommand AddPhotoCommand { get { return new AsyncRelayCommand(AddPhotoFromGalleryAsync); } private set { } }
+        public ICommand TakeVideoCommand
+        {
+            get { return new AsyncRelayCommand(TakeVideoAndroid); }
+            private set { }
+        }
+        public ICommand AppearingCommand
+        {
+            get
+            {
+                return new AsyncRelayCommand(LoadCategory);
+            }
+            private set { }
+        }
+        public ICommand ShareItemCommand
+        {
+            get
+            {
+                return
+                    new Command((O) => SharePhoto(O));
+            }
+            private set { }
+        }
+        public ICommand DeletePhotoCommand
+        {
+            get
+            {
+                return
+                    new Command((O) => DeletePhoto(O));
+            }
+            private set { }
+        }
+        public ICommand AddItemCommand
+        {
+            get
+            {
+                return new
+                    AsyncRelayCommand(async () => await AddPhotoFromGalleryAsync());
+            }
+            private set { }
+        }
+        public ICommand RecordAudioItem
+        {
+            get
+            {
+                return new
+                    AsyncRelayCommand(async () => await RecordAudioAsync());
+            }
+            private set { }
+        }
+        public ICommand DeleteAudioCommand
+        {
+            get
+            {
+                return
+                    new Command((O) => DeleteAudioAsync(O));
+            }
+            private set { }
+        }
+        public ICommand PlayItemCommand
+        {
+            get
+            {
+                return
+                    new Command((O) => PlayAudio(O));
+            }
+            private set { }
+        }
         #endregion
         public ViewCategoryViewModel()
         {
             LoadingAnimationVisible = true;
             LoadingPhotosVisible = false;
-
-            urlIconRecorder = "record.svg";
-            ColorButtonRecorder = Colors.Green;
+            urlIconRecorder = "record.svg";            
             Title = "";
-            TakePhotoCommand = new AsyncRelayCommand(TakePhotoAndroid);
-            TakeVideoCommand = new AsyncRelayCommand(TakeVideoAndroid);
-            AddPhotoCommand = new AsyncRelayCommand(AddPhotoFromGalleryAsync);
-            AppearingCommand = new AsyncRelayCommand(LoadCategory);
-            ShareItemCommand = new Command((O) => SharePhoto(O));
-            DeletePhotoCommand = new Command((O) => DeletePhoto(O));
-            PlayItemCommand = new Command((O) => PlayAudio(O));
-            AddItemCommand = new AsyncRelayCommand(async () => await AddPhotoFromGalleryAsync());
-            RecordAudioItem = new AsyncRelayCommand(async () => await RecordAudioAsync());
-            DeleteAudioCommand = new Command((O) => DeleteAudioAsync(O));
+            ColorButtonRecorder = Colors.Green;
+
         }
 
         private async void PlayAudio(object o)
         {
-             await MessageToastAsync("Reproduciendo audio", false);            
+            await MessageToastAsync("Reproduciendo audio", false);
             _audioPlayer.Play(o.ToString());
         }
 
@@ -201,8 +260,8 @@ namespace Manchito.ViewModel
                 if (OperatingSystem.IsAndroidVersionAtLeast(30))
                 {
                     var storagePermission = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-                }                
-                if (StatusAudio == PermissionStatus.Granted )
+                }
+                if (StatusAudio == PermissionStatus.Granted)
                 {
                     if (_recorderService.IsRecording)
                     {
@@ -282,7 +341,7 @@ namespace Manchito.ViewModel
             }
             finally
             {
-                await loadImages();
+                loadImages();
             }
         }
         private async Task DeletePhoto(object o)
@@ -301,7 +360,7 @@ namespace Manchito.ViewModel
                         File.Delete(photo.FilePath);
                         await MessageToastAsync("Foto Borrada", false);
                         string path = o.ToString();
-                        await loadImages();
+                        loadImages();
                     }
                 }
             }
@@ -364,8 +423,8 @@ namespace Manchito.ViewModel
                         video.FileName = $"VID D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")}.mp4";
                         // save the file into local storage                       
                         string localFilePath = Path.Combine(await FolderPathAndroid(), video.FileName);
-                        File.Move(video.FullPath, localFilePath);                       
-                        await loadImages();
+                        File.Move(video.FullPath, localFilePath);
+                        loadImages();
                         await MessageToastAsync("Video Guardado", true);
                     }
                 }
@@ -400,7 +459,8 @@ namespace Manchito.ViewModel
                         {
                             Title = $"{CategoryItem.ItemType.Name} - {CategoryItem.Alias}";
                         }
-                        await loadImages();
+                        Thread threadImages = new Thread(new ThreadStart(loadImages));
+                        threadImages.Start();
                         await LoadAudio();
                     });
                 }
@@ -415,7 +475,7 @@ namespace Manchito.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Error Load Category", f.Message, "OK");
             }
         }
-        private async Task loadImages()
+        private void loadImages()
         {
             try
             {
@@ -433,7 +493,7 @@ namespace Manchito.ViewModel
             }
             catch (Exception f)
             {
-                await Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
+                Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
             }
         }
         private async Task LoadAudio()
@@ -575,8 +635,10 @@ namespace Manchito.ViewModel
                         string localFilePath = Path.Combine(tempPath, photo.FileName);
                         File.Move(photo.FullPath, localFilePath);
                         await RegisterPhoto(localFilePath);
-                        await loadImages();
-                        await MessageToastAsync("Foto Guardada", true);                      
+
+
+                        loadImages();
+                        await MessageToastAsync("Foto Guardada", true);
                     }
                 }
             }
@@ -590,7 +652,7 @@ namespace Manchito.ViewModel
         private async Task MessageToastAsync(string Message, bool IsLong)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            var duration = (IsLong) ? ToastDuration.Long : ToastDuration.Short; 
+            var duration = (IsLong) ? ToastDuration.Long : ToastDuration.Short;
             var toast = Toast.Make(Message, duration, 14);
             await toast.Show(cancellationTokenSource.Token);
         }
