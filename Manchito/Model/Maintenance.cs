@@ -29,5 +29,7 @@
         /// Id of the project owner
         /// </summary>
         public int ProjectId { get; set; }
+
+        public ICollection<Category> Categories { get; set; }
     }
 }

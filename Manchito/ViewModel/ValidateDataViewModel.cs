@@ -1,10 +1,13 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.Messaging;
+using Java.IO;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.IO.Compression;
 using System.Windows.Input;
 
@@ -101,37 +104,31 @@ namespace Manchito.ViewModel
         {
             try
             {
-                var d = WeakReferenceMessenger.Default.IsRegistered<NameItemViewMessage>(this);
-                if (!d)
+                var idtmp = TempData.IdMaintenance;
+
+                using (var db = new DBLocalContext())
                 {
-                    if (Maintenance == null)
-                    {
-                        WeakReferenceMessenger.Default.Register<NameItemViewMessage>(this, async (r, m) =>
-                        {
-                            using (var db = new DBLocalContext())
-                            {
-                                Maintenance = await db.Maintenance.Where(M => M.MaintenanceId == m.Value).Include(M => M.Project).SingleOrDefaultAsync();
-                                Title = $"Validación {Maintenance.Alias}";
-                            }
-                            if (Maintenance != null)
-                            {
-                                Title = $"Validación {Maintenance.Alias}";
-                                await LoadCategories();
-                            }
-                        });
-                    }
-                    else
-                    {
-                        LoadCategories();
-                    }
-                }
-                else
-                {
+                    Maintenance = await db.Maintenance.Where(M => M.MaintenanceId == idtmp).SingleOrDefaultAsync();
                     if (Maintenance != null)
                     {
-                        LoadCategories();
+                        Maintenance.Project = await db.Project.FirstOrDefaultAsync(P => P.ProjectId == Maintenance.ProjectId);
+                        Maintenance.Project.Maintenances = null;
+                        Maintenance.Categories = db.Category.Where(Category => Category.MaintenanceId == idtmp).ToList();
+                        foreach (var item in Maintenance.Categories)
+                        {
+                            item.ItemType = await db.ItemTypes.FirstOrDefaultAsync(I => I.ItemTypeId == item.ItemTypeId);
+                            item.ItemType.Categories = null;
+                            item.Photographies =  await db.Photography.Where(P => P.CategoryId == item.CategoryId).ToListAsync();
+                            
+                            item.AudioNotes = await db.AudioNote.Where(A => A.CategoryId == item.CategoryId).ToListAsync();
+                        }
+                        Title = $"Validación {Maintenance.Alias}";
                     }
-                    WeakReferenceMessenger.Default.Unregister<NameItemViewMessage>(this);
+                }
+                if (Maintenance != null)
+                {
+                    Title = $"Validación {Maintenance.Alias}";
+                    await LoadCategories();
                 }
             }
             catch (Exception f)
@@ -147,7 +144,7 @@ namespace Manchito.ViewModel
             var toast = Toast.Make(Message, duration, 14);
             await toast.Show(cancellationTokenSource.Token);
         }
-        private void ShareMaintenance()
+        private async Task ShareMaintenance()
         {
             try
             {
@@ -156,21 +153,31 @@ namespace Manchito.ViewModel
                                     PathDirectoryFilesAndroid,
                                     $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
                                     $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}");
-                string zipPath = Path.Combine(
+
+                string zipPathFile = Path.Combine(
                                         FileSystem.CacheDirectory,
                                         $"P-{Maintenance.Project.Name}-{Maintenance.Alias}.zip");
-                if (File.Exists(zipPath))
+                if (System.IO.File.Exists(zipPathFile))
                 {
                     // create new zip file
-                    File.Delete(zipPath);
+                    System.IO.File.Delete(zipPathFile);
                 }
-                ZipFile.CreateFromDirectory(startPath, zipPath, CompressionLevel.Optimal, true);
-                if (File.Exists(zipPath))
+
+                
+                var JsonFile = Path.Combine(startPath, "Information About.json");
+                var JsonDAta = JsonConvert.SerializeObject(Maintenance ,Formatting.Indented,new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+                using (StreamWriter sw = new StreamWriter(JsonFile))
                 {
-                    Share.Default.RequestAsync(new ShareFileRequest
+                    await sw.WriteAsync(JsonDAta);
+                }
+             
+                ZipFile.CreateFromDirectory(startPath, zipPathFile, CompressionLevel.SmallestSize, true);
+                if (System.IO.File.Exists(zipPathFile))
+                {
+                   await Share.Default.RequestAsync(new ShareFileRequest
                     {
                         Title = "Compartir Archivo",
-                        File = new ShareFile(zipPath)
+                        File = new ShareFile(zipPathFile)
                     });
                 }
             }

@@ -20,9 +20,7 @@ namespace Manchito.ViewModel
         #region Properties
         private Maintenance _Maintenance;
         private List<Category> _Categories;
-
         private bool _LoadingAnimationVisible;
-
         public bool LoadingAnimationVisible
         {
             get { return _LoadingAnimationVisible; }
@@ -35,7 +33,6 @@ namespace Manchito.ViewModel
                 }
             }
         }
-
         public List<Category> Categories
         {
             get { return _Categories; }
@@ -60,7 +57,6 @@ namespace Manchito.ViewModel
                 }
             }
         }
-
         public ViewMaintenance ViewMaintenance { get; set; }
         #endregion
 
@@ -217,10 +213,9 @@ namespace Manchito.ViewModel
             //await Application.Current.MainPage.Navigation.PushAsync(new ValidateData());
             try
             {
-                int number = int.Parse(o.ToString());
+                TempData.IdMaintenance = int.Parse(o.ToString());
                 await Application.Current.MainPage.Navigation.PushAsync(new ValidateData(), true);
-                WeakReferenceMessenger.Default.Cleanup();
-                WeakReferenceMessenger.Default.Send(new NameItemViewMessage(number));
+                
             }
             catch (Exception ex)
             {

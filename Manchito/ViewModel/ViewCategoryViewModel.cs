@@ -216,6 +216,8 @@ namespace Manchito.ViewModel
             private set { }
         }
         #endregion
+
+        #region Methods
         public ViewCategoryViewModel()
         {
             LoadingAnimationVisible = true;
@@ -486,6 +488,7 @@ namespace Manchito.ViewModel
                 Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
             }
         }
+
         private async void LoadAudio()
         {
             try
@@ -553,37 +556,6 @@ namespace Manchito.ViewModel
                 return -20;
             }
         }
-        private async Task<bool> CheckAndroidDirectory()
-        {
-            try
-            {
-                if (CategoryItem != null)
-                {
-                    var Pj = CategoryItem.Maintenance.Project;
-                    var Man = CategoryItem.Maintenance;
-                    var Cat = CategoryItem;
-                    string categoryPath = await FolderPathAndroid();
-                    if (Directory.Exists(categoryPath))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        Directory.CreateDirectory(categoryPath);
-                        return true;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception e)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error CheckAndroidDirectory", $"Error: {e.Message}", "ok");
-                return false;
-            }
-        }
         private async Task RegisterPhoto(string pathFile)
         {
             try
@@ -640,5 +612,6 @@ namespace Manchito.ViewModel
             await toast.Show(cancellationTokenSource.Token);
         }
 
+        #endregion
     }
 }

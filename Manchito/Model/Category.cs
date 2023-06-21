@@ -34,5 +34,7 @@
         /// </summary>
         public ICollection<Photography> Photographies { get; set; }
         public ICollection<Note> Notes { get; set; }
+
+        public ICollection<AudioNote> AudioNotes { get; set; }
     }
 }
