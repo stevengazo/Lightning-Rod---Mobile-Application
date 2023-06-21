@@ -1,3 +1,5 @@
+using Manchito.Model;
+
 namespace Manchito.Views;
 
 public partial class ViewProjectList : ContentPage
@@ -7,15 +9,15 @@ public partial class ViewProjectList : ContentPage
 		InitializeComponent();
 	}
 
-    private void btnAgregar_Clicked(object sender, EventArgs e)
+    private async void btnAgregar_Clicked(object sender, EventArgs e)
     {
 
-		Navigation.PushAsync(new AddProject());
+        
     }
 
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    private  void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        Navigation.PushAsync(new ViewProject());
+        
 
     }
 }

@@ -18,7 +18,8 @@ public partial class MainPage : FlyoutPage
         var item = e.CurrentSelection.FirstOrDefault() as FlyoutPageItem;
         if (item != null)
         {
-                       Detail = new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
+            Detail =  (Page)Activator.CreateInstance(item.TargetType);
+            NavigationDispatcher.Instance.Initialize(this.Navigation);
             if (!((IFlyoutPageController)this).ShouldShowSplitMode)
                 IsPresented = false;
         }

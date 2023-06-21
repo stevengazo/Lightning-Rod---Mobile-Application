@@ -1,4 +1,6 @@
-﻿namespace Manchito;
+﻿using Manchito.Model;
+
+namespace Manchito;
 
 public partial class App : Application
 {

@@ -76,7 +76,6 @@
             <Button x:Name="btnAgregar"
                     BackgroundColor="Green"
                     Command="{Binding AddProjectCommand}"
-                    Clicked="btnAgregar_Clicked"
                     TextColor="White"
                     Text="Agregar Proyecto"
                     FontSize="Medium"      
