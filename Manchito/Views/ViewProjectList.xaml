@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Manchito.Views.ViewProjectList"
+             x:Name="ViewProjectListPage"
+             xmlns:local="clr-namespace:Manchito.ViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:models="clr-namespace:Manchito.Model"
+             Title="Manchito - Proyectos">
+    <!-- Binding  Context-->
+    <ContentPage.BindingContext>
+        <local:ProjectListViewModel/>
+    </ContentPage.BindingContext>
+    <!-- Behaviors of ContentPage -->
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior 
+               EventName="Appearing"
+               Command="{Binding LoadProjectsCommand}"
+            />
+    </ContentPage.Behaviors>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+        <HorizontalStackLayout Grid.Row="0"  HorizontalOptions="Center" Padding="5" VerticalOptions="Center">
+            <Label FontSize="Title" TextColor="{AppThemeBinding Light=black, Dark=white}">
+                Lista de Proyectos
+            </Label>
+        </HorizontalStackLayout>
+        <ScrollView Grid.Row="1" 
+                    BackgroundColor="{AppThemeBinding Light=white, Dark=gray}"
+                    Padding="10,10,10,10">
+            <VerticalStackLayout x:Name="containerlist" Spacing="5">
+                <ActivityIndicator IsRunning="true" IsVisible="{Binding LoadingAnimationVisible, Mode=TwoWay}" Color="Orange" />
+                <CollectionView SelectionMode="Single" ItemsSource="{Binding Projects,Mode=OneWay}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate >
+                            <Frame 
+                                    Padding="12"
+                                    Margin="2" 
+                                    VerticalOptions="Center"
+                                    HeightRequest="80"
+                                    CornerRadius="10"
+                                    BackgroundColor="{AppThemeBinding Light=whitesmoke, Dark=Gray}"
+                                    BorderColor= "{AppThemeBinding Light=lightblue, Dark=White}"                      
+                                    >
+                                <Frame.Behaviors>
+                                    <toolkit:AnimationBehavior>
+                                        <toolkit:AnimationBehavior.AnimationType>
+                                            <toolkit:FadeAnimation Opacity="0.5" />
+                                        </toolkit:AnimationBehavior.AnimationType>
+                                    </toolkit:AnimationBehavior>
+                                </Frame.Behaviors>
+                                <HorizontalStackLayout Spacing="10" Margin="0,10">
+                                    <HorizontalStackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer  Command="{Binding BindingContext.ViewProjectCommand, Source={x:Reference ViewProjectListPage}}"  CommandParameter="{Binding ProjectId}" Tapped="TapGestureRecognizer_Tapped" ></TapGestureRecognizer>
+                                    </HorizontalStackLayout.GestureRecognizers>
+                                    <Label Text="Nombre:" 
+                                           TextColor="{AppThemeBinding Light=black, Dark=White}" />
+                                    <Label Text="{Binding Name}"  
+                                           TextColor="{AppThemeBinding Light=black, Dark=white}"/>
+                                    <Label Text="Cliente:" 
+                                           TextColor="{AppThemeBinding Light=black, Dark=white}" />
+                                    <Label Text="{Binding CustomerName}" 
+                                           TextColor="{AppThemeBinding Light=black, Dark=white}"  />
+                                </HorizontalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center">
+            <Button x:Name="btnAgregar"
+                    BackgroundColor="Green"
+                    Command="{Binding AddProjectCommand}"
+                    Clicked="btnAgregar_Clicked"
+                    TextColor="White"
+                    Text="Agregar Proyecto"
+                    FontSize="Medium"      
+                    CornerRadius="15"
+                    MaximumHeightRequest="50"
+                   MinimumWidthRequest="240"                    
+                    />
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>
