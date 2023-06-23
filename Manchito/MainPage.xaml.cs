@@ -1,4 +1,5 @@
 ﻿using Manchito.Model;
+using Manchito.Views;
 
 namespace Manchito;
 
@@ -10,7 +11,8 @@ public partial class MainPage : FlyoutPage
     {
         InitializeComponent();
         FlyoutPage.collectionView.SelectionChanged += OnSelectionChanged;
-
+        var DefaultPage = new ViewProjectList();
+        NavigationDispatcher.Instance.Initialize(this.Navigation);
     }
 
     void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -19,7 +21,7 @@ public partial class MainPage : FlyoutPage
         if (item != null)
         {
             Detail =  (Page)Activator.CreateInstance(item.TargetType);
-            NavigationDispatcher.Instance.Initialize(this.Navigation);
+            
             if (!((IFlyoutPageController)this).ShouldShowSplitMode)
                 IsPresented = false;
         }

@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Maui.Markup;
+using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
@@ -80,9 +81,7 @@ namespace Manchito.ViewModel
         {
             try
             {
-                await NavigationDispatcher.Instance.Navigation.PushAsync(new AddProject());
-
-                //  await Application.Current.MainPage.Navigation.PushAsync(new AddProject());
+                await NavigationDispatcher.Instance.Navigation.PushModalAsync(new AddProject());
             }
             catch (Exception ex)
             {
@@ -110,13 +109,11 @@ namespace Manchito.ViewModel
         {
             try
             {
-                TempData.IdProject = int.Parse(t.ToString());
-                await NavigationDispatcher.Instance.Navigation.PushAsync(new ViewProject(),false);
-                // await Application.Current.MainPage.Navigation.PushAsync(new ViewProject(), false);
+                TempData.IdProject = int.Parse(t.ToString());                
+                await NavigationDispatcher.Instance.Navigation.PushModalAsync(new ViewProject());
             }
             catch (Exception ex)
             {
-
                 await Application.Current.MainPage.DisplayAlert("Error interno", $"Error: {ex.Message}", "ok");
             }
         }
