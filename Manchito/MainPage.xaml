@@ -20,7 +20,7 @@
             />
     </ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
-        <ToolbarItem  IconImageSource="config.sgv"  ></ToolbarItem>
+        <ToolbarItem  IconImageSource="config.sgv" Command="{Binding ViewConfiguration,Mode=OneWay}" />
     </ContentPage.ToolbarItems>
     <Grid>
         <Grid.RowDefinitions>

@@ -473,8 +473,8 @@ namespace Manchito.ViewModel
                     {
                         List<Photography> photos = new();
                         using (DBLocalContext db = new())
-                        {
-                            photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I => I.CategoryId).ToList();
+{
+                                                    photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I => I.CategoryId).ToList();
                         }
                         Photos = photos;
                         LoadingAnimationVisible = false;

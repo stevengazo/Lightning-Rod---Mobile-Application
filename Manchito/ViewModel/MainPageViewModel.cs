@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Maui.Markup;
+using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
 using Manchito.Messages;
 using Manchito.Model;
@@ -15,8 +16,14 @@ namespace Manchito.ViewModel
         public ICommand LoadProjectsCommand { get { return new Command(async () => await LoadProjects()); } private set { } }
         public ICommand AddProjectCommand { get { return new Command(async () => await AddProject()); } private set { } }
         public ICommand ViewProjectCommand { get { return new Command(async (t) => ViewProject(t)); } private set { } }
+        public ICommand ViewConfiguration { get { return new Command(async () => ViewConfigurationPage()); } private set { }  }
+
+        private void ViewConfigurationPage()
+        {
+            Application.Current.MainPage.Navigation.PushAsync(new ViewConfiguration(), true);
+        }
         #endregion
-       
+
         #region Properties
         private List<Project> _Projects;
         private string _ErrorMessage;
