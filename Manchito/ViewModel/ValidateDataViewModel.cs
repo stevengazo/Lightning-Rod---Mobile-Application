@@ -153,17 +153,19 @@ namespace Manchito.ViewModel
                                     PathDirectoryFilesAndroid,
                                     $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
                                     $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}");
-
+                if (!Directory.Exists("/storage/emulated/0/Download/Manchito"))
+                {
+                    Directory.CreateDirectory("/storage/emulated/0/Download/Manchito");
+                }
                 string zipPathFile = Path.Combine(
-                                        FileSystem.CacheDirectory,
+                                         "/storage/emulated/0/Download/Manchito",
                                         $"P-{Maintenance.Project.Name}-{Maintenance.Alias}.zip");
                 if (System.IO.File.Exists(zipPathFile))
                 {
                     // create new zip file
+                    MessageToastAsync("Se sobreescribirá la ultima copioa", true);
                     System.IO.File.Delete(zipPathFile);
                 }
-
-                
                 var JsonFile = Path.Combine(startPath, "Information About.json");
                 var JsonDAta = JsonConvert.SerializeObject(Maintenance ,Formatting.Indented,new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
                 using (StreamWriter sw = new StreamWriter(JsonFile))
