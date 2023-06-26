@@ -38,7 +38,7 @@ namespace Manchito.ViewModel
                 Projects = db.Project.ToList();
                 foreach (var Project in Projects)
                 {
-                    string ZipFilePath = Path.Combine(BackupPath, $"P-{Project.ProjectId}_{Project.Name}");
+                    string ZipFilePath = Path.Combine(BackupPath, $"P-{Project.ProjectId}_{Project.Name}.zip");
                     string ProjectBasePath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Project.ProjectId}_{Project.Name}");
                     GenerateZipFile(ZipFilePath, ProjectBasePath);
                 }
@@ -66,22 +66,42 @@ namespace Manchito.ViewModel
 
         private void GenerateDirectories()
         {
-            if (Directory.Exists(BasePath))
+            try
             {
-                Directory.CreateDirectory(BasePath);
-                if(Directory.Exists(BackupPath)) {
+                if (!Directory.Exists(BasePath))
+                {
+                    Directory.CreateDirectory(BasePath);
+                }
+                if (!Directory.Exists(BackupPath))
+                {
                     Directory.CreateDirectory(BackupPath);
                 }
             }
+            catch (Exception f)
+            {
+                MessageToastAsync("Error " + f.Message, false);
+            }
+
         }
         private async Task GenerateZipFile(string ZipFilePath, string BasePath)
         {
-            if (File.Exists(ZipFilePath))
+            try
             {
-               await MessageToastAsync("Se sobreescribirá la ultima copia", false);
-                File.Delete(ZipFilePath);
+                if (File.Exists(ZipFilePath))
+                {
+                    await MessageToastAsync("Se sobreescribirá la ultima copia", true);
+                    File.Delete(ZipFilePath);
+                }
+
+                ZipFile.CreateFromDirectory(BasePath, ZipFilePath, CompressionLevel.SmallestSize, true);
+                string filename = Path.GetFileName(ZipFilePath);
+                MessageToastAsync($"Archivo {filename} generado", false);
             }
-            ZipFile.CreateFromDirectory(BasePath, ZipFilePath, CompressionLevel.SmallestSize, true);
+            catch (Exception f)
+            {
+                MessageToastAsync("Error " + f.Message, true);
+            }
+    
         }
     }
 }
