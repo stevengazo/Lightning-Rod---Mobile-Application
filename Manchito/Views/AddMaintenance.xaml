@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Manchito.Views.AddMaintenance"
+             xmlns:local="clr-namespace:Manchito.ViewModel"
+             Title="Agregar Mantenimiento">
+    <ContentPage.BindingContext>
+        <local:AddMaintenanceViewModel />
+    </ContentPage.BindingContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="600" />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
+        <Frame Grid.Row="0" BorderColor="White" >
+            <VerticalStackLayout   HorizontalOptions="Center" Spacing="20" VerticalOptions="Center" Padding="0,20">
+                <!--Alias-->
+                <Label FontSize="Large" HorizontalOptions="Center">
+                    Alias
+                </Label>
+
+                <Entry
+                HorizontalOptions="Center"
+                MaximumWidthRequest="180"
+                    BackgroundColor="WhiteSmoke"
+                Style="{StaticResource CommonEntryStyle}"
+                Placeholder="Nombre del Proyecto"
+                MaxLength="80">
+                </Entry>
+
+
+                <Label FontSize="Micro" HorizontalOptions="Center" Margin="0">
+                    Alias: nombre del sitio o lugar
+                </Label>
+                <!--Fecha-->
+                <Label FontSize="Large" HorizontalOptions="Center">
+                    Fecha
+                </Label>
+
+                <DatePicker 
+                    MaximumWidthRequest="180"
+                    HorizontalOptions="Center"                       
+                />
+
+                <Label FontSize="Micro" HorizontalOptions="Center">
+                    Fecha: inicio del proyecto
+                </Label>
+                <!--Estado-->
+                <Label FontSize="Large" HorizontalOptions="Center">
+                    Estado
+                </Label>
+
+                <Picker x:Name="picker"
+                        BackgroundColor="WhiteSmoke"
+                        Margin="0"                        
+                        HorizontalTextAlignment="Center"
+                        Title="Seleccione un estado">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>En ejecucion</x:String>
+                            <x:String>Concluido</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+
+                <Label FontSize="Micro" HorizontalOptions="Center" >
+                    Estado: situación del proyecto
+                </Label>
+            </VerticalStackLayout>
+
+        </Frame>
+        <Frame Grid.Row="1" BorderColor="White"  Padding="0" >
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="50" Padding="0">
+                <Button
+                     Text="Agregar"
+                    BackgroundColor="Green"
+                    BorderColor="LightGreen"
+                    BorderWidth="1"
+                    CornerRadius="10"
+                    TextColor="White"
+                    WidthRequest="120"
+                    HeightRequest="40"
+                    />
+                <Button
+                    Text="Cancelar"
+                    BackgroundColor="Red"
+                    BorderColor="LightPink"
+                    BorderWidth="1"
+                    CornerRadius="10"
+                    TextColor="White"
+                    WidthRequest="120"
+                    HeightRequest="40"
+                    />
+            </HorizontalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>

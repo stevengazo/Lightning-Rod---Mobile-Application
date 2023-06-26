@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Manchito.Views.UpdateProject"
+             xmlns:local="clr-namespace:Manchito.ViewModel"
+             x:Name="UpdateProjectPage"
+             Title="Actualizar Proyecto">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="580" />
+            <RowDefinition Height="120" />
+        </Grid.RowDefinitions>
+        <!-- DAta-->
+        <VerticalStackLayout Grid.Row="0" HorizontalOptions="Center" Spacing="12" VerticalOptions="Start" Margin="0" Padding="0,50">
+            <!-- Id Proyecto-->
+            <Label FontSize="Subtitle" HorizontalOptions="Center" TextColor="{Binding Project.ProjectId}" />
+            <!--Alias-->
+            <Label FontSize="Subtitle" HorizontalOptions="Center">
+                Alias
+            </Label>
+            <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
+                <Entry  BackgroundColor="WhiteSmoke"
+                        Text="{Binding Project.Name, Mode=TwoWay}"                        
+                        HorizontalOptions="Center"
+                        WidthRequest="240"           
+                        Placeholder="Nombre del Proyecto"
+                        MaxLength="80" />
+            </Frame>
+            <Label FontSize="Small" HorizontalOptions="Center" Text="Alias: nombre del sitio o lugar" />
+            <!--Customer Name-->
+            <Label FontSize="Subtitle" HorizontalOptions="Center" Text="Nombre Del Cliente" />
+            <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
+                <Entry  BackgroundColor="WhiteSmoke"
+                        Text="{Binding Project.CustomerName, Mode=TwoWay}"
+                        HorizontalOptions="Center"
+                        WidthRequest="240"            
+                        Placeholder="Ejemplo S.A."
+                        MaxLength="80" />
+            </Frame>
+            <!--Customer Contact Name-->
+            <Label FontSize="Subtitle" HorizontalOptions="Center" Text="Nombre del Contacto del cliente" />
+            <Frame BorderColor="White" CornerRadius="5" Padding="0,2,0,2">
+                <Entry  BackgroundColor="WhiteSmoke"
+                        Text="{Binding Project.CustomerContactName,Mode=TwoWay}"
+                        HorizontalOptions="Center"
+                        WidthRequest="240"            
+                        Placeholder="Pepito"
+                        MaxLength="80" />
+            </Frame>
+            <!--Fecha-->
+            <Label FontSize="Small" HorizontalOptions="Center" Text="Fecha" />
+            <Frame BorderColor="White" CornerRadius="5" Padding="0">
+                <DatePicker     Date="{Binding Project.DateProject,Mode=TwoWay}"                    
+                                BackgroundColor="WhiteSmoke"                    
+                                WidthRequest="240"
+                                HorizontalOptions="Center" />
+            </Frame>
+            <Label FontSize="Small" HorizontalOptions="Center" Text="Fecha: inicio del proyecto" />
+            <!--Estado-->
+            <Label FontSize="Small" HorizontalOptions="Center" Text="Estado" />
+            <Frame BorderColor="White" CornerRadius="5" Padding="0">
+                <Picker x:Name="picker"
+                        Margin="0"                               
+                        SelectedItem="{Binding Project.Status,Mode=TwoWay}"
+                        BackgroundColor="WhiteSmoke"
+                        HorizontalTextAlignment="Center"
+                        WidthRequest="240"
+                        Title="Seleccione un estado">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>En ejecucion</x:String>
+                            <x:String>Concluido</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+            </Frame>
+            <Label FontSize="Small" HorizontalOptions="Center" Text="Estado: situación del proyecto" />
+        </VerticalStackLayout>
+        <!-- buttons-->
+        <HorizontalStackLayout Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" Padding="2">
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="50" Padding="0">
+                <Button
+                     Text="Actualizar"
+                    BackgroundColor="Green"
+                    BorderColor="LightGreen"
+                    BorderWidth="1"
+                    Command="{Binding BindingContext. UpdateProjectCommand, Source={x:Reference UpdateProjectPage}}"  
+                    CommandParameter="{Binding Project.ProjectId}"                                                                                              
+                    CornerRadius="10"
+                    TextColor="White"
+                    WidthRequest="120"
+                    HeightRequest="40"
+                    />
+                <Button
+                    Text="Cancelar"
+                    BackgroundColor="Red"
+                    BorderColor="LightPink"
+                    Command="{Binding CancelCommand}"
+                    BorderWidth="1"
+                    CornerRadius="10"
+                    TextColor="White"
+                    WidthRequest="120"
+                    HeightRequest="40"
+                    />
+            </HorizontalStackLayout>
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

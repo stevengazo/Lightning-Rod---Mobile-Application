@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:VM="clr-namespace:Manchito.ViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Manchito.Views.ValidateData"           
+             Title="{Binding Title}">
+    <ContentPage.BindingContext>
+        <VM:ValidateDataViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior 
+               EventName="Appearing"
+               Command="{Binding AppearingCommand}"
+            />
+    </ContentPage.Behaviors>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="70" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0"  HorizontalOptions="Center" Text="Elementos Clave" FontSize="Title"  />
+        <Frame Grid.Row="1" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" >
+            <VerticalStackLayout Spacing="15">
+                <Label HorizontalOptions="Center" FontSize="Body">Recuerde seleccionar todos los elementos del mantenimiento</Label>
+                <Label Padding="5" FontSize="Subtitle" TextColor="{AppThemeBinding Light=black, Dark=white}">
+                    Pararrayos: Revision de la ubicación, altura y estado del pararrayos
+                </Label>
+                <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                <Label Padding="5"  FontSize="Subtitle"  TextColor="{AppThemeBinding Light=black, Dark=white}">
+                    Bajante: Revision del estado, recorrido, protecciones. contador de eventos y rotulacion.
+                </Label>
+                <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                <Label Padding="5" FontSize="Subtitle" TextColor="{AppThemeBinding Light=black, Dark=white}">
+                    Sistema de Puesta a Tierra: revision de ubicacion, electrodos, cableado, registro principal, mediciones.
+                </Label>
+                <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                <Label Padding="5" FontSize="Subtitle" TextColor="{AppThemeBinding Light=black, Dark=white}">
+                    Montaje: altura y estado del montaje usado para el pararrayos.
+                </Label>
+                <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                <Label Padding="5" FontSize="Subtitle" TextColor="{AppThemeBinding Light=black, Dark=white}">
+                    Unificaciones: comprobacion de la unificacion de la malla
+                </Label>
+                <Line X1="20" Y1="0" X2="320" Y2="0" Stroke="LightGray" />
+                <Label Padding="5" FontSize="Subtitle" TextColor="{AppThemeBinding Light=black, Dark=white}">
+                    Supresores: tableros y equipos sin proteccion.
+                </Label>
+            </VerticalStackLayout>
+        </Frame>
+        <HorizontalStackLayout Grid.Row="3" HorizontalOptions="Center" VerticalOptions="Center">
+            <Button                
+                    WidthRequest="240"
+                    TextColor="White"
+                    HeightRequest="60"                                            
+                    Command="{Binding ShareMaintenanceCommand}"  
+                    BorderWidth="2"
+                    BorderColor="White"
+                    BackgroundColor="blue"
+                    Padding="2"
+                    Text="Exportar Información"
+                    CornerRadius="25"
+                />
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>
