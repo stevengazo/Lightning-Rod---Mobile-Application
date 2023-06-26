@@ -19,6 +19,9 @@
                Command="{Binding LoadProjectsCommand}"
             />
     </ContentPage.Behaviors>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  IconImageSource="config.sgv"  ></ToolbarItem>
+    </ContentPage.ToolbarItems>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />

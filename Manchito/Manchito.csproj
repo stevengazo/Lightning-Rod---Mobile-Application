@@ -49,6 +49,7 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Icons\addphoto.svg" />
+	  <None Remove="Resources\Icons\config.svg" />
 	  <None Remove="Resources\Icons\record.svg" />
 	  <None Remove="Resources\Icons\share.svg" />
 	  <None Remove="Resources\Icons\video.svg" />
@@ -138,6 +139,7 @@
 
 	<ItemGroup>
 	  <MauiImage Include="Resources\Icons\addphoto.svg" />
+	  <MauiImage Include="Resources\Icons\config.svg" />
 	  <MauiImage Include="Resources\Icons\record.svg" />
 	  <MauiImage Include="Resources\Icons\video.svg" />
 	  <MauiImage Include="Resources\Icons\share.svg" />

@@ -8,6 +8,7 @@ using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Diagnostics;
 using System.IO.Compression;
 using System.Windows.Input;
 
@@ -148,7 +149,6 @@ namespace Manchito.ViewModel
         {
             try
             {
-                MessageToastAsync("Generando Archivo\nPor favor espere...", true);
                 string startPath = Path.Combine(
                                     PathDirectoryFilesAndroid,
                                     $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
@@ -163,7 +163,7 @@ namespace Manchito.ViewModel
                 if (System.IO.File.Exists(zipPathFile))
                 {
                     // create new zip file
-                    MessageToastAsync("Se sobreescribirá la ultima copioa", true);
+                    await MessageToastAsync("Se sobreescribirá la ultima copia", false);
                     System.IO.File.Delete(zipPathFile);
                 }
                 var JsonFile = Path.Combine(startPath, "Information About.json");
@@ -172,8 +172,9 @@ namespace Manchito.ViewModel
                 {
                     await sw.WriteAsync(JsonDAta);
                 }
-             
+                await MessageToastAsync("Generando Archivo",false);
                 ZipFile.CreateFromDirectory(startPath, zipPathFile, CompressionLevel.SmallestSize, true);
+ 
                 if (System.IO.File.Exists(zipPathFile))
                 {
                    await Share.Default.RequestAsync(new ShareFileRequest
@@ -185,7 +186,7 @@ namespace Manchito.ViewModel
             }
             catch (Exception f)
             {
-                Application.Current.MainPage.DisplayAlert("Error ShareMaintenance", $"Error interno {f.Message}", "Ok");
+                   await Application.Current.MainPage.DisplayAlert("Error ShareMaintenance", $"Error interno {f.Message}", "Ok");
             }
         }
         #endregion
