@@ -249,7 +249,7 @@ namespace Manchito.ViewModel
                     Maintenance = db.Maintenance.Where(M => M.MaintenanceId == tempIdMaintenance).Include(M => M.Project).FirstOrDefault();
                     if (Maintenance != null)
                     {
-                        await Task.Run(LoadCategories);
+                        LoadCategories();
                     }
                 }
             }
@@ -261,8 +261,7 @@ namespace Manchito.ViewModel
             {
                 if (Maintenance != null)
                 {
-                    Thread thread = new Thread(new ThreadStart(LoadCategories));
-                    thread.Start();
+                    LoadCategories();
                 }
             }
         }
@@ -275,20 +274,18 @@ namespace Manchito.ViewModel
 
                     if (Maintenance != null)
                     {
-                        using var db = new DBLocalContext();
-                        Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId)
-                                                .Include(C => C.ItemType)
-                                                .Include(M => M.Photographies.Take(3)).ToList();
-                        if (Categories.Count == 0)
+                        lock (this)
                         {
-                            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                            var toast = Toast.Make("No hay datos", ToastDuration.Long, 16);
-                            toast.Show(cancellationTokenSource.Token);
+                            using var db = new DBLocalContext();
+                            Categories = db.Category.Where(C => C.MaintenanceId == Maintenance.MaintenanceId)
+                                                    .Include(C => C.ItemType)
+                                                    .Include(M => M.Photographies.Take(3)).ToList();
+                            LoadingAnimationVisible = false;
                         }
-                        LoadingAnimationVisible = false;
                     }
                 }));
                 threadLoadCategories.Start();
+                threadLoadCategories.Join();
             }
             catch (Exception f)
             {

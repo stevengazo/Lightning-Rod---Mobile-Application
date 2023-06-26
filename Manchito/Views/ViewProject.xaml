@@ -85,11 +85,10 @@
         </Frame>
         <!-- LIST OF MAINTENANCES -->
         <Frame Grid.Row="1" BackgroundColor="{AppThemeBinding Light=White, Dark=Gray}"   BorderColor="{AppThemeBinding Light=white, Dark=Gray}" Margin="2" Padding="2">
+            <ScrollView>
             <VerticalStackLayout>
                 <Label FontSize="Title" HorizontalOptions="Center">Lista de Sitios</Label>
-                <ScrollView>
                     <VerticalStackLayout Spacing="5" Padding="1">
-
                         <CollectionView SelectionMode="Single" ItemsSource="{Binding Maintenances,Mode=OneWay}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
@@ -122,14 +121,12 @@
                                             </VerticalStackLayout>
                                         </Frame>
                                     </SwipeView>
-
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-                        <!-- Item -->
                     </VerticalStackLayout>
-                </ScrollView>
-            </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
         </Frame>
        <!-- BUTTON TO ADD MAINTENANCE -->
         <Frame Grid.Row="2" Padding="3" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">

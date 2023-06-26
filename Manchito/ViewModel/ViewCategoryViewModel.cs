@@ -452,14 +452,9 @@ namespace Manchito.ViewModel
                         threadAudio.Start();
                     }
                 }
-                else
-                {
-                    WeakReferenceMessenger.Default.UnregisterAll(this);
-                }
             }
             catch (Exception f)
             {
-                WeakReferenceMessenger.Default.UnregisterAll(this);
                 await Application.Current.MainPage.DisplayAlert("Error Load Category", f.Message, "OK");
             }
         }
@@ -473,8 +468,8 @@ namespace Manchito.ViewModel
                     {
                         List<Photography> photos = new();
                         using (DBLocalContext db = new())
-{
-                                                    photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I => I.CategoryId).ToList();
+                        {
+                            photos = db.Photography.Where(P => P.CategoryId == CategoryItem.CategoryId).OrderByDescending(I => I.CategoryId).ToList();
                         }
                         Photos = photos;
                         LoadingAnimationVisible = false;
@@ -488,7 +483,6 @@ namespace Manchito.ViewModel
                 Application.Current.MainPage.DisplayAlert("Error LoadImages", f.Message, "OK");
             }
         }
-
         private async void LoadAudio()
         {
             try
