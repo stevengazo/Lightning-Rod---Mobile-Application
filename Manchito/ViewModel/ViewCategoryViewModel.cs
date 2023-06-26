@@ -421,10 +421,6 @@ namespace Manchito.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Error TakePhotoAndroid ", $"Error: {ex.Message}", "ok");
             }
         }
-        /// <summary>
-        /// Catch the value and load the category in memory
-        /// </summary>
-        /// <returns></returns>
         public async Task LoadCategory()
         {
             try
@@ -498,10 +494,6 @@ namespace Manchito.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Error LoadAudio", f.Message, "OK");
             }
         }
-        /// <summary>
-        /// return the path of the category in android
-        /// </summary>
-        /// <returns></returns>
         private async Task<string> FolderPathAndroid()
         {
             try
@@ -601,7 +593,6 @@ namespace Manchito.ViewModel
             var toast = Toast.Make(Message, duration, 14);
             await toast.Show(cancellationTokenSource.Token);
         }
-
         #endregion
     }
 }

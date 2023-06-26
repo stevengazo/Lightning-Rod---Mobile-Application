@@ -132,7 +132,6 @@ namespace Manchito.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Error LoadMaintenance", $"Error {f.Message}", "OK");
             }
         }
-
         private async Task MessageToastAsync(string Message, bool IsLong)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -144,10 +143,7 @@ namespace Manchito.ViewModel
         {
             try
             {
-                string startPath = Path.Combine(
-                                    PathDirectoryFilesAndroid,
-                                    $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}",
-                                    $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}");
+                string startPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Maintenance.Project.ProjectId}_{Maintenance.Project.Name}", $"M-{Maintenance.MaintenanceId}_{Maintenance.Alias}");
                 if (!Directory.Exists("/storage/emulated/0/Download/Manchito"))
                 {
                     Directory.CreateDirectory("/storage/emulated/0/Download/Manchito");

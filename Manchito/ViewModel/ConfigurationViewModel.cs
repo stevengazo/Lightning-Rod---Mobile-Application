@@ -18,13 +18,19 @@ namespace Manchito.ViewModel
 {
     public class ConfigurationViewModel : INotifyPropertyChangedAbst
     {
-
-
+        #region Icommands
         public ICommand BackupLocalCommand { get { return new Command(async () => BackupFilesLocal()); } set { } }
+
+        #endregion
+       
+        #region Properties
         public List<Project> Projects { get; set; }
 
         string BasePath = "/storage/emulated/0/Download/Manchito";
         string BackupPath = string.Empty;
+        #endregion
+       
+        #region Methods
         public ConfigurationViewModel()
         {
             BackupPath = Path.Combine(BasePath,"Copia Seguridad");
@@ -52,9 +58,6 @@ namespace Manchito.ViewModel
                 await MessageToastAsync("Error General" + rfd.Message, false);
             }
         }
-
-      
-
         private async Task MessageToastAsync(string Message, bool IsLong)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -62,7 +65,6 @@ namespace Manchito.ViewModel
             var toast = Toast.Make(Message, duration, 14);
             await toast.Show(cancellationTokenSource.Token);
         }
-
 
         private void GenerateDirectories()
         {
@@ -81,7 +83,6 @@ namespace Manchito.ViewModel
             {
                 MessageToastAsync("Error " + f.Message, false);
             }
-
         }
         private async Task GenerateZipFile(string ZipFilePath, string BasePath)
         {
@@ -101,7 +102,7 @@ namespace Manchito.ViewModel
             {
                 MessageToastAsync("Error " + f.Message, true);
             }
-    
         }
+        #endregion
     }
 }

@@ -9,12 +9,16 @@ namespace Manchito.ViewModel
     public class UpdateProjectViewModel : INotifyPropertyChangedAbst
     {
 
+
+        #region iCOMMANDS
+        public ICommand UpdateProjectCommand { get; private set; }
+        public ICommand CancelCommand { get; private set; }
+        #endregion
+
         #region Properties
         private Project _Project;
         private UpdateProject _UpdateProject;
 
-        public ICommand UpdateProjectCommand { get; private set; }
-        public ICommand CancelCommand { get; private set; }
 
         public Project Project
         {
@@ -28,7 +32,6 @@ namespace Manchito.ViewModel
         #region Method
         public UpdateProjectViewModel(UpdateProject view)
         {
-
             this._UpdateProject = view;
             // Commands
             UpdateProjectCommand = new Command(async (o) => await UpdateProject(o));
@@ -44,7 +47,6 @@ namespace Manchito.ViewModel
                 view.Navigation.RemovePage(view);
             }
         }
-
         private async Task<Project> GetProject(int id)
         {
             try
@@ -88,7 +90,6 @@ namespace Manchito.ViewModel
                 throw new Exception(ex.Message);
             }
         }
-
         private async void Cancel()
         {
             var lastPage = Application.Current.MainPage.Navigation.NavigationStack.ToList().LastOrDefault();
@@ -96,10 +97,7 @@ namespace Manchito.ViewModel
             {
                 Application.Current.MainPage.Navigation.RemovePage(lastPage);
             }
-
-
         }
-
         #endregion
 
     }
