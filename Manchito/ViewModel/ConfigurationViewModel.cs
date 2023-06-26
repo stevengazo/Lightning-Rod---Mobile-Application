@@ -4,6 +4,7 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using Manchito.DataBaseContext;
 using Manchito.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,6 +48,15 @@ namespace Manchito.ViewModel
                     string FilePathZip = Path.Combine(BackupPath, $"P-{item.ProjectId}-{item.Name}.zip");
                     await GenerateBackup(RootProjectPath, FilePathZip);
                     await MessageToastAsync($"Generando copia de {item.Name}", true);
+
+
+                    var JsonFile = Path.Combine(BackupPath, $"Information P-{item.ProjectId}-{item.Name}.json");
+                    var JsonDAta = JsonConvert.SerializeObject(item, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                    using (StreamWriter sw = new StreamWriter(JsonFile))
+                    {
+                        await sw.WriteAsync(JsonDAta);
+                    }
+
                 }
 
             }
