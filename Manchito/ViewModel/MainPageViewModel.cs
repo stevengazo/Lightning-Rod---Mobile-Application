@@ -1,7 +1,4 @@
-﻿using CommunityToolkit.Maui.Markup;
-using CommunityToolkit.Mvvm.Messaging;
-using Manchito.DataBaseContext;
-using Manchito.Messages;
+﻿using Manchito.DataBaseContext;
 using Manchito.Model;
 using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +13,7 @@ namespace Manchito.ViewModel
         public ICommand LoadProjectsCommand { get { return new Command(async () => await LoadProjects()); } private set { } }
         public ICommand AddProjectCommand { get { return new Command(async () => await AddProject()); } private set { } }
         public ICommand ViewProjectCommand { get { return new Command(async (t) => ViewProject(t)); } private set { } }
-        public ICommand ViewConfiguration { get { return new Command(async () => ViewConfigurationPage()); } private set { }  }
+        public ICommand ViewConfiguration { get { return new Command(async () => ViewConfigurationPage()); } private set { } }
 
         private void ViewConfigurationPage()
         {

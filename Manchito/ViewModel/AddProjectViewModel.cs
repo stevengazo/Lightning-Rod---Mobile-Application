@@ -100,7 +100,7 @@ namespace Manchito.ViewModel
             // Actual date
             DateProject = DateTime.Today;
 
-            
+
 
         }
 

@@ -18,52 +18,34 @@ namespace Manchito.ViewModel
 {
     public class ConfigurationViewModel : INotifyPropertyChangedAbst
     {
+
+
         public ICommand BackupLocalCommand { get { return new Command(async () => BackupFilesLocal()); } set { } }
+        public List<Project> Projects { get; set; }
 
-
+        string BasePath = "/storage/emulated/0/Download/Manchito";
+        string BackupPath = string.Empty;
         public ConfigurationViewModel()
         {
-
+            BackupPath = Path.Combine(BasePath,"Copia Seguridad");
         }
         private async void BackupFilesLocal()
         {
             try
             {
-
-                string BackupPath = "/storage/emulated/0/Download/Manchito/Backups";
-                if (!Directory.Exists(BackupPath) || !Directory.Exists("/storage/emulated/0/Download/Manchito"))
-                {
-                    if (!Directory.Exists("/storage/emulated/0/Download/Manchito"))
-                    {
-                        Directory.CreateDirectory("/storage/emulated/0/Download/Manchito");
-                    }
-                    Directory.CreateDirectory(BackupPath);
-                }
-                var ProjectList = new List<Project>();
+                GenerateDirectories();
                 using var db = new DBLocalContext();
-                ProjectList = db.Project.ToList();
-                foreach (var item in ProjectList)
+                Projects = db.Project.ToList();
+                foreach (var Project in Projects)
                 {
-                    string RootProjectPath = Path.Combine(PathDirectoryFilesAndroid, $"P-{item.ProjectId}_{item.Name}");
-                    string FilePathZip = Path.Combine(BackupPath, $"P-{item.ProjectId}-{item.Name}.zip");
-                    await GenerateBackup(RootProjectPath, FilePathZip);
-                    await MessageToastAsync($"Generando copia de {item.Name}", true);
-
-
-                    var JsonFile = Path.Combine(BackupPath, $"Information P-{item.ProjectId}-{item.Name}.json");
-                    var JsonDAta = JsonConvert.SerializeObject(item, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
-                    using (StreamWriter sw = new StreamWriter(JsonFile))
-                    {
-                        await sw.WriteAsync(JsonDAta);
-                    }
-
+                    string ZipFilePath = Path.Combine(BackupPath, $"P-{Project.ProjectId}_{Project.Name}");
+                    string ProjectBasePath = Path.Combine(PathDirectoryFilesAndroid, $"P-{Project.ProjectId}_{Project.Name}");
+                    GenerateZipFile(ZipFilePath, ProjectBasePath);
                 }
-
             }
             catch (UnauthorizedAccessException e)
             {
                 await MessageToastAsync("No posee permisos", false);
-                await CheckForStoragePermission();
             }
             catch (Exception rfd)
             {
@@ -71,31 +53,7 @@ namespace Manchito.ViewModel
             }
         }
 
-        public async Task CheckForStoragePermission()
-        {
-
-            var statusStorageRead = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
-            if (statusStorageRead != PermissionStatus.Granted)
-            {
-                await Permissions.RequestAsync<Permissions.StorageRead>();
-            }
-            var statusStorageWrite = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-            if (statusStorageWrite != PermissionStatus.Granted)
-            {
-                await Permissions.RequestAsync<Permissions.StorageWrite>();
-            }
-            var statusStoragePhotos = await Permissions.CheckStatusAsync<Permissions.Photos>();
-            if (statusStoragePhotos != PermissionStatus.Granted)
-            {
-                await Permissions.RequestAsync<Permissions.Photos>();
-            }
-
-            var statusMedia = await Permissions.CheckStatusAsync<Permissions.Media>();
-            if (statusMedia != PermissionStatus.Granted)
-            {
-                await Permissions.RequestAsync<Permissions.Media>();
-            }
-        }
+      
 
         private async Task MessageToastAsync(string Message, bool IsLong)
         {
@@ -104,14 +62,26 @@ namespace Manchito.ViewModel
             var toast = Toast.Make(Message, duration, 14);
             await toast.Show(cancellationTokenSource.Token);
         }
-        private async Task GenerateBackup(string basePath, string FilePath)
+
+
+        private void GenerateDirectories()
         {
-            if (File.Exists(FilePath))
+            if (Directory.Exists(BasePath))
+            {
+                Directory.CreateDirectory(BasePath);
+                if(Directory.Exists(BackupPath)) {
+                    Directory.CreateDirectory(BackupPath);
+                }
+            }
+        }
+        private async Task GenerateZipFile(string ZipFilePath, string BasePath)
+        {
+            if (File.Exists(ZipFilePath))
             {
                await MessageToastAsync("Se sobreescribirá la ultima copia", false);
-                File.Delete(FilePath);
+                File.Delete(ZipFilePath);
             }
-            ZipFile.CreateFromDirectory(basePath, FilePath, CompressionLevel.SmallestSize, true);
+            ZipFile.CreateFromDirectory(BasePath, ZipFilePath, CompressionLevel.SmallestSize, true);
         }
     }
 }

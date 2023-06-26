@@ -1,16 +1,9 @@
-﻿using AndroidX.Interpolator.View.Animation;
-using CommunityToolkit.Maui.Alerts;
+﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Core.Primitives;
-using CommunityToolkit.Mvvm.Messaging;
-using Java.Nio.FileNio;
 using Manchito.DataBaseContext;
-using Manchito.Messages;
 using Manchito.Model;
 using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design.Internal;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace Manchito.ViewModel
@@ -67,7 +60,7 @@ namespace Manchito.ViewModel
         public ICommand AddCategoryCommand { get { return new Command(async () => await AddCategory()); } private set { } }
         public ICommand UpdateOnSwapCommand { get; private set; }
         public ICommand UpdateItemOnSwapCommand { get { return new Command(async (o) => await UpdateCategory(o)); ; } private set { } }
-        public ICommand DeleteItemOnSwapCommand { get {return new Command(async (o) => await DeleteCategory(o)); ; } private set { } }
+        public ICommand DeleteItemOnSwapCommand { get { return new Command(async (o) => await DeleteCategory(o)); ; } private set { } }
         #endregion
 
         #region Methods
@@ -146,7 +139,7 @@ namespace Manchito.ViewModel
             }
         }
 
-     
+
         private async Task DeleteCategory(object o)
         {
 
@@ -178,7 +171,7 @@ namespace Manchito.ViewModel
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error DeleteCategory", $"Error interno {ex.Message}", "Ok");                
+                await Application.Current.MainPage.DisplayAlert("Error DeleteCategory", $"Error interno {ex.Message}", "Ok");
             }
             finally
             {
@@ -215,7 +208,7 @@ namespace Manchito.ViewModel
             {
                 TempData.IdMaintenance = int.Parse(o.ToString());
                 await Application.Current.MainPage.Navigation.PushAsync(new ValidateData(), true);
-                
+
             }
             catch (Exception ex)
             {
@@ -242,7 +235,7 @@ namespace Manchito.ViewModel
         {
             try
             {
-                if(Maintenance == null)
+                if (Maintenance == null)
                 {
                     var tempIdMaintenance = TempData.IdMaintenance;
                     using var db = new DBLocalContext();

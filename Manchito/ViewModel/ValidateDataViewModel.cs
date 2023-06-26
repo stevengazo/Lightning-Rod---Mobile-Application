@@ -1,14 +1,9 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Mvvm.Messaging;
-using Java.IO;
 using Manchito.DataBaseContext;
-using Manchito.Messages;
 using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Diagnostics;
 using System.IO.Compression;
 using System.Windows.Input;
 
@@ -119,8 +114,8 @@ namespace Manchito.ViewModel
                         {
                             item.ItemType = await db.ItemTypes.FirstOrDefaultAsync(I => I.ItemTypeId == item.ItemTypeId);
                             item.ItemType.Categories = null;
-                            item.Photographies =  await db.Photography.Where(P => P.CategoryId == item.CategoryId).ToListAsync();
-                            
+                            item.Photographies = await db.Photography.Where(P => P.CategoryId == item.CategoryId).ToListAsync();
+
                             item.AudioNotes = await db.AudioNote.Where(A => A.CategoryId == item.CategoryId).ToListAsync();
                         }
                         Title = $"Validación {Maintenance.Alias}";
@@ -167,17 +162,17 @@ namespace Manchito.ViewModel
                     System.IO.File.Delete(zipPathFile);
                 }
                 var JsonFile = Path.Combine(startPath, "Information About.json");
-                var JsonDAta = JsonConvert.SerializeObject(Maintenance ,Formatting.Indented,new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+                var JsonDAta = JsonConvert.SerializeObject(Maintenance, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
                 using (StreamWriter sw = new StreamWriter(JsonFile))
                 {
                     await sw.WriteAsync(JsonDAta);
                 }
-                await MessageToastAsync("Generando Archivo",false);
+                await MessageToastAsync("Generando Archivo", false);
                 ZipFile.CreateFromDirectory(startPath, zipPathFile, CompressionLevel.SmallestSize, true);
- 
+
                 if (System.IO.File.Exists(zipPathFile))
                 {
-                   await Share.Default.RequestAsync(new ShareFileRequest
+                    await Share.Default.RequestAsync(new ShareFileRequest
                     {
                         Title = "Compartir Archivo",
                         File = new ShareFile(zipPathFile)
@@ -186,7 +181,7 @@ namespace Manchito.ViewModel
             }
             catch (Exception f)
             {
-                   await Application.Current.MainPage.DisplayAlert("Error ShareMaintenance", $"Error interno {f.Message}", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Error ShareMaintenance", $"Error interno {f.Message}", "Ok");
             }
         }
         #endregion

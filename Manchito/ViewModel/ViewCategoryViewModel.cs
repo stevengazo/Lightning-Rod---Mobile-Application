@@ -1,11 +1,7 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using Manchito.DataBaseContext;
-using Manchito.Messages;
-using System.Threading;
-using Microsoft.Maui.Graphics.Platform;
 using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
 using Plugin.AudioRecorder;
