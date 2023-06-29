@@ -68,6 +68,16 @@
                             Padding="5"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"/>
+                        <Button Text="Gps"
+                            Command="{Binding GetGPSCommand}"                                                                                            
+                            BackgroundColor="Blue"
+                            CornerRadius="15"
+                            WidthRequest="180"
+                            HeightRequest="35"
+                            TextColor="White"
+                            Padding="5"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                 </Frame>
             </Grid>
