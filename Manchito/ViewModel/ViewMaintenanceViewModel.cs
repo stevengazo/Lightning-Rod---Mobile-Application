@@ -63,16 +63,7 @@ namespace Manchito.ViewModel
         public ICommand UpdateItemOnSwapCommand { get { return new Command(async (o) => await UpdateCategory(o)); ; } private set { } }
         public ICommand DeleteItemOnSwapCommand { get { return new Command(async (o) => await DeleteCategory(o)); ; } private set { } }
 
-        public ICommand GetGPSCommand {
-            get
-            {
-                return new Command(async () => await GetLocationAsync());
-            }
-            private set
-            {
-
-            }
-        }
+   
         #endregion
 
         #region Methods
@@ -81,55 +72,11 @@ namespace Manchito.ViewModel
             LoadingAnimationVisible = true;
         }
 
-        private async Task GetLocationAsync()
-        {
-            GetCurrentLocation();
-        }
+    
 
 
 
-        private CancellationTokenSource _cancelTokenSource;
-        private bool _isCheckingLocation;
-
-        public async Task GetCurrentLocation()
-        {
-            try
-            {
-                _isCheckingLocation = true;
-
-                GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
-
-                _cancelTokenSource = new CancellationTokenSource();
-
-                Location location = await Geolocation.Default.GetLocationAsync(request, _cancelTokenSource.Token);
-
-                if (location != null)
-                    Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
-            }
-            // Catch one of the following exceptions:
-            //   FeatureNotSupportedException
-            //   FeatureNotEnabledException
-            //   PermissionException
-            catch (PermissionException f)
-            {
-                var Status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-            }
-            catch (Exception ex)
-            {
-                // Unable to get location
-            }
-            finally
-            {
-                _isCheckingLocation = false;
-            }
-        }
-
-        public void CancelRequest()
-        {
-            if (_isCheckingLocation && _cancelTokenSource != null && _cancelTokenSource.IsCancellationRequested == false)
-                _cancelTokenSource.Cancel();
-        }
-
+ 
 
         private async Task MessageToastAsync(string Message, bool IsLong)
         {

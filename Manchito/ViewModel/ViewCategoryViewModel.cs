@@ -550,6 +550,12 @@ namespace Manchito.ViewModel
                     FilePath = pathFile,
                     PhotographyId = (await GetLastPhotographyId() + 1)
                 };
+
+                GPSLocation gps = await GetCurrentLocation();
+              
+                photography.Altitude = (gps!= null) ? gps.Altitude : 0;
+                photography.Latitude = (gps != null) ? gps.Latitude : 0;
+                photography.Longitude= (gps != null) ? gps.Longitude : 0;
                 photography.DateTaked = DateTime.Now;
                 using (DBLocalContext db = new())
                 {
@@ -566,8 +572,19 @@ namespace Manchito.ViewModel
         {
             try
             {
+                var StatusLocation = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+                if(StatusLocation != PermissionStatus.Granted)
+                {
+                    await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+                }
+                var StatusCamera = await Permissions.CheckStatusAsync<Permissions.Camera>();
+                if (StatusCamera != PermissionStatus.Granted)
+                {
+                    await Permissions.CheckStatusAsync<Permissions.Camera>();
+                }
                 if (MediaPicker.Default.IsCaptureSupported)
                 {
+
                     FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
                     photo.FileName = $"IMG D{DateTime.Today.ToString("yyyy-MM-dd")}_H{DateTime.Now.ToString("HH-mm-ss-fff")} .jpg";
                     if (photo != null)
@@ -586,6 +603,67 @@ namespace Manchito.ViewModel
                 await MessageToastAsync("La Foto no fue tomada", true);
             }
         }
+
+        private CancellationTokenSource _cancelTokenSource;
+        private bool _isCheckingLocation;
+
+        public async Task<GPSLocation> GetCurrentLocation()
+        {
+            try
+            {
+                _isCheckingLocation = true;
+
+                GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(10));
+
+                _cancelTokenSource = new CancellationTokenSource();
+
+                Location location = await Geolocation.Default.GetLocationAsync(request, _cancelTokenSource.Token);
+
+                if (location != null)
+                {
+                    GPSLocation gps = new GPSLocation();
+                    gps.Latitude = location.Latitude;
+                    gps.Longitude = location.Longitude;
+                    gps.Altitude = (location.Altitude == null) ? 0 : gps.Altitude;
+                    return gps;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            // Catch one of the following exceptions:
+            //   FeatureNotSupportedException
+            //   FeatureNotEnabledException
+            //   PermissionException
+            catch (PermissionException f)
+            {
+                var Status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+                return null;
+            }
+            catch(FeatureNotEnabledException f)
+            {
+                await Application.Current.MainPage.DisplayAlert("Advertencia", "No tienes el GPS activado\nActivalo para guardar la ubicación","Aceptar");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                // Unable to get location
+                return null;
+            }
+            finally
+            {
+                _isCheckingLocation = false;
+            }
+        }
+
+        public void CancelRequest()
+        {
+            if (_isCheckingLocation && _cancelTokenSource != null && _cancelTokenSource.IsCancellationRequested == false)
+                _cancelTokenSource.Cancel();
+        }
+
+
         private async Task MessageToastAsync(string Message, bool IsLong)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
