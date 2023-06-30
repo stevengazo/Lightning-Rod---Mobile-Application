@@ -221,6 +221,17 @@ namespace Manchito.ViewModel
             urlIconRecorder = "record.svg";
             Title = "";
             ColorButtonRecorder = Colors.Green;
+
+            var StatusLocation =Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>().Result;
+            if (StatusLocation != PermissionStatus.Granted)
+            {
+                Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            }
+            var StatusCamera =  Permissions.CheckStatusAsync<Permissions.Camera>().Result;
+            if (StatusCamera != PermissionStatus.Granted)
+            {
+               Permissions.CheckStatusAsync<Permissions.Camera>();
+            }
         }
         private async void PlayAudio(object o)
         {
@@ -252,10 +263,10 @@ namespace Manchito.ViewModel
             try
             {
                 var StatusAudio = await Permissions.CheckStatusAsync<Permissions.Microphone>();
-                if (OperatingSystem.IsAndroidVersionAtLeast(30))
+           /*     if (OperatingSystem.IsAndroidVersionAtLeast(30))
                 {
                     var storagePermission = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-                }
+                }*/
                 if (StatusAudio == PermissionStatus.Granted)
                 {
                     if (_recorderService.IsRecording)
@@ -552,10 +563,10 @@ namespace Manchito.ViewModel
                 };
 
                 GPSLocation gps = await GetCurrentLocation();
-              
-                photography.Altitude = (gps!= null) ? gps.Altitude : 0;
+
+                photography.Altitude = (gps != null) ? gps.Altitude : 0;
                 photography.Latitude = (gps != null) ? gps.Latitude : 0;
-                photography.Longitude= (gps != null) ? gps.Longitude : 0;
+                photography.Longitude = (gps != null) ? gps.Longitude : 0;
                 photography.DateTaked = DateTime.Now;
                 using (DBLocalContext db = new())
                 {
@@ -573,7 +584,7 @@ namespace Manchito.ViewModel
             try
             {
                 var StatusLocation = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-                if(StatusLocation != PermissionStatus.Granted)
+                if (StatusLocation != PermissionStatus.Granted)
                 {
                     await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
                 }
@@ -641,9 +652,9 @@ namespace Manchito.ViewModel
                 var Status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
                 return null;
             }
-            catch(FeatureNotEnabledException f)
+            catch (FeatureNotEnabledException f)
             {
-                await Application.Current.MainPage.DisplayAlert("Advertencia", "No tienes el GPS activado\nActivalo para guardar la ubicación","Aceptar");
+                await Application.Current.MainPage.DisplayAlert("Advertencia", "No tienes el GPS activado\nActivalo para guardar la ubicación", "Aceptar");
                 return null;
             }
             catch (Exception ex)

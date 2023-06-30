@@ -1,5 +1,4 @@
-﻿using Android.Service.Voice;
-using CommunityToolkit.Maui.Alerts;
+﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using Manchito.DataBaseContext;
 using Manchito.Model;
@@ -63,7 +62,7 @@ namespace Manchito.ViewModel
         public ICommand UpdateItemOnSwapCommand { get { return new Command(async (o) => await UpdateCategory(o)); ; } private set { } }
         public ICommand DeleteItemOnSwapCommand { get { return new Command(async (o) => await DeleteCategory(o)); ; } private set { } }
 
-   
+
         #endregion
 
         #region Methods
@@ -72,11 +71,11 @@ namespace Manchito.ViewModel
             LoadingAnimationVisible = true;
         }
 
-    
 
 
 
- 
+
+
 
         private async Task MessageToastAsync(string Message, bool IsLong)
         {

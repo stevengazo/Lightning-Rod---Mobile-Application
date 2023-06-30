@@ -1,17 +1,8 @@
-﻿using Android.App.Backup;
-using Android.Systems;
-using CommunityToolkit.Maui.Alerts;
+﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using Manchito.DataBaseContext;
 using Manchito.Model;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Manchito.ViewModel
@@ -22,18 +13,18 @@ namespace Manchito.ViewModel
         public ICommand BackupLocalCommand { get { return new Command(async () => BackupFilesLocal()); } set { } }
 
         #endregion
-       
+
         #region Properties
         public List<Project> Projects { get; set; }
 
         string BasePath = "/storage/emulated/0/Download/Manchito";
         string BackupPath = string.Empty;
         #endregion
-       
+
         #region Methods
         public ConfigurationViewModel()
         {
-            BackupPath = Path.Combine(BasePath,"Copia Seguridad");
+            BackupPath = Path.Combine(BasePath, "Copia Seguridad");
         }
         private async void BackupFilesLocal()
         {
