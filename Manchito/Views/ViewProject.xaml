@@ -6,6 +6,7 @@
              xmlns:VM="clr-namespace:Manchito.ViewModel"
              x:Name="ViewProjectPage"
              Title="Información de Proyecto">
+    <!--#region ContentPage Elements -->
     <!-- Binding Content -->
     <ContentPage.BindingContext>
         <VM:ViewProjectViewModel/>
@@ -17,14 +18,15 @@
                Command="{Binding AppearingCommand}"
             />
     </ContentPage.Behaviors>
+    <!--#endregion-->
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="0.55*" />
             <RowDefinition Height="2*"/>
             <RowDefinition Height="0.25*"  />
         </Grid.RowDefinitions>
-        <!-- HEADER -->
-        <Frame Grid.Row="0" Margin="2" CornerRadius="5" Padding="5" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" >
+        <!--#region Header -->
+          <Frame Grid.Row="0" Margin="2" CornerRadius="5" Padding="5" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}" >
             
             <Grid>
                 <Grid.RowDefinitions>
@@ -83,11 +85,13 @@
                 </Frame>
             </Grid>
         </Frame>
-        <!-- LIST OF MAINTENANCES -->
+        <!--#endregion-->
+
+        <!--#region List of sites -->
         <Frame Grid.Row="1" BackgroundColor="{AppThemeBinding Light=White, Dark=Gray}"   BorderColor="{AppThemeBinding Light=white, Dark=Gray}" Margin="2" Padding="2">
             <ScrollView>
-            <VerticalStackLayout>
-                <Label FontSize="Title" HorizontalOptions="Center">Lista de Sitios</Label>
+                <VerticalStackLayout>
+                    <Label FontSize="Title" HorizontalOptions="Center">Lista de Sitios</Label>
                     <VerticalStackLayout Spacing="5" Padding="1">
                         <CollectionView SelectionMode="Single" ItemsSource="{Binding Maintenances,Mode=OneWay}">
                             <CollectionView.ItemTemplate>
@@ -128,7 +132,9 @@
                 </VerticalStackLayout>
             </ScrollView>
         </Frame>
-       <!-- BUTTON TO ADD MAINTENANCE -->
+        <!--#endregion-->
+
+        <!--#region Footer Buttons -->
         <Frame Grid.Row="2" Padding="3" BackgroundColor="{AppThemeBinding Light=white, Dark=black}" BorderColor="{AppThemeBinding Light=white, Dark=black}">
 
             <HorizontalStackLayout Padding="1" Margin="2" HorizontalOptions="Center">
@@ -143,5 +149,7 @@
                         Text="Agregar Sitio"/>
             </HorizontalStackLayout>
         </Frame>
+        <!--#endregion-->
+
     </Grid>
 </ContentPage>

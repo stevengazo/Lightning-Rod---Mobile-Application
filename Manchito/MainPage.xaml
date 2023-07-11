@@ -8,31 +8,38 @@
              x:Name="MyMainPage"
              Title="Manchito"                         
              >
-    <!-- Binding  Context-->
+    <!--#region ContentPage Elements -->
     <ContentPage.BindingContext>
         <local:MainPageViewModel/>
     </ContentPage.BindingContext>
-    <!-- Behaviors of ContentPage -->
+    
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior 
                EventName="Appearing"
                Command="{Binding LoadProjectsCommand}"
             />
     </ContentPage.Behaviors>
+    
     <ContentPage.ToolbarItems>
         <ToolbarItem  IconImageSource="config.sgv" Command="{Binding ViewConfiguration,Mode=OneWay}" />
     </ContentPage.ToolbarItems>
+    <!--#endregion-->
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="3*" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
+        <!--#region Header -->
         <HorizontalStackLayout Grid.Row="0"  HorizontalOptions="Center" Padding="5" VerticalOptions="Center">
             <Label FontSize="Title" TextColor="{AppThemeBinding Light=black, Dark=white}">
                 Lista de Proyectos
             </Label>
         </HorizontalStackLayout>
+        <!--#endregion-->
+
+        <!--#region List of Projects -->
         <ScrollView Grid.Row="1" 
                     BackgroundColor="{AppThemeBinding Light=white, Dark=gray}"
                     Padding="10,10,10,10">
@@ -76,6 +83,9 @@
                 </CollectionView>
             </VerticalStackLayout>
         </ScrollView>
+        <!--#endregion-->
+        
+        <!--#region Buttons footer -->
         <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center" VerticalOptions="Center">
             <Button x:Name="btnAgregar"
                     BackgroundColor="Green"
@@ -88,8 +98,6 @@
                    MinimumWidthRequest="240"                    
                     />
         </HorizontalStackLayout>
+        <!--#endregion-->
     </Grid>
-
-
-
 </ContentPage>

@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:Manchito.ViewModel"
              x:Name="ViewCategoryPage"
     Title="{Binding Title}">
+    <!--#region ContentPage Elements -->
     <ContentPage.BindingContext>
         <local:ViewCategoryViewModel />
     </ContentPage.BindingContext>
@@ -15,14 +16,20 @@
                Command="{Binding AppearingCommand}"
             />
     </ContentPage.Behaviors>
+    <!--#endregion-->
+
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60*"/>
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
+        
+        
         <ScrollView VerticalOptions="Start" Grid.Row="0">
             <VerticalStackLayout Margin="0"  Spacing="30">
                 <StackLayout  Padding="0.0" >
+                    <!--#region Carousel Photos -->
                     <Grid >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="80" />
@@ -97,7 +104,9 @@
                             </VerticalStackLayout>
                         </Frame>
                     </Grid>
+                    <!--#endregion-->                    
                 </StackLayout>
+                <!--#region Audios -->
                 <Grid  Margin="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60" />
@@ -153,8 +162,11 @@
                         </VerticalStackLayout>
                     </Frame>
                 </Grid>
+                <!--#endregion-->                
             </VerticalStackLayout>
         </ScrollView>
+
+        <!--#region Footer Buttons -->
         <HorizontalStackLayout Grid.Row="1" HorizontalOptions="Center" >
             <ImageButton                
                                 WidthRequest="100"
@@ -203,6 +215,8 @@
                                 CornerRadius="5"
                                 />
         </HorizontalStackLayout>
+        <!--#endregion-->
+        
     </Grid>
     
 </ContentPage>
