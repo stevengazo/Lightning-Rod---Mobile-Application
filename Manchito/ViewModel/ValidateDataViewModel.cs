@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.IO.Compression;
 using System.Windows.Input;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
 
 namespace Manchito.ViewModel
 {

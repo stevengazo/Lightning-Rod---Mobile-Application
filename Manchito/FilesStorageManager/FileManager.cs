@@ -1,4 +1,5 @@
-﻿namespace Manchito.FilesStorageManager
+﻿using Microsoft.Maui.Storage;
+namespace Manchito.FilesStorageManager
 {
     /// <summary>
     /// Manage the access and load of the files in the app (Android system)

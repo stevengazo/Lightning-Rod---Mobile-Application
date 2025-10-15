@@ -3,6 +3,7 @@ using Manchito.Model;
 using Manchito.Views;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Input;
+using Microsoft.Maui.ApplicationModel;
 
 namespace Manchito.ViewModel
 {
