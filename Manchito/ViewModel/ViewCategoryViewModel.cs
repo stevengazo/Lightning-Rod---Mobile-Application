@@ -6,6 +6,11 @@ using Manchito.Model;
 using Microsoft.EntityFrameworkCore;
 using Plugin.AudioRecorder;
 using System.Windows.Input;
+using Microsoft.Maui.Devices.Sensors;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.Media;
+using Microsoft.Maui.ApplicationModel;
 
 
 namespace Manchito.ViewModel
